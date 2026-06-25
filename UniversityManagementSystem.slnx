@@ -2,6 +2,7 @@
   <Folder Name="/Services/" />
   <Folder Name="/Services/Identity/" />
   <Folder Name="/SharedKernel/">
+    <Project Path="src/SharedKernel/SharedKernel.Abstractions/SharedKernel.Abstractions.csproj" Id="92a369a6-c4ed-4604-a676-84fdb4ff8f80" />
     <Project Path="src/SharedKernel/SharedKernel.Domain/SharedKernel.Domain.csproj" Id="a5471819-dace-4dde-8f02-8290f596fe8a" />
   </Folder>
 </Solution>
