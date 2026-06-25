@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/Services/" />
+  <Folder Name="/Services/Identity/" />
+  <Folder Name="/SharedKernel/">
+    <Project Path="src/SharedKernel/SharedKernel.Domain/SharedKernel.Domain.csproj" Id="a5471819-dace-4dde-8f02-8290f596fe8a" />
+  </Folder>
+</Solution>
