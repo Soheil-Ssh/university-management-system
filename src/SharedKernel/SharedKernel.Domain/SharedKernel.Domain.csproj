@@ -10,9 +10,4 @@
 		<PackageReference Include="MediatR" Version="14.1.0" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<Folder Include="Exceptions\" />
-		<Folder Include="Result\" />
-	</ItemGroup>
-
 </Project>
