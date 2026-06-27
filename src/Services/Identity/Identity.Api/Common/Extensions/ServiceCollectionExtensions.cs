@@ -1,5 +1,6 @@
 ﻿using Identity.Api.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
+using SharedKernel.Api;
 
 namespace Identity.Api.Common.Extensions;
 
@@ -13,6 +14,9 @@ public static class ServiceCollectionExtensions
         // Add the IdentityDbContext to the service collection
         services.AddDbContext<IdentityDbContext>(options 
             => options.UseSqlServer(sqlServerConnectionString));
+
+        // Add the shared kernel API services to the service collection
+        services.AddSharedKernelApi();
 
         return services;
     }
