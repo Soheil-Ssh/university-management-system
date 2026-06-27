@@ -1,0 +1,99 @@
+using Identity.Api.Domain.Permission;
+using Identity.Api.Domain.Role.Errors;
+
+namespace Identity.Api.Domain.Role;
+
+public sealed class Role : AggregateRoot<RoleId>
+{
+    public string Name { get; private set; }
+    public string Description { get; private set; } = string.Empty;
+
+    private readonly List<RolePermission> _permissions = [];
+    public IReadOnlyCollection<RolePermission> Permissions => _permissions;
+
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+    private Role() { }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+
+    private Role(RoleId id, string name, string description) : base(id)
+    {
+        Name = name;
+        Description = description;
+    }
+
+    public static Result<Role> Create(string name, string description)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            return RoleErrors.NameEmpty;
+
+        name = name.Trim();
+
+        if (name.Length < 2)
+            return RoleErrors.NameTooShort;
+        if (name.Length > 100)
+            return RoleErrors.NameTooLong;
+
+        if (string.IsNullOrWhiteSpace(description))
+            return RoleErrors.DescriptionEmpty;
+        if (description.Length > 500)
+            return RoleErrors.DescriptionTooLong;
+
+        return new Role(RoleId.New(), name, description);
+    }
+
+    public Result UpdateName(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            return RoleErrors.NameEmpty;
+
+        name = name.Trim();
+
+        if (name.Length < 2)
+            return RoleErrors.NameTooShort;
+        if (name.Length > 100)
+            return RoleErrors.NameTooLong;
+
+        Name = name;
+
+        return Result.Success();
+    }
+
+    public Result UpdateDescription(string description)
+    {
+        if (string.IsNullOrWhiteSpace(description))
+            return RoleErrors.DescriptionEmpty;
+        if (description.Length > 500)
+            return RoleErrors.DescriptionTooLong;
+
+        Description = description;
+
+        return Result.Success();
+    }
+
+    public Result AddPermission(PermissionId permissionId)
+    {
+        if (_permissions.Any(x => x.PermissionId == permissionId))
+            return RoleErrors.PermissionAlreadyExist;
+
+        var rolePermissionResult = RolePermission.Create(Id, permissionId);
+        if (rolePermissionResult.IsFailure)
+            return rolePermissionResult.Error;
+
+        _permissions.Add(rolePermissionResult.Data);
+
+        return Result.Success();
+    }
+
+    public Result RemovePermission(PermissionId permissionId)
+    {
+        var permission = _permissions
+            .FirstOrDefault(x => x.PermissionId == permissionId);
+
+        if (permission is null)
+            return RoleErrors.PermissionNotFound;
+
+        _permissions.Remove(permission);
+
+        return Result.Success();
+    }
+}
