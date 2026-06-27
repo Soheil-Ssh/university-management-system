@@ -1,0 +1,17 @@
+services:
+  # Identity Api
+  identity.api:
+    image: ${DOCKER_REGISTRY-}identity.api
+    build:
+      context: .
+      dockerfile: src/Services/Identity/Identity.Api/Dockerfile
+  # Identity Sql Server
+  identity.db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+
+networks:
+  ums_network:
+    driver: bridge
+
+volumes:
+  identity-data:

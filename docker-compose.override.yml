@@ -1,0 +1,39 @@
+services:
+  # Identity Api
+  identity.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - ConnectionStrings__SqlServerDefaultConnection="Server=identity.db;Database=Identity_Db;User=sa;Password=Password123;TrustServerCertificate=True;"  
+    ports:
+      - "5000:8080"
+      - "5050:8081"
+    depends_on:
+      identity.db:
+        condition: service_healthy
+    networks:
+      - ums_network
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+  # Identity Sql Server
+  identity.db:
+    container_name: identity.db
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Password123
+    ports:
+      - "1433:1433"
+    volumes:
+      - identity-data:/var/opt/mssql
+    networks:
+      - ums_network
+    healthcheck:
+      test: [ "CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -U sa -P Password123 -Q 'SELECT 1' -C || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 90s
