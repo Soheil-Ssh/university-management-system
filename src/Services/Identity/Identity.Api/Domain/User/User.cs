@@ -1,5 +1,4 @@
-﻿using Identity.Api.Domain.Role;
-using Identity.Api.Domain.User.Errors;
+﻿using Identity.Api.Domain.User.Errors;
 using Identity.Api.Domain.User.ValueObjects;
 
 namespace Identity.Api.Domain.User;
@@ -11,8 +10,8 @@ public sealed class User : AggregateRoot<UserId>
     public string PasswordHash { get; private set; }
     public bool IsActive { get; private set; }
 
-    private readonly List<UserRole> _roles = [];
-    public IReadOnlyCollection<UserRole> Roles => _roles;
+    private readonly List<UserRole> _userRoles = [];
+    public IReadOnlyCollection<UserRole> UserRoles => _userRoles;
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     private User() { }
@@ -48,25 +47,25 @@ public sealed class User : AggregateRoot<UserId>
 
     public Result AssignRole(RoleId roleId)
     {
-        if (_roles.Any(x => x.RoleId == roleId)) return UserErrors.RoleAlreadyExist;
+        if (_userRoles.Any(x => x.RoleId == roleId)) return UserErrors.RoleAlreadyExist;
 
         var roleResult = UserRole.Create(Id, roleId);
         if (roleResult.IsFailure)
             return roleResult.Error;
 
-        _roles.Add(roleResult.Data);
+        _userRoles.Add(roleResult.Data);
 
         return Result.Success();
     }
 
     public Result RemoveRole(RoleId roleId)
     {
-        var role = _roles.FirstOrDefault(x => x.RoleId == roleId);
+        var role = _userRoles.FirstOrDefault(x => x.RoleId == roleId);
 
         if (role is null)
             return UserErrors.RoleNotFound;
 
-        _roles.Remove(role);
+        _userRoles.Remove(role);
 
         return Result.Success();
     }

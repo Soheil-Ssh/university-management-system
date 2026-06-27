@@ -1,4 +1,5 @@
-﻿using Identity.Api.Persistence.Contexts;
+﻿using Carter;
+using Identity.Api.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel.Abstractions;
 using SharedKernel.Api;
@@ -13,8 +14,11 @@ public static class ServiceCollectionExtensions
         var sqlServerConnectionString = configuration.GetConnectionString("SqlServerDefaultConnection");
 
         // Add the IdentityDbContext to the service collection
-        services.AddDbContext<IdentityDbContext>(options 
+        services.AddDbContext<IdentityDbContext>(options
             => options.UseSqlServer(sqlServerConnectionString));
+
+        // Add Carter to the service collection
+        services.AddCarter();
 
         // Add the shared kernel abstractions to the service collection
         services.AddSharedKernelAbstractions<Program>();

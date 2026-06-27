@@ -1,4 +1,3 @@
-using Identity.Api.Domain.Permission;
 using Identity.Api.Domain.Role.Errors;
 
 namespace Identity.Api.Domain.Role;
@@ -8,8 +7,8 @@ public sealed class Role : AggregateRoot<RoleId>
     public string Name { get; private set; }
     public string Description { get; private set; } = string.Empty;
 
-    private readonly List<RolePermission> _permissions = [];
-    public IReadOnlyCollection<RolePermission> Permissions => _permissions;
+    private readonly List<RolePermission> _rolePermissions = [];
+    public IReadOnlyCollection<RolePermission> RolePermissions => _rolePermissions;
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     private Role() { }
@@ -72,27 +71,27 @@ public sealed class Role : AggregateRoot<RoleId>
 
     public Result AddPermission(PermissionId permissionId)
     {
-        if (_permissions.Any(x => x.PermissionId == permissionId))
+        if (_rolePermissions.Any(x => x.PermissionId == permissionId))
             return RoleErrors.PermissionAlreadyExist;
 
         var rolePermissionResult = RolePermission.Create(Id, permissionId);
         if (rolePermissionResult.IsFailure)
             return rolePermissionResult.Error;
 
-        _permissions.Add(rolePermissionResult.Data);
+        _rolePermissions.Add(rolePermissionResult.Data);
 
         return Result.Success();
     }
 
     public Result RemovePermission(PermissionId permissionId)
     {
-        var permission = _permissions
+        var permission = _rolePermissions
             .FirstOrDefault(x => x.PermissionId == permissionId);
 
         if (permission is null)
             return RoleErrors.PermissionNotFound;
 
-        _permissions.Remove(permission);
+        _rolePermissions.Remove(permission);
 
         return Result.Success();
     }

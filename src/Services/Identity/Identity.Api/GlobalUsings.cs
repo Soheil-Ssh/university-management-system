@@ -3,3 +3,7 @@ global using SharedKernel.Domain.Error;
 global using SharedKernel.Domain.Result;
 global using SharedKernel.Abstractions.Persistence;
 global using Identity.Api.Common.Extensions;
+global using Identity.Api.Domain.Role;
+global using Identity.Api.Domain.User;
+global using Identity.Api.Domain.Permission;
+global using Microsoft.EntityFrameworkCore;

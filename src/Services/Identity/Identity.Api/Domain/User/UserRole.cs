@@ -1,6 +1,4 @@
-﻿using Identity.Api.Domain.Role;
-
-namespace Identity.Api.Domain.User;
+﻿namespace Identity.Api.Domain.User;
 
 public class UserRole : Entity<UserRoleId>
 {
