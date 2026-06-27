@@ -32,9 +32,7 @@ public sealed class Role : AggregateRoot<RoleId>
         if (name.Length > 100)
             return RoleErrors.NameTooLong;
 
-        if (string.IsNullOrWhiteSpace(description))
-            return RoleErrors.DescriptionEmpty;
-        if (description.Length > 500)
+        if (!string.IsNullOrWhiteSpace(description) && description.Length > 500)
             return RoleErrors.DescriptionTooLong;
 
         return new Role(RoleId.New(), name, description);
@@ -59,9 +57,7 @@ public sealed class Role : AggregateRoot<RoleId>
 
     public Result UpdateDescription(string description)
     {
-        if (string.IsNullOrWhiteSpace(description))
-            return RoleErrors.DescriptionEmpty;
-        if (description.Length > 500)
+        if (!string.IsNullOrWhiteSpace(description) && description.Length > 500)
             return RoleErrors.DescriptionTooLong;
 
         Description = description;

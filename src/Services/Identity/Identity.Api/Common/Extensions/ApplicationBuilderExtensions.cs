@@ -1,17 +1,23 @@
 ﻿using Carter;
+using Identity.Api.Persistence.Contexts;
 using Scalar.AspNetCore;
+using SharedKernel.Persistence.Database;
 
 namespace Identity.Api.Common.Extensions;
 
 public static class ApplicationBuilderExtensions
 {
-    public static WebApplication UseIdentityPipeline(this WebApplication app)
+    public static async Task<WebApplication> UseIdentityPipeline(this WebApplication app)
     {
+        await app.Services.ApplyMigrationsAsync<IdentityDbContext>();
+        await app.Services.SeedDatabaseAsync<IdentityDbContext>();
+
         if (app.Environment.IsDevelopment())
         {
             app.MapOpenApi();
             app.MapScalarApiReference();
         }
+
 
         app.UseExceptionHandler();
         app.UseHttpsRedirection();

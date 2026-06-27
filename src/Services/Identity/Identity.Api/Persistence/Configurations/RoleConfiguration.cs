@@ -7,7 +7,7 @@ public class RoleConfiguration : IEntityTypeConfiguration<Role>
     public void Configure(EntityTypeBuilder<Role> builder)
     {
         // Table
-        builder.ToTable("UserRoles");
+        builder.ToTable("Roles");
 
         // Primary key
         builder.HasKey(x => x.Id);
@@ -56,6 +56,11 @@ public class RoleConfiguration : IEntityTypeConfiguration<Role>
                     id => id.Value,
                     value => new PermissionId(value))
                 .IsRequired();
+
+            permission.HasOne<Permission>()
+                .WithMany()
+                .HasForeignKey(x => x.PermissionId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             permission.HasIndex("RoleId", nameof(RolePermission.PermissionId))
                 .IsUnique();

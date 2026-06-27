@@ -5,7 +5,7 @@ try
 
     var app = builder.Build();
 
-    app.UseIdentityPipeline();
+    await app.UseIdentityPipeline();
     app.Run();
 }
 catch (Exception ex)

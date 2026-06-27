@@ -5,7 +5,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
-      - ConnectionStrings__SqlServerDefaultConnection="Server=identity.db;Database=Identity_Db;User=sa;Password=Password123;TrustServerCertificate=True;"  
+      - ConnectionStrings__SqlServerDefaultConnection=Server=identity.db;Database=Identity_Db;User=sa;Password=Password123;TrustServerCertificate=True;  
     ports:
       - "5000:8080"
       - "5050:8081"

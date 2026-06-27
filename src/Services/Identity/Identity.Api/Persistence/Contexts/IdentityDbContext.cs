@@ -1,5 +1,4 @@
-﻿using Identity.Api.Domain.Permission;
-using Microsoft.EntityFrameworkCore;
+﻿using System.Reflection;
 
 namespace Identity.Api.Persistence.Contexts;
 
@@ -8,4 +7,10 @@ public class IdentityDbContext(DbContextOptions<IdentityDbContext> options) : Db
     public DbSet<User> Users { get; set; }
     public DbSet<Role> Roles { get; set; }
     public DbSet<Permission> Permissions { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        base.OnModelCreating(modelBuilder);
+    }
 }

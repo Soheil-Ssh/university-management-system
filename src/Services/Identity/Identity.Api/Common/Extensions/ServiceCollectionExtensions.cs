@@ -1,10 +1,12 @@
 ﻿using Carter;
 using Identity.Api.Persistence.Contexts;
 using Identity.Api.Persistence.Repositories;
+using Identity.Api.Persistence.Seed;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using SharedKernel.Abstractions;
 using SharedKernel.Api;
 using SharedKernel.Persistence;
+using SharedKernel.Persistence.Database;
 
 namespace Identity.Api.Common.Extensions;
 
@@ -31,8 +33,9 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IPermissionRepository, PermissionRepository>();
 
-        // TODO Apply migration
-        // TODO Add seeds
+        // Add data seeders to the service collection
+        services.AddScoped<IDataSeeder, PermissionSeeder>();
+        services.AddScoped<IDataSeeder, RoleSeeder>();
 
         // Add Carter to the service collection
         services.AddCarter();

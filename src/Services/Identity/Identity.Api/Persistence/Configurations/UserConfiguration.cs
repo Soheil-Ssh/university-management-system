@@ -63,6 +63,11 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                     id => id.Value,
                     value => new UserRoleId(value));
 
+            role.HasOne<Role>()
+                .WithMany()
+                .HasForeignKey(x => x.RoleId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             role.Property(x => x.RoleId)
                 .HasConversion(
                     id => id.Value,
