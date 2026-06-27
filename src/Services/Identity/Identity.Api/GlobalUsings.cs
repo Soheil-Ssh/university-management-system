@@ -7,3 +7,4 @@ global using Identity.Api.Domain.Role;
 global using Identity.Api.Domain.User;
 global using Identity.Api.Domain.Permission;
 global using Microsoft.EntityFrameworkCore;
+global using Identity.Api.Persistence.Contexts;

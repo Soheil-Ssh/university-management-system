@@ -1,9 +1,9 @@
 ﻿namespace Identity.Api.Persistence.Repositories;
 
-public class UnitOfWork : IUnitOfWork
+public class UnitOfWork(IdentityDbContext context) : IUnitOfWork
 {
-    public Task SaveAsync(CancellationToken cancellationToken = default)
+    public async Task SaveAsync(CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        await context.SaveChangesAsync(cancellationToken);
     }
 }
