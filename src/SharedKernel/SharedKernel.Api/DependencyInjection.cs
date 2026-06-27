@@ -4,19 +4,36 @@ using SharedKernel.Api.ExceptionHandling;
 
 namespace SharedKernel.Api;
 
-public static class DependenciesContainer
+// ReSharper disable once ConvertToExtensionBlock
+public static class DependencyInjection
 {
     public static IServiceCollection AddSharedKernelApi(this IServiceCollection services)
     {
-        // Add exception handlers
+        return services
+            .AddSharedExceptionHandling()
+            .AddSharedOpenApi()
+            .AddSharedApiVersioning();
+    }
+
+    // ReSharper disable once MemberCanBePrivate.Global
+    public static IServiceCollection AddSharedExceptionHandling(this IServiceCollection services)
+    {
         services.AddExceptionHandler<ValidationExceptionHandler>();
         services.AddExceptionHandler<GlobalExceptionHandler>();
         services.AddProblemDetails();
 
-        // Add open API
-        services.AddOpenApi();
+        return services;
+    }
 
-        // Add API versioning
+    // ReSharper disable once MemberCanBePrivate.Global
+    public static IServiceCollection AddSharedOpenApi(this IServiceCollection services)
+    {
+        return services.AddOpenApi();
+    }
+
+    // ReSharper disable once MemberCanBePrivate.Global
+    public static IServiceCollection AddSharedApiVersioning(this IServiceCollection services)
+    {
         services.AddApiVersioning(options =>
             {
                 options.DefaultApiVersion = new ApiVersion(1);
