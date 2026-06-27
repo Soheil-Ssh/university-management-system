@@ -1,6 +1,6 @@
 ﻿namespace Identity.Api.Persistence.Repositories;
 
-public class PermissionRepository
+public class PermissionRepository : IPermissionRepository
 {
-    
+
 }

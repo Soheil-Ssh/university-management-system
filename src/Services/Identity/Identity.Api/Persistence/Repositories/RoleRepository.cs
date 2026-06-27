@@ -1,6 +1,6 @@
 ﻿namespace Identity.Api.Persistence.Repositories;
 
-public class RoleRepository
+public class RoleRepository : IRoleRepository
 {
     
 }

@@ -1,6 +1,6 @@
 ﻿namespace Identity.Api.Persistence.Repositories;
 
-public class UserRepository
+public class UserRepository : IUserRepository
 {
     
 }
