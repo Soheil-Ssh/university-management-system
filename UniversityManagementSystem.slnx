@@ -6,6 +6,7 @@
   </Folder>
   <Folder Name="/src/SharedKernel/">
     <Project Path="src/SharedKernel/SharedKernel.Abstractions/SharedKernel.Abstractions.csproj" Id="92a369a6-c4ed-4604-a676-84fdb4ff8f80" />
+    <Project Path="src/SharedKernel/SharedKernel.Api/SharedKernel.Api.csproj" Id="c1070eb4-fa1f-4c6a-a878-811f908cd594" />
     <Project Path="src/SharedKernel/SharedKernel.Domain/SharedKernel.Domain.csproj" Id="a5471819-dace-4dde-8f02-8290f596fe8a" />
   </Folder>
 </Solution>
