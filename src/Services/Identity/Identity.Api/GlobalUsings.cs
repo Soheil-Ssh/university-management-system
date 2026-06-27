@@ -2,3 +2,4 @@
 global using SharedKernel.Domain.Error;
 global using SharedKernel.Domain.Result;
 global using SharedKernel.Abstractions.Persistence;
+global using Identity.Api.Common.Extensions;

@@ -1,6 +1,12 @@
-var builder = WebApplication.CreateBuilder(args);
-var app = builder.Build();
-
-app.MapGet("/", () => "Hello World!");
-
-app.Run();
+try
+{
+    var builder = WebApplication.CreateBuilder(args);
+    builder.Services.AddIdentityServices();
+    var app = builder.Build();
+    app.UseIdentityPipeline();
+    app.Run();
+}
+catch (Exception ex)
+{
+    throw;
+}
