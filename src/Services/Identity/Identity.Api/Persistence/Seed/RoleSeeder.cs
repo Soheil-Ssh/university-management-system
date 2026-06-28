@@ -13,7 +13,7 @@ public class RoleSeeder(IdentityDbContext context) : IDataSeeder
 
         foreach (var role in Roles.All)
         {
-            var roleResult = Role.Create(role);
+            var roleResult = Role.Create(role, true);
             if (roleResult.IsFailure)
                 throw new Exception(roleResult.Error.ToString());
 

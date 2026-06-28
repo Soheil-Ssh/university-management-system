@@ -9,6 +9,7 @@ public class Roles
     public const string DepartmentExpert = "DepartmentExpert";
     public const string Professor = "Professor";
     public const string Student = "Student";
+    public const string Unassigned = "Unassigned";
 
     public static readonly IReadOnlyList<string> All =
     [
@@ -18,6 +19,7 @@ public class Roles
         DepartmentManager,
         DepartmentExpert,
         Professor,
-        Student
+        Student,
+        Unassigned
     ];
 }

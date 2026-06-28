@@ -20,7 +20,7 @@ public static class CreateRole
     {
         public async Task<Result<Guid>> Handle(Command request, CancellationToken cancellationToken)
         {
-            var roleResult = Role.Create(request.Name, request.Description);
+            var roleResult = Role.Create(request.Name, false, request.Description);
 
             if (roleResult.IsFailure)
                 return roleResult.Error;
