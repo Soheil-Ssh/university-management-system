@@ -56,7 +56,7 @@ public static class Update
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPut("api/roles/{id:guid}", async (ISender sender, Guid id, Request request) =>
+            app.MapPut("api/v{v:apiVersion}/roles/{id:guid}", async (ISender sender, Guid id, Request request) =>
             {
                 var command = new Command(id, request.Name, request.Description);
                 var result = await sender.Send(command);

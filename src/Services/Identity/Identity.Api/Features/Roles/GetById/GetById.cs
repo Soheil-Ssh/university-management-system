@@ -33,7 +33,7 @@ public static class GetById
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("api/roles/{id:guid}", async (ISender sender, Guid id) =>
+            app.MapGet("api/v{v:apiVersion}/roles/{id:guid}", async (ISender sender, Guid id) =>
             {
                 var request = new Query(id);
                 var result = await sender.Send(request);
