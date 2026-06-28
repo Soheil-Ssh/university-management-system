@@ -5,7 +5,7 @@ namespace Identity.Api.Domain.Role;
 public sealed class Role : AggregateRoot<RoleId>
 {
     public string Name { get; private set; }
-    public string Description { get; private set; } = string.Empty;
+    public string? Description { get; private set; }
 
     private readonly List<RolePermission> _rolePermissions = [];
     public IReadOnlyCollection<RolePermission> RolePermissions => _rolePermissions;
@@ -14,13 +14,13 @@ public sealed class Role : AggregateRoot<RoleId>
     private Role() { }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
-    private Role(RoleId id, string name, string description) : base(id)
+    private Role(RoleId id, string name, string? description = null) : base(id)
     {
         Name = name;
         Description = description;
     }
 
-    public static Result<Role> Create(string name, string description)
+    public static Result<Role> Create(string name, string? description = null)
     {
         if (string.IsNullOrWhiteSpace(name))
             return RoleErrors.NameEmpty;
@@ -57,7 +57,9 @@ public sealed class Role : AggregateRoot<RoleId>
 
     public Result UpdateDescription(string description)
     {
-        if (!string.IsNullOrWhiteSpace(description) && description.Length > 500)
+        if (string.IsNullOrWhiteSpace(description))
+            return RoleErrors.DescriptionEmpty;
+        if (description.Length > 500)
             return RoleErrors.DescriptionTooLong;
 
         Description = description;

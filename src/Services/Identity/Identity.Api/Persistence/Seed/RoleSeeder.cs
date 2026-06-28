@@ -1,5 +1,4 @@
 ﻿using Identity.Api.Common.Authorization.Roles;
-using Identity.Api.Persistence.Contexts;
 using SharedKernel.Persistence.Database;
 
 namespace Identity.Api.Persistence.Seed;
@@ -14,7 +13,7 @@ public class RoleSeeder(IdentityDbContext context) : IDataSeeder
 
         foreach (var role in Roles.All)
         {
-            var roleResult = Role.Create(role, string.Empty);
+            var roleResult = Role.Create(role);
             if (roleResult.IsFailure)
                 throw new Exception(roleResult.Error.ToString());
 

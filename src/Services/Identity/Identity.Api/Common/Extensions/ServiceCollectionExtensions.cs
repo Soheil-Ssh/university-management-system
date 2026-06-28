@@ -1,6 +1,4 @@
-﻿using Carter;
-using Identity.Api.Persistence.Contexts;
-using Identity.Api.Persistence.Repositories;
+﻿using Identity.Api.Persistence.Repositories;
 using Identity.Api.Persistence.Seed;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using SharedKernel.Abstractions;
@@ -37,14 +35,14 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IDataSeeder, PermissionSeeder>();
         services.AddScoped<IDataSeeder, RoleSeeder>();
 
-        // Add Carter to the service collection
-        services.AddCarter();
-
         // Add the shared kernel abstractions to the service collection
         services.AddSharedKernelAbstractions<Program>();
 
         // Add the shared kernel API services to the service collection
         services.AddSharedKernelApi();
+
+        // Add Carter to the service collection
+        services.AddCarter();
 
         return services;
     }
