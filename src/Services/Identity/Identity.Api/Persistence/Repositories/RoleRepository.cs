@@ -10,10 +10,9 @@ public class RoleRepository(IdentityDbContext context) : IRoleRepository
         await context.Roles.AddAsync(role, cancellationToken);
     }
 
-    public async Task IsExistRole(string roleName, CancellationToken cancellationToken = default)
-        => await context.Roles.AnyAsync(r => r.Name == roleName, cancellationToken);
+    public async Task<bool> IsExistRole(string roleName, CancellationToken cancellationToken = default)
+        => await context.Roles.AnyAsync(r => r.Name.ToLower() == roleName.ToLower(), cancellationToken);
 
-    public async Task IsExistRole(RoleId id, string roleName, CancellationToken cancellationToken = default)
-        => await context.Roles.AnyAsync(r => r.Id != id && r.Name == roleName, cancellationToken);
-
+    public async Task<bool> IsExistRole(RoleId id, string roleName, CancellationToken cancellationToken = default)
+        => await context.Roles.AnyAsync(r => r.Id != id && r.Name.ToLower() == roleName.ToLower(), cancellationToken);
 }

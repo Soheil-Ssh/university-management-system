@@ -1,4 +1,6 @@
-﻿namespace Identity.Api.Features.Roles.CreateRole;
+﻿using Identity.Api.Domain.Role.Errors;
+
+namespace Identity.Api.Features.Roles.CreateRole;
 
 public static class CreateRole
 {
@@ -20,6 +22,10 @@ public static class CreateRole
     {
         public async Task<Result<Guid>> Handle(Command request, CancellationToken cancellationToken)
         {
+            var existRole = await roleRepository.IsExistRole(request.Name, cancellationToken);
+            if (existRole)
+                return RoleErrors.AlreadyExists;
+
             var roleResult = Role.Create(request.Name, false, request.Description);
 
             if (roleResult.IsFailure)

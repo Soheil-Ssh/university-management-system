@@ -9,4 +9,5 @@ public static class RoleErrors
     public static readonly Error DescriptionTooLong = new("Role.Description.TooLong", "Description is too long.", ErrorType.Validation);
     public static readonly Error PermissionAlreadyExist = new("User.Permission.AlreadyExist", "Permission already exists for this user.", ErrorType.Validation);
     public static readonly Error PermissionNotFound = new("User.Permission.NotFound", "Permission not found for this user.", ErrorType.Validation);
+    public static readonly Error AlreadyExists = new("Role.AlreadyExists", "A role with this name already exists.", ErrorType.Validation);
 }
