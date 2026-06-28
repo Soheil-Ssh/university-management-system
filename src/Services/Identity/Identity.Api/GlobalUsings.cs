@@ -17,3 +17,4 @@ global using Carter;
 global using Mapster;
 global using SharedKernel.Api.Extensions;
 global using Asp.Versioning;
+global using SharedKernel.Abstractions.CQRS;
