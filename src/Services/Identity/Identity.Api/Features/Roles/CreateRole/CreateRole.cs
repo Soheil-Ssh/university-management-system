@@ -26,7 +26,7 @@ public static class CreateRole
             if (existRole)
                 return RoleErrors.AlreadyExists;
 
-            var roleResult = Role.Create(request.Name, false, request.Description);
+            var roleResult = Role.Create(request.Name, request.Description);
 
             if (roleResult.IsFailure)
                 return roleResult.Error;

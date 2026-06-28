@@ -1,5 +1,3 @@
-using Identity.Api.Domain.Role.Errors;
-
 namespace Identity.Api.Domain.Role;
 
 public sealed class Role : AggregateRoot<RoleId>
@@ -22,47 +20,54 @@ public sealed class Role : AggregateRoot<RoleId>
         IsSystem = isSystem;
     }
 
-    public static Result<Role> Create(string name, bool isSystem, string? description = null)
+    public static Result<Role> CreateSystemRole(string name, string? description = null)
     {
-        if (string.IsNullOrWhiteSpace(name))
-            return RoleErrors.NameEmpty;
+        var nameResult = ValidateName(name);
+        if (nameResult.IsFailure)
+            return nameResult.Error;
 
-        name = name.Trim();
+        var descResult = ValidateDescription(description);
+        if (descResult.IsFailure)
+            return descResult.Error;
 
-        if (name.Length < 2)
-            return RoleErrors.NameTooShort;
-        if (name.Length > 100)
-            return RoleErrors.NameTooLong;
+        return new Role(RoleId.New(), name, true, description);
+    }
 
-        if (!string.IsNullOrWhiteSpace(description) && description.Length > 500)
-            return RoleErrors.DescriptionTooLong;
+    public static Result<Role> Create(string name, string? description = null)
+    {
+        var nameResult = ValidateName(name);
+        if (nameResult.IsFailure)
+            return nameResult.Error;
 
-        return new Role(RoleId.New(), name, isSystem, description);
+        var descResult = ValidateDescription(description);
+        if (descResult.IsFailure)
+            return descResult.Error;
+
+        return new Role(RoleId.New(), name.Trim(), false, description);
     }
 
     public Result UpdateName(string name)
     {
-        if (string.IsNullOrWhiteSpace(name))
-            return RoleErrors.NameEmpty;
+        if (IsSystem)
+            return RoleErrors.SystemRoleCannotBeModified;
 
-        name = name.Trim();
+        var nameResult = ValidateName(name);
+        if (nameResult.IsFailure)
+            return nameResult.Error;
 
-        if (name.Length < 2)
-            return RoleErrors.NameTooShort;
-        if (name.Length > 100)
-            return RoleErrors.NameTooLong;
-
-        Name = name;
+        Name = name.Trim();
 
         return Result.Success();
     }
 
-    public Result UpdateDescription(string description)
+    public Result UpdateDescription(string? description)
     {
-        if (string.IsNullOrWhiteSpace(description))
-            return RoleErrors.DescriptionEmpty;
-        if (description.Length > 500)
-            return RoleErrors.DescriptionTooLong;
+        if (IsSystem)
+            return RoleErrors.SystemRoleCannotBeModified;
+
+        var descResult = ValidateDescription(description);
+        if (descResult.IsFailure)
+            return descResult.Error;
 
         Description = description;
 
@@ -92,6 +97,28 @@ public sealed class Role : AggregateRoot<RoleId>
             return RoleErrors.PermissionNotFound;
 
         _rolePermissions.Remove(permission);
+
+        return Result.Success();
+    }
+
+    private static Result ValidateName(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            return RoleErrors.NameEmpty;
+
+        name = name.Trim();
+        if (name.Length < 2)
+            return RoleErrors.NameTooShort;
+        if (name.Length > 100)
+            return RoleErrors.NameTooLong;
+
+        return Result.Success();
+    }
+
+    private static Result ValidateDescription(string? description)
+    {
+        if (!string.IsNullOrWhiteSpace(description) && description.Length > 500)
+            return RoleErrors.DescriptionTooLong;
 
         return Result.Success();
     }
