@@ -1,8 +1,6 @@
-﻿using Identity.Api.Domain.Role.Errors;
+﻿namespace Identity.Api.Features.Roles.Create;
 
-namespace Identity.Api.Features.Roles.CreateRole;
-
-public static class CreateRole
+public static class Create
 {
     public sealed record Request(string Name, string Description);
 
