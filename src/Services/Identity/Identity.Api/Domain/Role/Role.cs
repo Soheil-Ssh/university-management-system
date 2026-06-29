@@ -143,7 +143,8 @@ public sealed class Role : AggregateRoot<RoleId>
 
     public Result Deactivate()
     {
-        // ToDo
+        if (IsSystem)
+            return RoleErrors.SystemRoleCannotBeDeactivated;
 
         if (!IsActive)
             return Result.Success();
