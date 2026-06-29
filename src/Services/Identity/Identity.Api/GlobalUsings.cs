@@ -16,5 +16,6 @@ global using MediatR;
 global using Carter;
 global using Mapster;
 global using SharedKernel.Api.Extensions;
+global using SharedKernel.Api.Contracts;
 global using Asp.Versioning;
 global using SharedKernel.Abstractions.CQRS;
