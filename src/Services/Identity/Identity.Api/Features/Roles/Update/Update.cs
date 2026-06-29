@@ -4,7 +4,7 @@ public static class Update
 {
     public sealed record Request(string Name, string DisplayName, string? Description);
 
-    public sealed record Command(Guid Id, string Name, string DisplayName, string? Description) : IRequest<Result<Guid>>;
+    public sealed record Command(Guid Id, string Name, string DisplayName, string? Description) : ICommand<Result<Guid>>;
 
     public class Validator : AbstractValidator<Command>
     {
@@ -18,7 +18,7 @@ public static class Update
     }
 
     public class Handler(IRoleRepository roleRepository, IUnitOfWork unitOfWork)
-        : IRequestHandler<Command, Result<Guid>>
+        : ICommandHandler<Command, Result<Guid>>
     {
         public async Task<Result<Guid>> Handle(Command request, CancellationToken cancellationToken)
         {
