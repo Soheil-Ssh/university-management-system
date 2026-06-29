@@ -1,5 +1,4 @@
 ﻿using Identity.Api.Common.Authorization.Permissions;
-using Identity.Api.Persistence.Contexts;
 using SharedKernel.Persistence.Database;
 
 namespace Identity.Api.Persistence.Seed;
@@ -10,15 +9,25 @@ public class PermissionSeeder(IdentityDbContext context) : IDataSeeder
 
     public async Task SeedAsync(CancellationToken cancellationToken = default)
     {
-        if (await context.Permissions.AnyAsync(cancellationToken)) return;
-
-        foreach (var permission in PermissionRegistry.All)
+        foreach (var definition in PermissionRegistry.All)
         {
-            var permissionResult = Permission.Create(permission.Name, permission.Code);
-            if (permissionResult.IsFailure)
-                throw new Exception(permissionResult.Error.ToString());
+            var permission = await context.Permissions
+                .FirstOrDefaultAsync(x => x.Code == definition.Code, cancellationToken);
 
-            await context.Permissions.AddAsync(permissionResult.Data, cancellationToken);
+            if (permission is null)
+            {
+                var permissionResult = Permission.Create(definition.Name, definition.DisplayName, definition.Code);
+                if (permissionResult.IsFailure)
+                    throw new Exception(permissionResult.Error.ToString());
+
+                await context.Permissions.AddAsync(permissionResult.Data, cancellationToken);
+            }
+            else
+            {
+                var syncResult = permission.SyncWithSystemDefinition(definition.Name, definition.DisplayName);
+                if (syncResult.IsFailure)
+                    throw new Exception(syncResult.Error.ToString());
+            }
         }
 
         await context.SaveChangesAsync(cancellationToken);

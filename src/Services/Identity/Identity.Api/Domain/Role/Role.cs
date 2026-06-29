@@ -154,6 +154,18 @@ public sealed class Role : AggregateRoot<RoleId>
         return Result.Success();
     }
 
+    public Result SyncWithSystemDefinition(string displayName, string? description)
+    {
+        if (!IsSystem)
+            return RoleErrors.NonSystemRoleCannotBeSynchronized;
+
+        DisplayName = displayName.Trim();
+        Description = description?.Trim();
+        IsActive = true;
+
+        return Result.Success();
+    }
+
     private static Result ValidateName(string name)
     {
         if (string.IsNullOrWhiteSpace(name))

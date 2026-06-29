@@ -18,12 +18,17 @@ public class PermissionConfiguration : IEntityTypeConfiguration<Permission>
 
         // Name
         builder.Property(x => x.Name)
-            .HasMaxLength(100)
+            .HasMaxLength(150)
+            .IsRequired();
+
+        // Display name
+        builder.Property(x => x.DisplayName)
+            .HasMaxLength(150)
             .IsRequired();
 
         // Code
         builder.Property(x => x.Code)
-            .HasMaxLength(100)
+            .HasMaxLength(150)
             .IsRequired();
 
         builder.HasIndex(x => x.Code)

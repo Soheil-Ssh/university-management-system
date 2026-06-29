@@ -6,6 +6,7 @@ public static class RoleErrors
     public static readonly Error AlreadyExists = new("Role.AlreadyExists", "A role with this name already exists.", ErrorType.Validation);
     public static readonly Error NotFound = new("Role.NotFound", "Role not found.", ErrorType.Validation);
     public static readonly Error SystemRoleCannotBeDeactivated = new("Role.SystemRoleCannotBeDeactivated", "Cannot deactivated a system role.", ErrorType.Validation);
+    public static readonly Error NonSystemRoleCannotBeSynchronized = new("Role.Sync.NonSystemRoleNotAllowed", "Only system roles can be synchronized.", ErrorType.Validation);
 
     // Role name errors
     public static readonly Error NameEmpty = new("Role.Name.Empty", "Role name cannot be empty.", ErrorType.Validation);
