@@ -4,7 +4,9 @@ public static class GetAll
 {
     public sealed record Request(
         string? Name,
+        string? DisplayName,
         bool? IsSystem,
+        bool? IsActive,
         DateTime? FromCreateAt,
         DateTime? ToCreateAt,
         DateTime? FromUpdateAt,
@@ -15,13 +17,17 @@ public static class GetAll
     public sealed record Response(
         Guid Id,
         string Name,
+        string DisplayName,
         string? Description,
         bool IsSystem,
-        DateTime CreatedAt,
-        DateTime UpdatedAt);
+        bool IsActive,
+        DateTime CreateAt,
+        DateTime UpdateAt);
 
     public sealed record Query(string? Name,
+        string? DisplayName,
         bool? IsSystem,
+        bool? IsActive,
         DateTime? FromCreateAt,
         DateTime? ToCreateAt,
         DateTime? FromUpdateAt,
@@ -39,8 +45,14 @@ public static class GetAll
             if (!string.IsNullOrWhiteSpace(request.Name))
                 query = query.Where(r => r.Name.Contains(request.Name.Trim()));
 
+            if (!string.IsNullOrWhiteSpace(request.DisplayName))
+                query = query.Where(r => r.DisplayName.Contains(request.DisplayName.Trim()));
+
             if (request.IsSystem.HasValue)
                 query = query.Where(r => r.IsSystem == request.IsSystem.Value);
+
+            if (request.IsActive.HasValue)
+                query = query.Where(r => r.IsActive == request.IsActive.Value);
 
             if (request.FromCreateAt.HasValue)
                 query = query.Where(r => r.CreatedAt >= request.FromCreateAt.Value);
@@ -59,8 +71,10 @@ public static class GetAll
                 .Select(r => new Response(
                     r.Id.Value,
                     r.Name,
+                    r.DisplayName,
                     r.Description,
                     r.IsSystem,
+                    r.IsActive,
                     r.CreatedAt,
                     r.UpdatedAt))
                 .ToPagedResultAsync(request.Page, request.PageSize, cancellationToken);

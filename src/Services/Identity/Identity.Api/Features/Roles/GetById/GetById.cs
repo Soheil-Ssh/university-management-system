@@ -6,8 +6,10 @@ public static class GetById
 
     public sealed record Response(Guid Id,
         string Name,
+        string DisplayName,
         string? Description,
         bool IsSystem,
+        bool IsActive,
         DateTime CreateAt,
         DateTime UpdateAt);
 
@@ -22,8 +24,10 @@ public static class GetById
 
             return new Response(role.Id.Value,
                 role.Name,
+                role.DisplayName,
                 role.Description,
                 role.IsSystem,
+                role.IsActive,
                 role.CreatedAt,
                 role.UpdatedAt);
         }

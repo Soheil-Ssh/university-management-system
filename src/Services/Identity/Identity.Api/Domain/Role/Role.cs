@@ -3,8 +3,10 @@ namespace Identity.Api.Domain.Role;
 public sealed class Role : AggregateRoot<RoleId>
 {
     public string Name { get; private set; }
+    public string DisplayName { get; private set; }
     public string? Description { get; private set; }
     public bool IsSystem { get; private set; }
+    public bool IsActive { get; private set; }
 
     private readonly List<RolePermission> _rolePermissions = [];
     public IReadOnlyCollection<RolePermission> RolePermissions => _rolePermissions;
@@ -13,43 +15,59 @@ public sealed class Role : AggregateRoot<RoleId>
     private Role() { }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
-    private Role(RoleId id, string name, bool isSystem, string? description = null) : base(id)
+    private Role(
+        RoleId id,
+        string name,
+        string displayName,
+        bool isSystem,
+        string? description = null)
+        : base(id)
     {
         Name = name;
+        DisplayName = displayName;
         Description = description;
         IsSystem = isSystem;
+        IsActive = true;
     }
 
-    public static Result<Role> CreateSystemRole(string name, string? description = null)
+    public static Result<Role> CreateSystemRole(string name, string displayName, string? description = null)
     {
         var nameResult = ValidateName(name);
         if (nameResult.IsFailure)
             return nameResult.Error;
 
+        var displayNameResult = ValidateDisplayName(displayName);
+        if (displayNameResult.IsFailure)
+            return displayNameResult.Error;
+
         var descResult = ValidateDescription(description);
         if (descResult.IsFailure)
             return descResult.Error;
 
-        return new Role(RoleId.New(), name, true, description);
+        return new Role(RoleId.New(), name.Trim(), displayName.Trim(), true, description?.Trim());
     }
 
-    public static Result<Role> Create(string name, string? description = null)
+    public static Result<Role> Create(string name, string displayName, string? description = null)
     {
         var nameResult = ValidateName(name);
         if (nameResult.IsFailure)
             return nameResult.Error;
 
+        var displayNameResult = ValidateDisplayName(displayName);
+        if (displayNameResult.IsFailure)
+            return displayNameResult.Error;
+
         var descResult = ValidateDescription(description);
         if (descResult.IsFailure)
             return descResult.Error;
 
-        return new Role(RoleId.New(), name.Trim(), false, description);
+        return new Role(RoleId.New(), name.Trim(), displayName.Trim(), false, description?.Trim());
     }
 
     public Result UpdateName(string name)
     {
         if (IsSystem)
-            return RoleErrors.SystemRoleCannotBeModified;
+            return RoleErrors.SystemRoleNameCannotBeChanged;
 
         var nameResult = ValidateName(name);
         if (nameResult.IsFailure)
@@ -60,22 +78,32 @@ public sealed class Role : AggregateRoot<RoleId>
         return Result.Success();
     }
 
+    public Result UpdateDisplayName(string displayName)
+    {
+        var displayNameResult = ValidateDisplayName(displayName);
+        if (displayNameResult.IsFailure)
+            return displayNameResult.Error;
+
+        DisplayName = displayName.Trim();
+
+        return Result.Success();
+    }
+
     public Result UpdateDescription(string? description)
     {
-        if (IsSystem)
-            return RoleErrors.SystemRoleCannotBeModified;
-
         var descResult = ValidateDescription(description);
         if (descResult.IsFailure)
             return descResult.Error;
 
-        Description = description;
+        Description = description?.Trim();
 
         return Result.Success();
     }
 
     public Result AddPermission(PermissionId permissionId)
     {
+        // TODO Check current role is system or not because system role permissions cannot be modified
+
         if (_rolePermissions.Any(x => x.PermissionId == permissionId))
             return RoleErrors.PermissionAlreadyExist;
 
@@ -90,6 +118,8 @@ public sealed class Role : AggregateRoot<RoleId>
 
     public Result RemovePermission(PermissionId permissionId)
     {
+        // TODO Check current role is system or not because system role permissions cannot be modified
+
         var permission = _rolePermissions
             .FirstOrDefault(x => x.PermissionId == permissionId);
 
@@ -97,6 +127,28 @@ public sealed class Role : AggregateRoot<RoleId>
             return RoleErrors.PermissionNotFound;
 
         _rolePermissions.Remove(permission);
+
+        return Result.Success();
+    }
+
+    public Result Activate()
+    {
+        if (IsActive || IsSystem)
+            return Result.Success();
+
+        IsActive = true;
+
+        return Result.Success();
+    }
+
+    public Result Deactivate()
+    {
+        // ToDo
+
+        if (!IsActive)
+            return Result.Success();
+
+        IsActive = false;
 
         return Result.Success();
     }
@@ -111,6 +163,20 @@ public sealed class Role : AggregateRoot<RoleId>
             return RoleErrors.NameTooShort;
         if (name.Length > 100)
             return RoleErrors.NameTooLong;
+
+        return Result.Success();
+    }
+
+    private static Result ValidateDisplayName(string displayName)
+    {
+        if (string.IsNullOrWhiteSpace(displayName))
+            return RoleErrors.DisplayNameEmpty;
+
+        displayName = displayName.Trim();
+        if (displayName.Length < 2)
+            return RoleErrors.DisplayNameTooShort;
+        if (displayName.Length > 150)
+            return RoleErrors.DisplayNameTooLong;
 
         return Result.Success();
     }

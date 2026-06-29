@@ -2,9 +2,9 @@ namespace Identity.Api.Features.Roles.Update;
 
 public static class Update
 {
-    public sealed record Request(string Name, string Description);
+    public sealed record Request(string Name, string DisplayName, string? Description);
 
-    public sealed record Command(Guid Id, string Name, string Description) : IRequest<Result<Guid>>;
+    public sealed record Command(Guid Id, string Name, string DisplayName, string? Description) : IRequest<Result<Guid>>;
 
     public class Validator : AbstractValidator<Command>
     {
@@ -12,6 +12,7 @@ public static class Update
         {
             RuleFor(x => x.Id).NotEmpty();
             RuleFor(x => x.Name).NotEmpty().MaximumLength(100);
+            RuleFor(x => x.DisplayName).NotEmpty().MaximumLength(150);
             RuleFor(x => x.Description).MaximumLength(500);
         }
     }
@@ -25,21 +26,26 @@ public static class Update
             if (role is null)
                 return RoleErrors.NotFound;
 
-            if (role.IsSystem)
-                return RoleErrors.SystemRoleCannotBeModified;
-
-            // Check if name is being changed to an existing name (excluding current role)
+            // Update name if it has changed
             if (!role.Name.Equals(request.Name, StringComparison.OrdinalIgnoreCase))
             {
-                var exists = await roleRepository.IsExistRole(role.Id, request.Name, cancellationToken);
+                var exists = await roleRepository.IsExistRole(role.Id,
+                    request.Name,
+                    cancellationToken);
+
                 if (exists)
                     return RoleErrors.AlreadyExists;
+
+                var nameResult = role.UpdateName(request.Name);
+
+                if (nameResult.IsFailure)
+                    return nameResult.Error;
             }
 
-            // Update name
-            var nameResult = role.UpdateName(request.Name);
-            if (nameResult.IsFailure)
-                return nameResult.Error;
+            // Update display name
+            var displayNameResult = role.UpdateDisplayName(request.DisplayName);
+            if (displayNameResult.IsFailure)
+                return displayNameResult.Error;
 
             // Update description
             var descriptionResult = role.UpdateDescription(request.Description);
@@ -58,7 +64,7 @@ public static class Update
         {
             app.MapPut("api/v{v:apiVersion}/roles/{id:guid}", async (ISender sender, Guid id, Request request) =>
             {
-                var command = new Command(id, request.Name, request.Description);
+                var command = new Command(id, request.Name, request.DisplayName, request.Description);
                 var result = await sender.Send(command);
                 return result.ToHttpResult();
             })

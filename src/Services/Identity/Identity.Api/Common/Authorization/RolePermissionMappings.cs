@@ -7,12 +7,12 @@ public class RolePermissionMappings
     public static readonly Dictionary<string, IReadOnlyCollection<string>> Mappings =
         new()
         {
-            [Roles.Roles.SuperAdmin] = [..PermissionRegistry.All.Select(x => x.Name)],
+            [Roles.Roles.SuperAdmin.Name] = [..PermissionRegistry.All.Select(x => x.Name)],
 
-            [Roles.Roles.UniversityPresident] = [..PermissionRegistry.All.Select(x => x.Name)],
+            [Roles.Roles.UniversityPresident.Name] = [..PermissionRegistry.All.Select(x => x.Name)],
 
-            [Roles.Roles.Professor] = [],
+            [Roles.Roles.Professor.Name] = [],
 
-            [Roles.Roles.Student] = []
+            [Roles.Roles.Student.Name] = []
         };
 }

@@ -2,15 +2,16 @@
 
 public static class Create
 {
-    public sealed record Request(string Name, string Description);
+    public sealed record Request(string Name, string DisplayName, string? Description);
 
-    public sealed record Command(string Name, string Description) : IRequest<Result<Guid>>;
+    public sealed record Command(string Name, string DisplayName, string? Description) : IRequest<Result<Guid>>;
 
     public class Validator : AbstractValidator<Command>
     {
         public Validator()
         {
             RuleFor(x => x.Name).NotEmpty().MaximumLength(100);
+            RuleFor(x => x.DisplayName).NotEmpty().MaximumLength(150);
             RuleFor(x => x.Description).MaximumLength(500);
         }
     }
@@ -24,7 +25,7 @@ public static class Create
             if (existRole)
                 return RoleErrors.AlreadyExists;
 
-            var roleResult = Role.Create(request.Name, request.Description);
+            var roleResult = Role.Create(request.Name, request.DisplayName, request.Description);
 
             if (roleResult.IsFailure)
                 return roleResult.Error;
@@ -44,10 +45,10 @@ public static class Create
                 {
                     var command = request.Adapt<Command>();
                     var result = await sender.Send(command);
-
                     return result.ToHttpResult();
                 })
                 .Version(app, 1.0)
+                .WithName("CreateRole")
                 .WithTags("Roles");
         }
     }
