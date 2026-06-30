@@ -1,6 +1,8 @@
-﻿namespace Identity.Api.Persistence.Repositories;
+﻿using Identity.Api.Domain.Permission;
+using Microsoft.EntityFrameworkCore;
 
-public class PermissionRepository : IPermissionRepository
+namespace Identity.Api.Persistence.Repositories;
+
+public class PermissionRepository(IdentityDbContext context) : IPermissionRepository
 {
-
 }

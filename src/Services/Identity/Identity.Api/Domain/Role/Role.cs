@@ -67,7 +67,7 @@ public sealed class Role : AggregateRoot<RoleId>
     public Result UpdateName(string name)
     {
         if (IsSystem)
-            return RoleErrors.SystemRoleNameCannotBeChanged;
+            return RoleErrors.SystemRoleNameCannotBeRename;
 
         var nameResult = ValidateName(name);
         if (nameResult.IsFailure)
@@ -102,7 +102,8 @@ public sealed class Role : AggregateRoot<RoleId>
 
     public Result AddPermission(PermissionId permissionId)
     {
-        // TODO Check current role is system or not because system role permissions cannot be modified
+        if (IsSystem)
+            return RoleErrors.SystemRolePermissionsCannotBeModified;
 
         if (_rolePermissions.Any(x => x.PermissionId == permissionId))
             return RoleErrors.PermissionAlreadyExist;
@@ -118,7 +119,8 @@ public sealed class Role : AggregateRoot<RoleId>
 
     public Result RemovePermission(PermissionId permissionId)
     {
-        // TODO Check current role is system or not because system role permissions cannot be modified
+        if (IsSystem)
+            return RoleErrors.SystemRolePermissionsCannotBeModified;
 
         var permission = _rolePermissions
             .FirstOrDefault(x => x.PermissionId == permissionId);
