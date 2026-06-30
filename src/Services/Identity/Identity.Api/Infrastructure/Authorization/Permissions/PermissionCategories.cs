@@ -1,4 +1,4 @@
-﻿namespace Identity.Api.Common.Authorization.Permissions;
+﻿namespace Identity.Api.Infrastructure.Authorization.Permissions;
 
 public static class PermissionCategories
 {

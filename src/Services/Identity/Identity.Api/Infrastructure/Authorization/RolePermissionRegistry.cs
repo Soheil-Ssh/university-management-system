@@ -1,6 +1,6 @@
-﻿using Identity.Api.Common.Authorization.Permissions;
+﻿using Identity.Api.Infrastructure.Authorization.Permissions;
 
-namespace Identity.Api.Common.Authorization;
+namespace Identity.Api.Infrastructure.Authorization;
 
 public class RolePermissionRegistry
 {

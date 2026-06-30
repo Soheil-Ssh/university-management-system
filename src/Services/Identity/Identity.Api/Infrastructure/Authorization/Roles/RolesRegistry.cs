@@ -1,4 +1,4 @@
-﻿namespace Identity.Api.Common.Authorization.Roles;
+﻿namespace Identity.Api.Infrastructure.Authorization.Roles;
 
 public class RolesRegistry
 {

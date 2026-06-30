@@ -1,4 +1,4 @@
-﻿using Identity.Api.Common.Authorization;
+﻿using Identity.Api.Infrastructure.Authorization;
 using Identity.Api.Infrastructure.Persistence.Contexts;
 using SharedKernel.Persistence.Database;
 
