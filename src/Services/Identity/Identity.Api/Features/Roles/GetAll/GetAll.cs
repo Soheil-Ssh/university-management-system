@@ -2,7 +2,7 @@ namespace Identity.Api.Features.Roles.GetAll;
 
 public static class GetAll
 {
-    public sealed record Request(
+    public sealed record GetAllRolesRequest(
         string? Name,
         string? DisplayName,
         bool? IsSystem,
@@ -85,7 +85,7 @@ public static class GetAll
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("api/v{v:apiVersion}/roles", async ([AsParameters] Request request, ISender sender) =>
+            app.MapGet("api/v{v:apiVersion}/roles", async ([AsParameters] GetAllRolesRequest request, ISender sender) =>
             {
                 var query = request.Adapt<Query>();
                 var result = await sender.Send(query);

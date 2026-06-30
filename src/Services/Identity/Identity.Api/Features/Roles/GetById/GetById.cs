@@ -2,8 +2,6 @@ namespace Identity.Api.Features.Roles.GetById;
 
 public static class GetById
 {
-    public sealed record Query(Guid Id) : IQuery<Result<Response>>;
-
     public sealed record Response(Guid Id,
         string Name,
         string DisplayName,
@@ -12,6 +10,8 @@ public static class GetById
         bool IsActive,
         DateTime CreateAt,
         DateTime UpdateAt);
+
+    public sealed record Query(Guid Id) : IQuery<Result<Response>>;
 
     public class Handler(IdentityDbContext context) : IQueryHandler<Query, Result<Response>>
     {

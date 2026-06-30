@@ -2,7 +2,7 @@ namespace Identity.Api.Features.Roles.Update;
 
 public static class Update
 {
-    public sealed record Request(string Name, string DisplayName, string? Description);
+    public sealed record UpdateRoleRequest(string Name, string DisplayName, string? Description);
 
     public sealed record Command(Guid Id, string Name, string DisplayName, string? Description) : ICommand<Result<Guid>>;
 
@@ -62,7 +62,7 @@ public static class Update
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPut("api/v{v:apiVersion}/roles/{id:guid}", async (ISender sender, Guid id, Request request) =>
+            app.MapPut("api/v{v:apiVersion}/roles/{id:guid}", async (ISender sender, Guid id, UpdateRoleRequest request) =>
             {
                 var command = new Command(id, request.Name, request.DisplayName, request.Description);
                 var result = await sender.Send(command);

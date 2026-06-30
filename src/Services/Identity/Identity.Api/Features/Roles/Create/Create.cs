@@ -2,7 +2,7 @@
 
 public static class Create
 {
-    public sealed record Request(string Name, string DisplayName, string? Description);
+    public sealed record CreateRoleRequest(string Name, string DisplayName, string? Description);
 
     public sealed record Command(string Name, string DisplayName, string? Description) : ICommand<Result<Guid>>;
 
@@ -41,7 +41,7 @@ public static class Create
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("api/v{v:apiVersion}/roles", async (ISender sender, Request request) =>
+            app.MapPost("api/v{v:apiVersion}/roles", async (ISender sender, CreateRoleRequest request) =>
                 {
                     var command = request.Adapt<Command>();
                     var result = await sender.Send(command);
