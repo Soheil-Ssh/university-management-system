@@ -29,7 +29,17 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .HasMaxLength(200)
             .IsRequired();
 
+        // SecurityStamp
+        builder.Property(x => x.SecurityStamp)
+            .HasMaxLength(100)
+            .IsRequired();
+
+        // IsActive
         builder.Property(x => x.IsActive)
+            .IsRequired();
+
+        // MustChangePassword
+        builder.Property(x => x.MustChangePassword)
             .IsRequired();
 
         // Email

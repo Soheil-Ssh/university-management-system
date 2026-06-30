@@ -1,6 +1,6 @@
-﻿using Identity.Api.Infrastructure.Persistence.Contexts;
-using Identity.Api.Infrastructure.Persistence.Repositories;
+﻿using Identity.Api.Infrastructure.Persistence.Repositories;
 using Identity.Api.Infrastructure.Persistence.Seed;
+using Identity.Api.Infrastructure.Security;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using SharedKernel.Abstractions;
 using SharedKernel.Api;
@@ -31,6 +31,9 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IPermissionRepository, PermissionRepository>();
+
+        // Add security services to the service collection
+        services.AddScoped<IPasswordHasher, BCryptPasswordHasher>();
 
         // Add data seeders to the service collection
         services.AddScoped<IDataSeeder, PermissionSeeder>();

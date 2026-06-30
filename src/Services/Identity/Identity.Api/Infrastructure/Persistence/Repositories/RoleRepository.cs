@@ -1,6 +1,4 @@
-﻿using Identity.Api.Infrastructure.Persistence.Contexts;
-
-namespace Identity.Api.Infrastructure.Persistence.Repositories;
+﻿namespace Identity.Api.Infrastructure.Persistence.Repositories;
 
 public class RoleRepository(IdentityDbContext context) : IRoleRepository
 {
@@ -17,4 +15,7 @@ public class RoleRepository(IdentityDbContext context) : IRoleRepository
 
     public async Task<bool> IsExistRole(RoleId id, string roleName, CancellationToken cancellationToken = default)
         => await context.Roles.AnyAsync(r => r.Id != id && r.Name.ToLower() == roleName.ToLower(), cancellationToken);
+
+    public async Task<bool> IsExistRole(RoleId id, CancellationToken cancellationToken = default)
+        => await context.Roles.AnyAsync(r => r.Id == id, cancellationToken);
 }

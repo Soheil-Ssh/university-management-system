@@ -6,4 +6,5 @@ public interface IRoleRepository
     Task AddAsync(Role role, CancellationToken cancellationToken = default);
     Task<bool> IsExistRole(string roleName, CancellationToken cancellationToken = default);
     Task<bool> IsExistRole(RoleId id, string roleName, CancellationToken cancellationToken = default);
+    Task<bool> IsExistRole(RoleId id, CancellationToken cancellationToken = default);
 }
