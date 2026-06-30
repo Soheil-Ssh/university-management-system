@@ -10,7 +10,7 @@ global using Identity.Api.Domain.Role.Errors;
 global using Identity.Api.Domain.User.Errors;
 global using Identity.Api.Domain.Permission.Errors;
 global using Microsoft.EntityFrameworkCore;
-global using Identity.Api.Persistence.Contexts;
+global using Identity.Api.Infrastructure.Persistence.Contexts;
 global using FluentValidation;
 global using MediatR;
 global using Carter;
