@@ -1,5 +1,4 @@
-﻿using Identity.Api.Domain.User.Errors;
-using Identity.Api.Domain.User.ValueObjects;
+﻿using Identity.Api.Domain.User.ValueObjects;
 
 namespace Identity.Api.Domain.User;
 
