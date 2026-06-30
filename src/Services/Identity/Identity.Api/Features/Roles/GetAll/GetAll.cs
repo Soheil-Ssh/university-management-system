@@ -1,3 +1,5 @@
+using Identity.Api.Infrastructure.Persistence.Contexts;
+
 namespace Identity.Api.Features.Roles.GetAll;
 
 public static class GetAll

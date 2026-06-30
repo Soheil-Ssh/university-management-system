@@ -1,7 +1,8 @@
 ﻿using Identity.Api.Common.Authorization.Permissions;
+using Identity.Api.Infrastructure.Persistence.Contexts;
 using SharedKernel.Persistence.Database;
 
-namespace Identity.Api.Persistence.Seed;
+namespace Identity.Api.Infrastructure.Persistence.Seed;
 
 public class PermissionSeeder(IdentityDbContext context) : IDataSeeder
 {

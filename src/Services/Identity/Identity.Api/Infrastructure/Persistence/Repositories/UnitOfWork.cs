@@ -1,4 +1,6 @@
-﻿namespace Identity.Api.Persistence.Repositories;
+﻿using Identity.Api.Infrastructure.Persistence.Contexts;
+
+namespace Identity.Api.Infrastructure.Persistence.Repositories;
 
 public class UnitOfWork(IdentityDbContext context) : IUnitOfWork
 {

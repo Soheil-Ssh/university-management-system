@@ -1,4 +1,5 @@
-﻿using Scalar.AspNetCore;
+﻿using Identity.Api.Infrastructure.Persistence.Contexts;
+using Scalar.AspNetCore;
 using SharedKernel.Persistence.Database;
 
 namespace Identity.Api.Common.Extensions;

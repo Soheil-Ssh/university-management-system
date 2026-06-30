@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Identity.Api.Persistence.Contexts;
+namespace Identity.Api.Infrastructure.Persistence.Contexts;
 
 public class IdentityDbContext(DbContextOptions<IdentityDbContext> options) : DbContext(options)
 {

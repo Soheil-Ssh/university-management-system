@@ -1,5 +1,6 @@
-﻿using Identity.Api.Persistence.Repositories;
-using Identity.Api.Persistence.Seed;
+﻿using Identity.Api.Infrastructure.Persistence.Contexts;
+using Identity.Api.Infrastructure.Persistence.Repositories;
+using Identity.Api.Infrastructure.Persistence.Seed;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using SharedKernel.Abstractions;
 using SharedKernel.Api;
