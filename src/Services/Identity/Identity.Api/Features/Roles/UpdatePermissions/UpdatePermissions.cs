@@ -54,9 +54,9 @@ public static class UpdatePermissions
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPut("api/v{v:apiVersion}/roles/{roleId:guid}/permissions", async (Guid roleId, [AsParameters] Request request, ISender sender) =>
+            app.MapPut("api/v{v:apiVersion}/roles/{id:guid}/permissions", async (Guid id, [AsParameters] Request request, ISender sender) =>
             {
-                var command = new Command(roleId, request.PermissionIds);
+                var command = new Command(id, request.PermissionIds);
                 var result = await sender.Send(command);
                 return result.ToHttpResult();
             })
