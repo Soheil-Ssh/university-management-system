@@ -131,6 +131,21 @@ public sealed class Role : AggregateRoot<RoleId>
         return Result.Success();
     }
 
+    public Result SyncPermissionWithSystemDefinition(PermissionId permissionId)
+    {
+        if (_rolePermissions.Any(x => x.PermissionId == permissionId))
+            return Result.Success();
+
+        var result = RolePermission.Create(Id, permissionId);
+
+        if (result.IsFailure)
+            return result.Error;
+
+        _rolePermissions.Add(result.Data);
+
+        return Result.Success();
+    }
+
     public Result Activate()
     {
         if (IsActive || IsSystem)

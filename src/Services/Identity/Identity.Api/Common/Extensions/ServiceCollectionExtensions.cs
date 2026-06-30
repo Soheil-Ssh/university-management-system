@@ -34,6 +34,7 @@ public static class ServiceCollectionExtensions
         // Add data seeders to the service collection
         services.AddScoped<IDataSeeder, PermissionSeeder>();
         services.AddScoped<IDataSeeder, RoleSeeder>();
+        services.AddScoped<IDataSeeder, RolePermissionSeeder>();
 
         // Add the shared kernel abstractions to the service collection
         services.AddSharedKernelAbstractions<Program>();

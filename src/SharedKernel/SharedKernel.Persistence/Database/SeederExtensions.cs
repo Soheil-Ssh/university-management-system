@@ -27,18 +27,19 @@ public static class SeederExtensions
 
             foreach (var seeder in seeders)
             {
-                logger.LogInformation("Executing {Seeder}...", seeder.GetType().Name);
+                logger.LogInformation("Executing database seeder {Seeder}.", seeder.GetType().Name);
                 await seeder.SeedAsync(cancellationToken);
+                logger.LogInformation("Database seeder {Seeder} executed successfully.", seeder.GetType().Name);
             }
 
             await transaction.CommitAsync(cancellationToken);
 
-            logger.LogInformation("Database seeding completed.");
+            logger.LogInformation("Database seeding transaction committed successfully.");
         }
         catch (Exception ex)
         {
             await transaction.RollbackAsync(cancellationToken);
-            logger.LogError(ex, "Database seeding failed.");
+            logger.LogError(ex, "Database seeding transaction failed and has been rolled back.");
             throw;
         }
     }

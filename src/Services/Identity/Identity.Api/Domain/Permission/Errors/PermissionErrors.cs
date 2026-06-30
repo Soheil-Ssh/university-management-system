@@ -2,6 +2,9 @@ namespace Identity.Api.Domain.Permission.Errors;
 
 public static class PermissionErrors
 {
+    // General errors
+    public static readonly Error NotFound = new("Permission.NotFound", "Permission not found.", ErrorType.Validation);
+
     // Name
     public static readonly Error NameEmpty = new("Permission.Name.Empty", "Permission name cannot be empty.", ErrorType.Validation);
     public static readonly Error NameTooLong = new("Permission.Name.TooLong", "Permission name is too long.", ErrorType.Validation);

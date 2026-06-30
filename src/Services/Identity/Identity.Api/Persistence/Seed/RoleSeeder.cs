@@ -9,22 +9,29 @@ public class RoleSeeder(IdentityDbContext context) : IDataSeeder
 
     public async Task SeedAsync(CancellationToken cancellationToken = default)
     {
-        foreach (var definition in Roles.All)
-        {
-            var role = await context.Roles
-                .FirstOrDefaultAsync(x => x.Name == definition.Name, cancellationToken);
+        var roles = await context.Roles.ToDictionaryAsync(x => x.Name, cancellationToken);
 
-            if (role is null)
+        foreach (var definition in RolesRegistry.All)
+        {
+            if (!roles.TryGetValue(definition.Name, out var role))
             {
-                var roleResult = Role.CreateSystemRole(definition.Name, definition.DisplayName, definition.Description);
+                var roleResult = Role.CreateSystemRole(
+                    definition.Name,
+                    definition.DisplayName,
+                    definition.Description);
+
                 if (roleResult.IsFailure)
                     throw new Exception(roleResult.Error.ToString());
 
-                await context.Roles.AddAsync(roleResult.Data, cancellationToken);
+                context.Roles.Add(roleResult.Data);
+
+                roles.Add(roleResult.Data.Name, roleResult.Data);
             }
             else
             {
-                var syncResult = role.SyncWithSystemDefinition(definition.DisplayName, definition.Description);
+                var syncResult = role.SyncWithSystemDefinition(definition.DisplayName,
+                    definition.Description);
+
                 if (syncResult.IsFailure)
                     throw new Exception(syncResult.Error.ToString());
             }
