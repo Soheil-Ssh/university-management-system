@@ -1,5 +1,4 @@
-﻿using Identity.Api.Domain.User.ValueObjects;
-using Identity.Api.Infrastructure.Authorization.Roles;
+﻿using Identity.Api.Infrastructure.Authorization.Roles;
 using Identity.Api.Infrastructure.Persistence.Options;
 using Microsoft.Extensions.Options;
 using SharedKernel.Persistence.Database;

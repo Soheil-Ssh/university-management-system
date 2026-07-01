@@ -1,7 +1,8 @@
-﻿using System.Text.RegularExpressions;
-using Identity.Api.Domain.User.Errors;
+﻿using SharedKernel.Domain.Result;
+using System.Text.RegularExpressions;
+using SharedKernel.Domain.ValueObjects.Errors;
 
-namespace Identity.Api.Domain.User.ValueObjects;
+namespace SharedKernel.Domain.ValueObjects;
 
 public sealed record Email
 {

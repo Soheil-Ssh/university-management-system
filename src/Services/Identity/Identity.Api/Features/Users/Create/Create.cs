@@ -1,5 +1,3 @@
-using Identity.Api.Domain.User.ValueObjects;
-
 namespace Identity.Api.Features.Users.Create;
 
 public static class Create

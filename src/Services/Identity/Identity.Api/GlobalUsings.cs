@@ -1,6 +1,8 @@
 ﻿global using SharedKernel.Domain.Abstractions;
 global using SharedKernel.Domain.Error;
 global using SharedKernel.Domain.Result;
+global using SharedKernel.Domain.ValueObjects;
+global using SharedKernel.Domain.ValueObjects.Errors;
 global using SharedKernel.Abstractions.Persistence;
 global using Identity.Api.Common.Extensions;
 global using Identity.Api.Domain.Role;

@@ -1,5 +1,4 @@
-﻿using Identity.Api.Domain.User.ValueObjects;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 
 namespace Identity.Api.Domain.User;
 
