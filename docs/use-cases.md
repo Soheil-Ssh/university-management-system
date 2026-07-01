@@ -7,12 +7,13 @@
 **Actor:** Super Administrator
 
 **Goal**
+
 Create a new role.
 
 **Preconditions**
 
 - User is authenticated.
-- User has the `CreateRole` permission.
+- User has the `identity.roles.create` permission.
 
 **Flow**
 
@@ -22,9 +23,11 @@ Create a new role.
 4. System creates the role.
 
 **Result**
+
 - The role is created successfully.
 
 **Business Rules**
+
 - Role names must be unique.
 
 **Requirements**
@@ -38,12 +41,13 @@ Create a new role.
 **Actor:** Super Administrator
 
 **Goal**
+
 Update an existing role.
 
 **Preconditions**
 
 - User is authenticated.
-- User has the `UpdateRole` permission.
+- User has the `identity.roles.update` permission.
 
 **Flow**
 
@@ -79,7 +83,7 @@ View the details of a specific role.
 **Preconditions**
 
 * User is authenticated.
-* User has the `ViewRole` permission.
+* User has the `identity.roles.view` permission.
 
 **Flow**
 
@@ -90,6 +94,61 @@ View the details of a specific role.
 **Result**
 
 * The role information is displayed.
+
+**Requirements**
+
+* FR-XXX
+
+## UC-00X - Activate Role
+
+**Bounded Context:** Identity
+
+**Actor:** Super Administrator
+
+**Goal**
+Activate role.
+
+**Preconditions**
+
+* User is authenticated.
+* User has the `identity.roles.update` permission.
+
+**Flow**
+
+1. Select an existing role by its ID.
+2. System activate role.
+
+**Result**
+
+* The role is activate successfully.
+
+**Requirements**
+
+* FR-XXX
+
+## UC-00X - Deactivate Role
+
+**Bounded Context:** Identity
+
+**Actor:** Super Administrator
+
+**Goal**
+
+Deactivate role.
+
+**Preconditions**
+
+* User is authenticated.
+* User has the `identity.roles.update` permission.
+
+**Flow**
+
+1. Select an existing role by its ID.
+2. System deactivate role.
+
+**Result**
+
+* The role is deactivate successfully.
 
 **Requirements**
 

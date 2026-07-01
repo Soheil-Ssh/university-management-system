@@ -1,4 +1,5 @@
-﻿using Identity.Api.Infrastructure.Persistence.Repositories;
+﻿using Identity.Api.Infrastructure.Persistence.Options;
+using Identity.Api.Infrastructure.Persistence.Repositories;
 using Identity.Api.Infrastructure.Persistence.Seed;
 using Identity.Api.Infrastructure.Security;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -26,6 +27,9 @@ public static class ServiceCollectionExtensions
             options.UseSqlServer(sqlServerConnectionString);
         });
 
+        // Add options to the service collection
+        services.Configure<SuperAdminOptions>(configuration.GetSection("SuperAdmin"));
+
         // Add repositories and unit of work to the service collection
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IUserRepository, UserRepository>();
@@ -39,6 +43,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IDataSeeder, PermissionSeeder>();
         services.AddScoped<IDataSeeder, RoleSeeder>();
         services.AddScoped<IDataSeeder, RolePermissionSeeder>();
+        services.AddScoped<IDataSeeder, UserSeeder>();
 
         // Add the shared kernel abstractions to the service collection
         services.AddSharedKernelAbstractions<Program>();

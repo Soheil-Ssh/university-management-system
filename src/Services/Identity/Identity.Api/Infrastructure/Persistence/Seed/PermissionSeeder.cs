@@ -1,5 +1,4 @@
 ﻿using Identity.Api.Infrastructure.Authorization.Permissions;
-using Identity.Api.Infrastructure.Persistence.Contexts;
 using SharedKernel.Persistence.Database;
 
 namespace Identity.Api.Infrastructure.Persistence.Seed;
