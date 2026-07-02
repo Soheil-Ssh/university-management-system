@@ -8,7 +8,7 @@ services:
     ports:
       - "1433:1433"
     volumes:
-      - sqlserver-data:/var/opt/mssql
+      - sqlserver_data:/var/opt/mssql
     networks:
       - ums_network
     healthcheck:
@@ -17,6 +17,28 @@ services:
       timeout: 5s
       retries: 10
       start_period: 90s
+
+  # Postgres
+  postgres:
+    image: postgres:alpine
+    restart: always
+    container_name: postgres
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports: 
+     - "5432:5432"
+    networks:
+      - ums_network
+    healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U postgres"]
+        interval: 10s
+        timeout: 5s
+        retries: 10
 
   # Identity Api
   identity.api:
@@ -30,6 +52,27 @@ services:
       - "5050:8081"
     depends_on:
       sqlserver:
+        condition: service_healthy
+    networks:
+      - ums_network
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  # File Api
+  file.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - ConnectionStrings__PostgresDefaultConnection=Host=postgres;Port=5432;Database=file_db;Username=file_user;Password=Password@123;TrustServerCertificate=True
+    ports:
+      - "5001:8080"
+      - "5051:8081"
+    depends_on:
+      postgres:
         condition: service_healthy
     networks:
       - ums_network
