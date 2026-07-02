@@ -7,7 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Domain\" />
+    <ProjectReference Include="..\..\..\SharedKernel\SharedKernel.Abstractions\SharedKernel.Abstractions.csproj" />
+    <ProjectReference Include="..\..\..\SharedKernel\SharedKernel.Api\SharedKernel.Api.csproj" />
+    <ProjectReference Include="..\..\..\SharedKernel\SharedKernel.Persistence\SharedKernel.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

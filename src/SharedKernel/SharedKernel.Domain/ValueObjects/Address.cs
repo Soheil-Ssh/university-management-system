@@ -7,7 +7,7 @@ namespace SharedKernel.Domain.ValueObjects;
 
 public sealed record Address
 {
-    private static readonly Regex MultipleSpacesRegex = new(@"\s+", RegexOptions.Compiled);
+    private static readonly Regex Pattern = new(@"\s+", RegexOptions.Compiled);
 
     private const int ProvinceMaxLength = 50;
     private const int CityMaxLength = 50;
@@ -104,7 +104,7 @@ public sealed record Address
             .Normalize(NormalizationForm.FormC)
             .Trim();
 
-        return MultipleSpacesRegex.Replace(value, " ");
+        return Pattern.Replace(value, " ");
     }
 
     public override string ToString()

@@ -7,7 +7,7 @@ namespace SharedKernel.Domain.ValueObjects;
 
 public sealed record Name
 {
-    private static readonly Regex ValidPattern = new(@"^[\p{L}\p{M}\s.'-]+$", RegexOptions.Compiled);
+    private static readonly Regex Pattern = new(@"^[\p{L}\p{M}\s.'-]+$", RegexOptions.Compiled);
 
     private const int MinLength = 2;
     private const int MaxLength = 100;
@@ -32,7 +32,7 @@ public sealed record Name
         if (value.Length > MaxLength)
             return NameErrors.TooLong;
 
-        if (!ValidPattern.IsMatch(value))
+        if (!Pattern.IsMatch(value))
             return NameErrors.InvalidCharacters;
 
         return new Name(value);

@@ -1,4 +1,4 @@
-﻿namespace Identity.Api.Domain.User;
+﻿namespace SharedKernel.Domain.Identifiers;
 
 public sealed record UserId(Guid Value)
 {
