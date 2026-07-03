@@ -5,7 +5,7 @@ namespace Student.Api.Features.Admissions.CompleteApplicantPersonalInfo;
 
 public static class CompleteApplicantPersonalInfo
 {
-    public sealed record Request(string FirstName,
+    public sealed record PersonalInfoRequest(string FirstName,
         string LastName,
         string EnFirstName,
         string EnLastName,
@@ -16,6 +16,12 @@ public static class CompleteApplicantPersonalInfo
         Gender Gender,
         MaritalStatus MaritalStatus,
         Guid PersonalImageFileId);
+
+    public sealed record PersonalInfoResponse(
+        Guid AdmissionRequestId,
+        string TrackingCode,
+        string RegistrationToken,
+        AdmissionRequestStep CurrentStep);
 
     public sealed record Command(
         Guid AdmissionRequestId,
@@ -30,14 +36,7 @@ public static class CompleteApplicantPersonalInfo
         DateTime BirthDate,
         Gender Gender,
         MaritalStatus MaritalStatus,
-        Guid PersonalImageFileId) : ICommand<Result<Response>>;
-
-    public sealed record Response(
-        Guid AdmissionRequestId,
-        string TrackingCode,
-        string RegistrationToken,
-        AdmissionRequestStep CurrentStep);
-
+        Guid PersonalImageFileId) : ICommand<Result<PersonalInfoResponse>>;
     
     public class Validator : AbstractValidator<Command>
     {
@@ -74,9 +73,9 @@ public static class CompleteApplicantPersonalInfo
     public class Handler(IAdmissionRequestRepository admissionRequestRepository,
         IRegistrationTokenGenerator registrationTokenGenerator,
         IUnitOfWork unitOfWork)
-        : ICommandHandler<Command, Result<Response>>
+        : ICommandHandler<Command, Result<PersonalInfoResponse>>
     {
-        public async Task<Result<Response>> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Result<PersonalInfoResponse>> Handle(Command request, CancellationToken cancellationToken)
         {
             var admissionRequestId = new AdmissionRequestId(request.AdmissionRequestId);
 
@@ -112,7 +111,7 @@ public static class CompleteApplicantPersonalInfo
 
             await unitOfWork.SaveAsync(cancellationToken);
 
-            return new Response(admissionRequest.Id.Value,
+            return new PersonalInfoResponse(admissionRequest.Id.Value,
                 admissionRequest.TrackingCode.Value,
                 admissionRequest.RegistrationToken,
                 admissionRequest.Step);
@@ -124,7 +123,7 @@ public static class CompleteApplicantPersonalInfo
         public void AddRoutes(IEndpointRouteBuilder app)
         {
             app.MapPut("api/v{v:apiVersion}/admission-requests/{admissionRequestId:guid}/applicant-personal-info",
-                    async (ISender sender, Guid admissionRequestId, Request request,
+                    async (ISender sender, Guid admissionRequestId, PersonalInfoRequest request,
                         [FromHeader(Name = "X-Registration-Token")] string registrationToken) =>
                     {
                         var command = new Command(

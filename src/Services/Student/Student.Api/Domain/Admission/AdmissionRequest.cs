@@ -52,11 +52,34 @@ public sealed class AdmissionRequest : AggregateRoot<AdmissionRequestId>
         if (Status != AdmissionRequestStatus.Draft)
             return AdmissionRequestErrors.CannotModifySubmittedRequest;
 
-        if (Step != AdmissionRequestStep.NotStarted)
+        if (Step != AdmissionRequestStep.NotStarted && Step != AdmissionRequestStep.PersonalInfoCompleted)
             return AdmissionRequestErrors.InvalidStep;
 
         ApplicantPersonalInfo = applicantPersonalInfo;
         Step = AdmissionRequestStep.PersonalInfoCompleted;
+        RegistrationToken = nextRegistrationToken;
+
+        return Result.Success();
+    }
+
+    public Result CompleteApplicantContactInfo(ApplicantContactInfo applicantContactInfo,
+        string currentRegistrationToken,
+        string nextRegistrationToken)
+    {
+        if (RegistrationToken != currentRegistrationToken)
+            return AdmissionRequestErrors.InvalidRegistrationToken;
+
+        if (Status != AdmissionRequestStatus.Draft)
+            return AdmissionRequestErrors.CannotModifySubmittedRequest;
+
+        if (ApplicantPersonalInfo is null)
+            return AdmissionRequestErrors.ApplicantPersonalInfoRequired;
+
+        if (Step != AdmissionRequestStep.PersonalInfoCompleted && Step != AdmissionRequestStep.ContactInfoCompleted)
+            return AdmissionRequestErrors.InvalidStep;
+
+        ApplicantContactInfo = applicantContactInfo;
+        Step = AdmissionRequestStep.ContactInfoCompleted;
         RegistrationToken = nextRegistrationToken;
 
         return Result.Success();
