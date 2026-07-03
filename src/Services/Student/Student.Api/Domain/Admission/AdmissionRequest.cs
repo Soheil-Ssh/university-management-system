@@ -1,5 +1,4 @@
-﻿using System.Security.Cryptography;
-using SharedKernel.Domain.Identifiers;
+﻿using SharedKernel.Domain.Identifiers;
 
 namespace Student.Api.Domain.Admission;
 
@@ -39,9 +38,27 @@ public sealed class AdmissionRequest : AggregateRoot<AdmissionRequestId>
         Step = AdmissionRequestStep.NotStarted;
     }
 
-    public static Result<AdmissionRequest> StartRegistration(TrackingCode trackingCode)
-        => new AdmissionRequest(AdmissionRequestId.New(), trackingCode, GenerateRegistrationToken());
+    public static Result<AdmissionRequest> StartRegistration(TrackingCode trackingCode,
+        string registrationToken)
+        => new AdmissionRequest(AdmissionRequestId.New(), trackingCode, registrationToken);
 
-    private static string GenerateRegistrationToken()
-        => Convert.ToHexString(RandomNumberGenerator.GetBytes(32));
+    public Result SaveApplicantPersonalInfo(ApplicantPersonalInfo applicantPersonalInfo,
+        string currentRegistrationToken,
+        string nextRegistrationToken)
+    {
+        if (RegistrationToken != currentRegistrationToken)
+            return AdmissionRequestErrors.InvalidRegistrationToken;
+
+        if (Status != AdmissionRequestStatus.Draft)
+            return AdmissionRequestErrors.CannotModifySubmittedRequest;
+
+        if (Step != AdmissionRequestStep.NotStarted)
+            return AdmissionRequestErrors.InvalidStep;
+
+        ApplicantPersonalInfo = applicantPersonalInfo;
+        Step = AdmissionRequestStep.PersonalInfoCompleted;
+        RegistrationToken = nextRegistrationToken;
+
+        return Result.Success();
+    }
 }

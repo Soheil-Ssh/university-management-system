@@ -1,0 +1,12 @@
+﻿namespace Student.Api.Domain.Admission.Errors;
+
+public class AdmissionRequestErrors
+{
+        public static readonly Error NotFound = new("AdmissionRequest.NotFound", "Admission request not found.", ErrorType.NotFound);
+        public static readonly Error InvalidRegistrationToken = 
+            new("AdmissionRequest.InvalidRegistrationToken", "Registration token is invalid or expired.", ErrorType.Unauthorized);
+        public static readonly Error CannotModifySubmittedRequest = 
+            new("AdmissionRequest.CannotModifySubmittedRequest", "Admission request has been submitted and cannot be modified.", ErrorType.Conflict);
+        public static readonly Error InvalidStep = 
+            new("AdmissionRequest.InvalidStep", "Admission request is not at a valid step for personal information registration.", ErrorType.Conflict);
+}

@@ -2,6 +2,9 @@
 
 public class AdmissionRequestRepository(StudentDbContext context) : IAdmissionRequestRepository
 {
+    public Task<AdmissionRequest?> GetByIdAsync(AdmissionRequestId id, CancellationToken cancellationToken)
+        => context.AdmissionRequests.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+
     public async Task AddAsync(AdmissionRequest admissionRequest, CancellationToken cancellationToken)
     {
         await context.AdmissionRequests.AddAsync(admissionRequest, cancellationToken);

@@ -3,6 +3,7 @@ using SharedKernel.Abstractions;
 using SharedKernel.Api;
 using SharedKernel.Persistence;
 using Student.Api.Infrastructure.Persistence.Repositories;
+using Student.Api.Infrastructure.Security;
 
 namespace Student.Api.Common.Extensions;
 
@@ -26,6 +27,9 @@ public static class ServiceCollectionExtensions
         // Add repositories and unit of work to the service collection
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IAdmissionRequestRepository, AdmissionRequestRepository>();
+
+        // Add services to the service collection
+        services.AddSingleton<IRegistrationTokenGenerator, RegistrationTokenGenerator>();
 
         // Add the shared kernel abstractions to the service collection
         services.AddSharedKernelAbstractions<Program>();

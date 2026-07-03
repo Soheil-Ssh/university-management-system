@@ -13,3 +13,7 @@ global using SharedKernel.Abstractions.CQRS;
 global using Student.Api.Common.Extensions;
 global using SharedKernel.Abstractions.Persistence;
 global using SharedKernel.Api.Extensions;
+global using SharedKernel.Domain.Enums;
+global using Student.Api.Domain.Admission.Services;
+global using Student.Api.Domain.Admission.Errors;
+global using FluentValidation;

@@ -6,7 +6,9 @@ public static class StartRegistration
 
     public sealed record Command : ICommand<Result<Response>>;
 
-    public class Handler(IAdmissionRequestRepository admissionRequestRepository, IUnitOfWork unitOfWork)
+    public class Handler(IAdmissionRequestRepository admissionRequestRepository,
+        IRegistrationTokenGenerator tokenGenerator,
+        IUnitOfWork unitOfWork)
         : ICommandHandler<Command, Result<Response>>
     {
         public async Task<Result<Response>> Handle(Command request, CancellationToken cancellationToken)
@@ -15,8 +17,10 @@ public static class StartRegistration
                 .GetNextTrackingCodeSequenceAsync(DateTime.Now.Year, cancellationToken);
 
             var trackingCode = TrackingCode.Generate(nextSequenceNumber);
+            var registrationToken = tokenGenerator.Generate();
 
-            var admissionRequestResult = AdmissionRequest.StartRegistration(trackingCode);
+            var admissionRequestResult = AdmissionRequest
+                .StartRegistration(trackingCode, registrationToken);
 
             if (admissionRequestResult.IsFailure)
                 return admissionRequestResult.Error;
