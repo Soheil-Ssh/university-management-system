@@ -6,6 +6,15 @@ public static class ApplicantPersonalInfoErrors
     public static readonly Error Required = new("ApplicantPersonalInfo.Required", "Personal information is required.", ErrorType.Validation);
     public static readonly Error NotFound = new("ApplicantPersonalInfo.NotFound", "Personal information not found.", ErrorType.NotFound);
 
+    public static readonly Error FirstNameMustBePersian = 
+        new("ApplicantPersonalInfo.FirstName.MustBePersian", "First name must contain only Persian letters.", ErrorType.Validation);
+    public static readonly Error LastNameMustBePersian = 
+        new("ApplicantPersonalInfo.LastName.MustBePersian", "Last name must contain only Persian letters.", ErrorType.Validation);
+    public static readonly Error EnFirstNameMustBeEnglish = 
+        new("ApplicantPersonalInfo.EnFirstName.MustBeEnglish", "English first name must contain only English letters.", ErrorType.Validation);
+    public static readonly Error EnLastNameMustBeEnglish = 
+        new("ApplicantPersonalInfo.EnLastName.MustBeEnglish", "English last name must contain only English letters.", ErrorType.Validation);
+
     // birthplace errors
     public static readonly Error BirthPlaceEmpty = new("ApplicantPersonalInfo.BirthPlace.Empty", "Birth place is required.", ErrorType.Validation);
     public static readonly Error BirthPlaceTooLong = new("ApplicantPersonalInfo.BirthPlace.TooLong", $"Birth place is too long.", ErrorType.Validation);

@@ -1,7 +1,6 @@
-﻿using SharedKernel.Domain.Enums;
-using SharedKernel.Domain.Extensions;
+﻿using SharedKernel.Domain.Extensions;
 using SharedKernel.Domain.Identifiers;
-using Student.Api.Domain.Admission.Errors;
+using System.Text.RegularExpressions;
 
 namespace Student.Api.Domain.Admission.ValueObjects;
 
@@ -9,6 +8,13 @@ public record ApplicantPersonalInfo
 {
     private const int MaxPlaceLength = 100;
     private static readonly DateTime MinBirthDate = new(1900, 1, 1);
+    private static readonly Regex PersianNameRegex = new(
+        @"^[آابپتثجچحخدذرزژسشصضطظعغفقکگلمنوهیيىكۀةؤئإأء\s‌'-]+$",
+        RegexOptions.Compiled | RegexOptions.CultureInvariant);
+
+    private static readonly Regex EnglishNameRegex = new(
+        @"^[A-Za-z][A-Za-z\s'-]*$",
+        RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
     public Name FirstName { get; private set; }
     public Name LastName { get; private set; }
@@ -68,19 +74,31 @@ public record ApplicantPersonalInfo
         if (firstNameResult.IsFailure)
             return firstNameResult.Error;
 
+        if (!IsPersianName(firstName))
+            return ApplicantPersonalInfoErrors.FirstNameMustBePersian;
+
         var lastNameResult = Name.Create(lastName).WithPath(nameof(LastName));
         if (lastNameResult.IsFailure)
             return lastNameResult.Error;
+
+        if (!IsPersianName(lastName))
+            return ApplicantPersonalInfoErrors.LastNameMustBePersian;
 
         var enFirstNameResult = Name.Create(enFirstName).WithPath(nameof(EnFirstName));
         if (enFirstNameResult.IsFailure)
             return enFirstNameResult.Error;
 
+        if (!IsEnglishName(enFirstName))
+            return ApplicantPersonalInfoErrors.EnFirstNameMustBeEnglish;
+
         var enLastNameResult = Name.Create(enLastName).WithPath(nameof(EnLastName));
         if (enLastNameResult.IsFailure)
             return enLastNameResult.Error;
 
-        var nationalCodeResult = SharedKernel.Domain.ValueObjects.NationalCode.Create(nationalCode);
+        if (!IsEnglishName(enLastName))
+            return ApplicantPersonalInfoErrors.EnLastNameMustBeEnglish;
+
+        var nationalCodeResult = NationalCode.Create(nationalCode);
         if (nationalCodeResult.IsFailure)
             return nationalCodeResult.Error;
 
@@ -116,5 +134,15 @@ public record ApplicantPersonalInfo
             gender,
             maritalStatus,
             personalImageFileId);
+    }
+
+    private static bool IsPersianName(string value)
+    {
+        return PersianNameRegex.IsMatch(value);
+    }
+
+    private static bool IsEnglishName(string value)
+    {
+        return EnglishNameRegex.IsMatch(value);
     }
 }

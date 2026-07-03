@@ -38,21 +38,26 @@ public static class CompleteApplicantPersonalInfo
         string RegistrationToken,
         AdmissionRequestStep CurrentStep);
 
+    
     public class Validator : AbstractValidator<Command>
     {
+        private const string PersianNamePattern = @"^[آابپتثجچحخدذرزژسشصضطظعغفقکگلمنوهیيىكۀةؤئإأء\s‌'-]+$";
+
+        private const string EnglishNamePattern = @"^[A-Za-z][A-Za-z\s'-]*$";
+
         public Validator()
         {
             RuleFor(x => x.AdmissionRequestId).NotEmpty();
 
             RuleFor(x => x.RegistrationToken).NotEmpty();
 
-            RuleFor(x => x.FirstName).NotEmpty().MaximumLength(100);
+            RuleFor(x => x.FirstName).NotEmpty().MaximumLength(100).Matches(PersianNamePattern);
 
-            RuleFor(x => x.LastName).NotEmpty().MaximumLength(100);
+            RuleFor(x => x.LastName).NotEmpty().MaximumLength(100).Matches(PersianNamePattern);
 
-            RuleFor(x => x.EnFirstName).NotEmpty().MaximumLength(100);
+            RuleFor(x => x.EnFirstName).NotEmpty().MaximumLength(100).Matches(EnglishNamePattern);
 
-            RuleFor(x => x.EnLastName).NotEmpty().MaximumLength(100);
+            RuleFor(x => x.EnLastName).NotEmpty().MaximumLength(100).Matches(EnglishNamePattern);
 
             RuleFor(x => x.NationalCode).NotEmpty().MaximumLength(10);
 
