@@ -5,7 +5,8 @@
       "commandVersion": "1.0",
       "serviceActions": {
         "identity.api": "StartDebugging",
-        "file.api": "StartDebugging"
+        "file.api": "StartDebugging",
+        "student.api": "StartDebugging"
       }
     }
   }

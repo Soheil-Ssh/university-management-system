@@ -6,3 +6,8 @@ global using Microsoft.EntityFrameworkCore;
 global using Student.Api.Domain.Admission;
 global using Student.Api.Domain.Admission.ValueObjects;
 global using Student.Api.Domain.Admission.Enums;
+global using Student.Api.Infrastructure.Persistence.Contexts;
+global using Carter;
+global using MediatR;
+global using SharedKernel.Abstractions.CQRS;
+global using Student.Api.Common.Extensions;

@@ -13,6 +13,10 @@ public sealed record DiplomaInfo
     public string Field { get; private set; }
     public int GraduationYear { get; private set; }
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+    private DiplomaInfo() { }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+
     private DiplomaInfo(decimal average, string field, int graduationYear)
     {
         Average = average;

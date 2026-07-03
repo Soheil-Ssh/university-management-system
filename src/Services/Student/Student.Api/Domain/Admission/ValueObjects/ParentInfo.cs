@@ -9,6 +9,10 @@ public sealed record ParentInfo
     public NationalCode NationalCode { get; }
     public MobileNumber Mobile { get; }
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+    private ParentInfo() { }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+
     private ParentInfo(Name firstName, Name lastName, NationalCode nationalCode, MobileNumber mobile)
     {
         FirstName = firstName;

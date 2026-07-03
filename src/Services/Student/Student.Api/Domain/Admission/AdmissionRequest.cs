@@ -1,7 +1,5 @@
 ﻿using System.Security.Cryptography;
 using SharedKernel.Domain.Identifiers;
-using Student.Api.Domain.Admission.Enums;
-using Student.Api.Domain.Admission.ValueObjects;
 
 namespace Student.Api.Domain.Admission;
 

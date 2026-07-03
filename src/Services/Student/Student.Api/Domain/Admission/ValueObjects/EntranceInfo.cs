@@ -1,4 +1,3 @@
-using Student.Api.Domain.Admission.Enums;
 using Student.Api.Domain.Admission.Errors;
 
 namespace Student.Api.Domain.Admission.ValueObjects;
@@ -10,6 +9,8 @@ public sealed record EntranceInfo
     public double? EntranceScore { get; }
     public AdmissionMethod AdmissionMethod { get; }
     public AdmissionType AdmissionType { get; }
+
+    private EntranceInfo() { }
 
     private EntranceInfo(Quota quota, int? entranceExamRank, double? entranceScore, AdmissionMethod admissionMethod, AdmissionType admissionType)
     {

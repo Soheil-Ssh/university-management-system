@@ -21,6 +21,13 @@ services:
       context: .
       dockerfile: src/Services/File/File.Api/Dockerfile
 
+  # Student Api
+  student.api:
+    image: ${DOCKER_REGISTRY-}studentapi
+    build:
+      context: .
+      dockerfile: src/Services/Student/Student.Api/Dockerfile
+
 networks:
   ums_network:
     driver: bridge

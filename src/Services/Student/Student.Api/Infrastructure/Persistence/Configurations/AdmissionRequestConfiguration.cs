@@ -1,9 +1,6 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SharedKernel.Domain.Identifiers;
 using SharedKernel.Persistence.Extensions;
-using Student.Api.Domain.Admission;
-using Student.Api.Domain.Admission.ValueObjects;
 using System.Linq.Expressions;
 
 namespace Student.Api.Infrastructure.Persistence.Configurations;
@@ -21,6 +18,18 @@ public class AdmissionRequestConfiguration : IEntityTypeConfiguration<AdmissionR
         builder.Property(x => x.Id)
             .ValueGeneratedNever()
             .HasConversion(id => id.Value, value => new AdmissionRequestId(value));
+
+        // Tracking code
+        builder.OwnsOne(x => x.TrackingCode, trackingCode =>
+        {
+            trackingCode.Property(x => x.Value)
+                .HasColumnName("TrackingCode")
+                .HasMaxLength(14)
+                .IsRequired();
+
+            trackingCode.HasIndex(x => x.Value)
+                .IsUnique();
+        });
 
         // Registration token
         builder.Property(x => x.RegistrationToken)
@@ -56,20 +65,6 @@ public class AdmissionRequestConfiguration : IEntityTypeConfiguration<AdmissionR
                 id => id == null ? (Guid?)null : id.Value,
                 value => value.HasValue ? new UserId(value.Value) : null);
 
-        #region TrackingCode
-
-        builder.ComplexProperty(x => x.TrackingCode, tc =>
-        {
-            tc.Property(x => x.Value)
-                .HasColumnName("TrackingCode")
-                .HasMaxLength(14)
-                .IsRequired();
-        });
-
-        builder.HasIndex(x => x.TrackingCode)
-            .IsUnique();
-
-        #endregion
 
         // Attachments as owned collection
         builder.Navigation(x => x.Attachments)
@@ -106,29 +101,32 @@ public class AdmissionRequestConfiguration : IEntityTypeConfiguration<AdmissionR
 
     private static void ConfigureApplicantPersonalInfo(EntityTypeBuilder<AdmissionRequest> builder)
     {
-        builder.OwnsOne(x => x.ApplicantPersonalInfo, owned =>
+        builder.ComplexProperty(x => x.ApplicantPersonalInfo, property =>
         {
-            owned.ConfigureName(x => x.FirstName, "FirstName");
-            owned.ConfigureName(x => x.LastName, "LastName");
-            owned.ConfigureName(x => x.EnFirstName, "EnFirstName");
-            owned.ConfigureName(x => x.EnFirstName, "EnFirstName");
-            owned.ConfigureNationalCode(x => x.NationalCode, "NationalCode");
+            property.IsRequired(false);
+            property.HasDiscriminator<bool>("HasApplicantPersonalInfo").HasValue(true);
 
-            owned.Property(x => x.BirthPlace)
+            property.ConfigureName(x => x.FirstName, "FirstName");
+            property.ConfigureName(x => x.LastName, "LastName");
+            property.ConfigureName(x => x.EnFirstName, "EnFirstName");
+            property.ConfigureName(x => x.EnLastName, "EnLastName");
+            property.ConfigureNationalCode(x => x.NationalCode, "NationalCode");
+
+            property.Property(x => x.BirthPlace)
                 .HasMaxLength(100);
 
-            owned.Property(x => x.IssuePlace)
+            property.Property(x => x.IssuePlace)
                 .HasMaxLength(100);
 
-            owned.Property(x => x.BirthDate);
+            property.Property(x => x.BirthDate);
 
-            owned.Property(x => x.Gender)
+            property.Property(x => x.Gender)
                 .HasConversion<int>();
 
-            owned.Property(x => x.MaritalStatus)
+            property.Property(x => x.MaritalStatus)
                 .HasConversion<int>();
 
-            owned.OwnsOne(x => x.PersonalImageFileId, file =>
+            property.ComplexProperty(x => x.PersonalImageFileId, file =>
             {
                 file.Property(x => x.Value)
                     .HasColumnName("PersonalImageFileId");
@@ -138,15 +136,15 @@ public class AdmissionRequestConfiguration : IEntityTypeConfiguration<AdmissionR
 
     private static void ConfigureApplicantContactInfo(EntityTypeBuilder<AdmissionRequest> builder)
     {
-        builder.OwnsOne(x => x.ApplicantContactInfo, owned =>
+        builder.ComplexProperty(x => x.ApplicantContactInfo, property =>
         {
-            owned.ConfigureMobile(x => x.Mobile, "Mobile");
+            property.IsRequired(false);
+            property.HasDiscriminator<bool>("HasApplicantContactInfo").HasValue(true);
 
-            owned.ConfigurePhone(x => x.Phone, "Phone");
-
-            owned.ConfigureEmail(x => x.Email, "Email");
-
-            owned.ConfigureAddress(x => x.Address);
+            property.ConfigureMobile(x => x.Mobile, "Mobile");
+            property.ConfigurePhone(x => x.Phone, "Phone");
+            property.ConfigureEmail(x => x.Email, "Email");
+            property.ConfigureAddress(x => x.Address);
         });
     }
 
@@ -154,53 +152,62 @@ public class AdmissionRequestConfiguration : IEntityTypeConfiguration<AdmissionR
         Expression<Func<AdmissionRequest, ParentInfo?>> expression,
         string prefix)
     {
-        builder.OwnsOne(expression, owned =>
+        builder.ComplexProperty(expression, property =>
         {
-            owned.ConfigureName(x => x.FirstName, $"{prefix}FirstName");
+            property.IsRequired(false);
+            property.HasDiscriminator<bool>($"Has{prefix}Info").HasValue(true);
 
-            owned.ConfigureName(x => x.LastName, $"{prefix}LastName");
-
-            owned.ConfigureNationalCode(x => x.NationalCode, $"{prefix}NationalCode");
-
-            owned.ConfigureMobile(x => x.Mobile, $"{prefix}Mobile");
+            property.ConfigureName(x => x.FirstName, $"{prefix}FirstName");
+            property.ConfigureName(x => x.LastName, $"{prefix}LastName");
+            property.ConfigureNationalCode(x => x.NationalCode, $"{prefix}NationalCode");
+            property.ConfigureMobile(x => x.Mobile, $"{prefix}Mobile");
         });
     }
 
     private static void ConfigureEmergency(EntityTypeBuilder<AdmissionRequest> builder)
     {
-        builder.OwnsOne(x => x.EmergencyContact, owned =>
+        builder.ComplexProperty(x => x.EmergencyContact, property =>
         {
-            owned.ConfigureName(x => x.FirstName, "EmergencyContactFirstName");
-            owned.ConfigureName(x => x.LastName, "EmergencyContactLastName");
-            owned.Property(x => x.Relation).HasMaxLength(100);
-            owned.ConfigureMobile(x => x.Mobile, "EmergencyContactMobile");
+            property.IsRequired(false);
+            property.HasDiscriminator<bool>("HasEmergencyContact").HasValue(true);
+
+            property.ConfigureName(x => x.FirstName, "EmergencyContactFirstName");
+            property.ConfigureName(x => x.LastName, "EmergencyContactLastName");
+            property.Property(x => x.Relation).HasMaxLength(100);
+            property.ConfigureMobile(x => x.Mobile, "EmergencyContactMobile");
         });
     }
 
     private static void ConfigureDiploma(EntityTypeBuilder<AdmissionRequest> builder)
     {
-        builder.OwnsOne(x => x.DiplomaInfo, owned =>
+        builder.ComplexProperty(x => x.DiplomaInfo, property =>
         {
-            owned.Property(x => x.Average);
-            owned.Property(x => x.Field).HasMaxLength(200);
-            owned.Property(x => x.GraduationYear);
+            property.IsRequired(false);
+            property.HasDiscriminator<bool>("HasDiplomaInfo").HasValue(true);
+
+            property.Property(x => x.Average);
+            property.Property(x => x.Field).HasMaxLength(200);
+            property.Property(x => x.GraduationYear);
         });
     }
 
     private static void ConfigureEntrance(EntityTypeBuilder<AdmissionRequest> builder)
     {
-        builder.OwnsOne(x => x.EntranceInfo, owned =>
+        builder.ComplexProperty(x => x.EntranceInfo, property =>
         {
-            owned.Property(x => x.Quota)
+            property.IsRequired(false);
+            property.HasDiscriminator<bool>("HasEntranceInfo").HasValue(true);
+
+            property.Property(x => x.Quota)
                 .HasConversion<int>();
 
-            owned.Property(x => x.EntranceExamRank);
-            owned.Property(x => x.EntranceScore);
+            property.Property(x => x.EntranceExamRank);
+            property.Property(x => x.EntranceScore);
 
-            owned.Property(x => x.AdmissionMethod)
+            property.Property(x => x.AdmissionMethod)
                 .HasConversion<int>();
 
-            owned.Property(x => x.AdmissionType)
+            property.Property(x => x.AdmissionType)
                 .HasConversion<int>();
         });
     }
