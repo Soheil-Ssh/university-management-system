@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using File.Api.Infrastructure.Persistence.Options;
+using File.Api.Infrastructure.Persistence.Repositories;
+using File.Api.Infrastructure.Storage;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using SharedKernel.Abstractions;
 using SharedKernel.Api;
@@ -17,11 +19,22 @@ public static class ServiceCollectionExtensions
         services.AddSharedKernelPersistence();
 
         // Add the IdentityDbContext to the service collection
-        services.AddDbContext<FileContext>((sp, options) =>
+        services.AddDbContext<FileDbContext>((sp, options) =>
         {
             options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
             options.UseNpgsql(sqlServerConnectionString);
         });
+
+        // Add options to the service collection
+        services.Configure<FileStorageOptions>(configuration.GetSection(FileStorageOptions.SectionName));
+
+        // Add repositories to the service collection
+        services.AddScoped<IFileRepository, FileRepository>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+        // Add services to the service collection
+        services.AddScoped<IFileStorage, LocalFileStorage>();
+        services.AddScoped<IFilePathGenerator, LocalFilePathGenerator>();
 
         // Add the shared kernel abstractions to the service collection
         services.AddSharedKernelAbstractions<Program>();

@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace File.Api.Infrastructure.Persistence.Migrations
 {
-    [DbContext(typeof(FileContext))]
+    [DbContext(typeof(FileDbContext))]
     partial class FileContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

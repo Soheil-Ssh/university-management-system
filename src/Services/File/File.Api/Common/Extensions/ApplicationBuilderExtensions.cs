@@ -7,7 +7,7 @@ public static class ApplicationBuilderExtensions
 {
     public static async Task<WebApplication> UseIdentityPipeline(this WebApplication app)
     {
-        await app.Services.ApplyMigrationsAsync<FileContext>();
+        await app.Services.ApplyMigrationsAsync<FileDbContext>();
 
         if (app.Environment.IsDevelopment())
         {

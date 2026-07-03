@@ -1,10 +1,10 @@
 namespace File.Api.Domain.File.Errors;
 
-using SharedKernel.Domain.Error;
-
 public static class FileErrors
 {
     // General errors
+    public static readonly Error FileIsRequired = new("File.Required", "File is required.", ErrorType.Validation);
+    public static readonly Error FileIsEmpty = new("File.Empty", "File is empty.", ErrorType.Validation);
     public static readonly Error NotFound = new("File.NotFound", "File not found.", ErrorType.NotFound);
     public static readonly Error AlreadyExists = new("File.AlreadyExists", "File already exists.", ErrorType.Conflict);
 

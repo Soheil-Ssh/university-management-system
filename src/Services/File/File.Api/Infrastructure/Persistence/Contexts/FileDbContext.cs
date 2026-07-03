@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace File.Api.Infrastructure.Persistence.Contexts;
 
-public class FileContext(DbContextOptions<FileContext> options) : DbContext(options)
+public class FileDbContext(DbContextOptions<FileDbContext> options) : DbContext(options)
 {
     public DbSet<Domain.File.File> Files { get; set; }
 
