@@ -1,6 +1,23 @@
-﻿namespace Student.Api.Common.Extensions;
+﻿using Asp.Versioning;
 
-public class VersioningExtensions
+namespace Student.Api.Common.Extensions;
+
+public static class VersioningExtensions
 {
-    
+    public static RouteHandlerBuilder Version(
+        this RouteHandlerBuilder builder,
+        IEndpointRouteBuilder app,
+        double version)
+    {
+        var apiVersion = new ApiVersion(version);
+
+        var set = app.NewApiVersionSet()
+            .HasApiVersion(apiVersion)
+            .ReportApiVersions()
+            .Build();
+
+        return builder
+            .WithApiVersionSet(set)
+            .MapToApiVersion(apiVersion);
+    }
 }

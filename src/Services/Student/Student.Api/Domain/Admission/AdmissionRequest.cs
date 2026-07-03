@@ -39,8 +39,8 @@ public sealed class AdmissionRequest : AggregateRoot<AdmissionRequestId>
         Step = AdmissionRequestStep.NotStarted;
     }
 
-    public static Result<AdmissionRequest> Create()
-        => new AdmissionRequest(AdmissionRequestId.New(), TrackingCode.Generate(8), GenerateRegistrationToken());
+    public static Result<AdmissionRequest> StartRegistration(TrackingCode trackingCode)
+        => new AdmissionRequest(AdmissionRequestId.New(), trackingCode, GenerateRegistrationToken());
 
     private static string GenerateRegistrationToken()
         => Convert.ToHexString(RandomNumberGenerator.GetBytes(32));

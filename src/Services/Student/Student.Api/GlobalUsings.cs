@@ -11,3 +11,5 @@ global using Carter;
 global using MediatR;
 global using SharedKernel.Abstractions.CQRS;
 global using Student.Api.Common.Extensions;
+global using SharedKernel.Abstractions.Persistence;
+global using SharedKernel.Api.Extensions;
