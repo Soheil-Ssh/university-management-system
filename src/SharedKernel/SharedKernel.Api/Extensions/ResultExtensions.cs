@@ -54,7 +54,9 @@ public static class ResultExtensions
         {
             Title = error.Code,
             Detail = error.Description,
-            Status = statusCode
+            Status = statusCode,
+            Path = error.Path,
+            Metadata = error.Metadata
         })
         {
             StatusCode = statusCode
@@ -65,16 +67,14 @@ public static class ResultExtensions
     {
         var statusCode = error.GetStatusCode();
 
-        var problem = new ApiProblemDetails
-        {
-            Title = error.Code,
-            Detail = error.Description,
-            Status = statusCode
-        };
-
         return Results.Problem(
-            title: problem.Title,
-            detail: problem.Detail,
-            statusCode: statusCode);
+            title: error.Code,
+            detail: error.Description,
+            statusCode: statusCode,
+            extensions: new Dictionary<string, object?>
+            {
+                ["path"] = error.Path,
+                ["metadata"] = error.Metadata
+            });
     }
 }

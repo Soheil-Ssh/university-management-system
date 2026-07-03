@@ -47,7 +47,7 @@ public sealed record Address
         string city,
         string street,
         string buildingNumber,
-        PostalCode postalCode,
+        string postalCode,
         string? unit = null,
         string? additionalInfo = null)
     {
@@ -85,12 +85,16 @@ public sealed record Address
         if (!string.IsNullOrWhiteSpace(additionalInfo) && additionalInfo.Length > AdditionalInfoMaxLength)
             return AddressErrors.AdditionalInfoTooLong;
 
+        var postalCodeResult = PostalCode.Create(postalCode);
+        if (postalCodeResult.IsFailure)
+            return postalCodeResult.Error;
+
         return new Address(
             province,
             city,
             street,
             buildingNumber,
-            postalCode,
+            postalCodeResult.Data,
             unit,
             additionalInfo);
     }
