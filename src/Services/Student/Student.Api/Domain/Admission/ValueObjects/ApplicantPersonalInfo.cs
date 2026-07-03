@@ -10,11 +10,11 @@ public record ApplicantPersonalInfo
     private const int MaxPlaceLength = 100;
     private static readonly DateTime MinBirthDate = new(1900, 1, 1);
 
-    public string FirstName { get; private set; }
-    public string LastName { get; private set; }
-    public string EnFirstName { get; private set; }
-    public string EnLastName { get; private set; }
-    public string NationalCode { get; private set; }
+    public Name FirstName { get; private set; }
+    public Name LastName { get; private set; }
+    public Name EnFirstName { get; private set; }
+    public Name EnLastName { get; private set; }
+    public NationalCode NationalCode { get; private set; }
     public string BirthPlace { get; private set; }
     public string IssuePlace { get; private set; }
     public DateTime BirthDate { get; private set; }
@@ -27,11 +27,11 @@ public record ApplicantPersonalInfo
     private ApplicantPersonalInfo() { }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
-    private ApplicantPersonalInfo(string firstName,
-        string lastName,
-        string enFirstName,
-        string enLastName,
-        string nationalCode,
+    private ApplicantPersonalInfo(Name firstName,
+        Name lastName,
+        Name enFirstName,
+        Name enLastName,
+        NationalCode nationalCode,
         string birthPlace,
         string issuePlace,
         DateTime birthDate,
@@ -105,11 +105,11 @@ public record ApplicantPersonalInfo
             return ApplicantPersonalInfoErrors.BirthDateTooOld;
 
         return new ApplicantPersonalInfo(
-            firstNameResult.Data.Value,
-            lastNameResult.Data.Value,
-            enFirstNameResult.Data.Value,
-            enLastNameResult.Data.Value,
-            nationalCodeResult.Data.Value,
+            firstNameResult.Data,
+            lastNameResult.Data,
+            enFirstNameResult.Data,
+            enLastNameResult.Data,
+            nationalCodeResult.Data,
             birthPlace,
             issuePlace,
             birthDate,

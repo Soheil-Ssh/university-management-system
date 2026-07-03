@@ -1,4 +1,4 @@
-## UC-003 - Get Role by ID
+## UC-ID-RM-002 - Get Role by ID
 
 **Bounded Context:** Identity
 
@@ -10,7 +10,7 @@ View the details of a specific role.
 **Preconditions**
 
 * User is authenticated.
-* User has the `identity.roles.view` permission.
+* User has the `identity.roles.read` permission.
 
 **Flow**
 

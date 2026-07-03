@@ -1,4 +1,4 @@
-## UC-001 - Get Roles
+## UC-ID-RM-001 - Get Roles
 
 **Bounded Context:** Identity
 
@@ -10,7 +10,7 @@ View a paginated list of roles with filtering options.
 **Preconditions**
 
 * User is authenticated.
-* User has the `identity.roles.view` permission.
+* User has the `identity.roles.read` permission.
 
 **Flow**
 
