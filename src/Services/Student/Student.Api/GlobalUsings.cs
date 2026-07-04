@@ -19,3 +19,5 @@ global using Student.Api.Domain.Admission.Errors;
 global using FluentValidation;
 global using SharedKernel.Domain.Extensions;
 global using Student.Api.Application.Abstractions;
+global using SharedKernel.Api.Contracts;
+global using Mapster;
