@@ -15,3 +15,4 @@ global using Microsoft.EntityFrameworkCore;
 global using File.Api.Domain.File.Enums;
 global using SharedKernel.Abstractions.Persistence;
 global using File.Api.Domain.File.ValueObjects;
+global using Mapster;
