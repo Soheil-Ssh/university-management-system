@@ -1,5 +1,3 @@
-using Student.Api.Domain.Admission.Errors;
-
 namespace Student.Api.Domain.Admission.ValueObjects;
 
 public sealed record EntranceInfo

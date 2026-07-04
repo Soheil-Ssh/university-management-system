@@ -24,4 +24,7 @@ public class AdmissionRequestErrors
 
         public static readonly Error EmergencyContactRequired =new ("AdmissionRequest.EmergencyContact.Required",
             "Emergency contact must be completed before diploma information.", ErrorType.Conflict);
+
+        public static readonly Error DiplomaInfoRequired = new("AdmissionRequest.DiplomaInfo.Required",
+            "Diploma information must be completed before entrance information.", ErrorType.Conflict);
 }

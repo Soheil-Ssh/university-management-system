@@ -38,8 +38,7 @@ public sealed class AdmissionRequest : AggregateRoot<AdmissionRequestId>
         Step = AdmissionRequestStep.NotStarted;
     }
 
-    public static Result<AdmissionRequest> StartRegistration(TrackingCode trackingCode,
-        string registrationToken)
+    public static Result<AdmissionRequest> StartRegistration(TrackingCode trackingCode, string registrationToken)
         => new AdmissionRequest(AdmissionRequestId.New(), trackingCode, registrationToken);
 
     public Result SaveApplicantPersonalInfo(ApplicantPersonalInfo applicantPersonalInfo,
@@ -155,6 +154,30 @@ public sealed class AdmissionRequest : AggregateRoot<AdmissionRequestId>
 
         DiplomaInfo = diplomaInfo;
         Step = AdmissionRequestStep.DiplomaInfoCompleted;
+        RegistrationToken = nextRegistrationToken;
+
+        return Result.Success();
+    }
+
+    public Result CompleteEntranceInfo(EntranceInfo entranceInfo,
+        string currentRegistrationToken,
+        string nextRegistrationToken)
+    {
+        if (RegistrationToken != currentRegistrationToken)
+            return AdmissionRequestErrors.InvalidRegistrationToken;
+
+        if (Status != AdmissionRequestStatus.Draft)
+            return AdmissionRequestErrors.CannotModifySubmittedRequest;
+
+        if (DiplomaInfo is null)
+            return AdmissionRequestErrors.DiplomaInfoRequired;
+
+        if (Step != AdmissionRequestStep.DiplomaInfoCompleted &&
+            Step != AdmissionRequestStep.EntranceInfoCompleted)
+            return AdmissionRequestErrors.InvalidStep;
+
+        EntranceInfo = entranceInfo;
+        Step = AdmissionRequestStep.EntranceInfoCompleted;
         RegistrationToken = nextRegistrationToken;
 
         return Result.Success();
