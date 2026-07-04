@@ -120,13 +120,28 @@ public sealed class File : AggregateRoot<FileId>
         return Result.Success();
     }
 
-    public Result UpdateFileName(string newFileName)
+    public Result UpdateNameWithoutExtension(string newNameWithoutExtension)
     {
-        var fileNameResult = FileName.Create(newFileName);
+        if (Status == FileStatus.Deleted)
+            return FileErrors.CannotRenameDeleted;
+
+        var fileNameResult = FileName.CreateFromNameWithoutExtension(
+            newNameWithoutExtension,
+            FileName.Extension);
+
         if (fileNameResult.IsFailure)
             return fileNameResult.Error;
 
-        FileName = fileNameResult.Data;
+        var newFileName = fileNameResult.Data;
+
+        if (string.Equals(FileName.Value, newFileName.Value,
+                StringComparison.OrdinalIgnoreCase))
+        {
+            return FileErrors.FileNameNotChanged;
+        }
+
+        FileName = newFileName;
+
         return Result.Success();
     }
 }

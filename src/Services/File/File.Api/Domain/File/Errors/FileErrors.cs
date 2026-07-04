@@ -9,6 +9,9 @@ public static class FileErrors
     public static readonly Error AlreadyExists = new("File.AlreadyExists", "File already exists.", ErrorType.Conflict);
     public static readonly Error Deleted = new("File.Deleted", "File has been deleted.", ErrorType.Conflict);
     public static readonly Error PhysicalFileNotFound = new("File.PhysicalFileNotFound", "The physical file does not exist in storage.", ErrorType.Validation);
+    public static readonly Error CannotRenameDeleted = new("File.CannotRenameDeleted", "Deleted file cannot be renamed.", ErrorType.Validation);
+
+    public static readonly Error FileNameNotChanged = new("File.FileNameNotChanged", "File name has not changed.", ErrorType.Validation);
 
     // Mime type errors
     public static readonly Error MimeTypeEmpty = new("File.MimeType.Empty", "Mime type cannot be empty.", ErrorType.Validation);

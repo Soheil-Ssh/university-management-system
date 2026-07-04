@@ -20,12 +20,41 @@ public sealed record FileName
         if (string.IsNullOrWhiteSpace(value))
             return FileNameErrors.Empty;
 
-        value = value.Trim();
+        value = Path.GetFileName(value.Trim());
+
+        if (string.IsNullOrWhiteSpace(value))
+            return FileNameErrors.Empty;
 
         if (value.Length > MaxLength)
             return FileNameErrors.TooLong;
 
+        if (value.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
+            return FileNameErrors.ContainsInvalidChars;
+
         return new FileName(value);
+    }
+
+    public static Result<FileName> CreateFromNameWithoutExtension(string nameWithoutExtension, string currentExtension)
+    {
+        if (string.IsNullOrWhiteSpace(nameWithoutExtension))
+            return FileNameErrors.Empty;
+
+        nameWithoutExtension = nameWithoutExtension.Trim();
+
+        if (nameWithoutExtension.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
+            return FileNameErrors.Invalid;
+
+        if (Path.HasExtension(nameWithoutExtension))
+            return FileNameErrors.ExtensionNotAllowed;
+
+        currentExtension = currentExtension?.Trim() ?? string.Empty;
+
+        string newValue = $"{nameWithoutExtension}{currentExtension}";
+
+        if (newValue.Length > MaxLength)
+            return FileNameErrors.TooLong;
+
+        return new FileName(newValue);
     }
 
     public override string ToString() => Value;
