@@ -7,6 +7,8 @@ public static class FileErrors
     public static readonly Error FileIsEmpty = new("File.Empty", "File is empty.", ErrorType.Validation);
     public static readonly Error NotFound = new("File.NotFound", "File not found.", ErrorType.NotFound);
     public static readonly Error AlreadyExists = new("File.AlreadyExists", "File already exists.", ErrorType.Conflict);
+    public static readonly Error Deleted = new("File.Deleted", "File has been deleted.", ErrorType.Conflict);
+    public static readonly Error PhysicalFileNotFound = new("File.PhysicalFileNotFound", "The physical file does not exist in storage.", ErrorType.Validation);
 
     // Mime type errors
     public static readonly Error MimeTypeEmpty = new("File.MimeType.Empty", "Mime type cannot be empty.", ErrorType.Validation);
@@ -23,6 +25,6 @@ public static class FileErrors
     public static readonly Error InvalidStatusTransition = new("File.InvalidStatusTransition", "Invalid status transition for this operation.", ErrorType.Conflict);
 
     // Storage path errors
-    public static readonly Error StoragePathEmpty = new("File.StoragePath.Empty", "Storage path is required.");
-    public static readonly Error StoragePathInvalid = new("File.StoragePath.Invalid", "Storage path is invalid.");
+    public static readonly Error StoragePathEmpty = new("File.StoragePath.Empty", "Storage path is required.", ErrorType.Validation);
+    public static readonly Error StoragePathInvalid = new("File.StoragePath.Invalid", "Storage path is invalid.", ErrorType.Validation);
 }
