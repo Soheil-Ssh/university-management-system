@@ -12,6 +12,8 @@
 	<ItemGroup>
 
 		<PackageReference Include="Carter" Version="10.0.0" />
+
+		<PackageReference Include="Grpc.AspNetCore" Version="2.49.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.9">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -28,6 +30,12 @@
 		<ProjectReference Include="..\..\..\SharedKernel\SharedKernel.Abstractions\SharedKernel.Abstractions.csproj" />
 		<ProjectReference Include="..\..\..\SharedKernel\SharedKernel.Api\SharedKernel.Api.csproj" />
 		<ProjectReference Include="..\..\..\SharedKernel\SharedKernel.Persistence\SharedKernel.Persistence.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Protobuf Include="..\..\File\File.Api\Application\Protos\file_validation.proto" GrpcServices="Client">
+	    <Link>Protos\file_validation.proto</Link>
+	  </Protobuf>
 	</ItemGroup>
 
 </Project>

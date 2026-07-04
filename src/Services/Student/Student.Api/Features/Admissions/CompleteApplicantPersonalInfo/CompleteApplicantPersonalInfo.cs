@@ -47,31 +47,22 @@ public static class CompleteApplicantPersonalInfo
         public Validator()
         {
             RuleFor(x => x.AdmissionRequestId).NotEmpty();
-
             RuleFor(x => x.RegistrationToken).NotEmpty();
-
             RuleFor(x => x.FirstName).NotEmpty().MaximumLength(100).Matches(PersianNamePattern);
-
             RuleFor(x => x.LastName).NotEmpty().MaximumLength(100).Matches(PersianNamePattern);
-
             RuleFor(x => x.EnFirstName).NotEmpty().MaximumLength(100).Matches(EnglishNamePattern);
-
             RuleFor(x => x.EnLastName).NotEmpty().MaximumLength(100).Matches(EnglishNamePattern);
-
             RuleFor(x => x.NationalCode).NotEmpty().MaximumLength(10);
-
             RuleFor(x => x.BirthPlace).NotEmpty().MaximumLength(100);
-
             RuleFor(x => x.IssuePlace).NotEmpty().MaximumLength(100);
-
             RuleFor(x => x.BirthDate).NotEmpty();
-
             RuleFor(x => x.PersonalImageFileId).NotEmpty();
         }
     }
 
     public class Handler(IAdmissionRequestRepository admissionRequestRepository,
         IRegistrationTokenGenerator registrationTokenGenerator,
+        IFileValidator fileValidator,
         IUnitOfWork unitOfWork)
         : ICommandHandler<Command, Result<Response>>
     {
@@ -99,6 +90,13 @@ public static class CompleteApplicantPersonalInfo
 
             if (personalInfoResult.IsFailure)
                 return personalInfoResult.Error;
+
+            var fileExistsResult = await fileValidator.ExistsAsync(personalImageFileId, cancellationToken);
+            if (fileExistsResult.IsFailure)
+                return fileExistsResult.Error;
+
+            if (!fileExistsResult.Data)
+                return ApplicantPersonalInfoErrors.PersonalImageFileNotFound.WithPath(nameof(request.PersonalImageFileId));
 
             var nextRegistrationToken = registrationTokenGenerator.Generate();
 

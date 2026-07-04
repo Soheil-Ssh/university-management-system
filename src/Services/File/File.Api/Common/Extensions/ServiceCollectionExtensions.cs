@@ -25,6 +25,9 @@ public static class ServiceCollectionExtensions
             options.UseNpgsql(sqlServerConnectionString);
         });
 
+        // Add gRPC services to the service collection
+        services.AddGrpc();
+
         // Add options to the service collection
         services.Configure<FileStorageOptions>(configuration.GetSection(FileStorageOptions.SectionName));
 

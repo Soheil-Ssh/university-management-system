@@ -68,9 +68,16 @@ services:
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
       - ConnectionStrings__PostgresDefaultConnection=Host=postgres;Port=5432;Database=file_db;Username=file_user;Password=Password@123;TrustServerCertificate=True
+      - Kestrel__Endpoints__Http__Url=http://0.0.0.0:8080
+      - Kestrel__Endpoints__Http__Protocols=Http1
+      - Kestrel__Endpoints__Https__Url=https://0.0.0.0:8081
+      - Kestrel__Endpoints__Https__Protocols=Http1
+      - Kestrel__Endpoints__Grpc__Url=http://0.0.0.0:8082
+      - Kestrel__Endpoints__Grpc__Protocols=Http2
     ports:
       - "5002:8080"
       - "5052:8081"
+      - "5082:8082"
     depends_on:
       postgres:
         condition: service_healthy
@@ -89,6 +96,7 @@ services:
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
       - ConnectionStrings__PostgresDefaultConnection=Host=postgres;Port=5432;Database=student_db;Username=student_user;Password=Password@123;TrustServerCertificate=True
+      - GrpcServices__FileServiceUrl=http://file.api:8082
     ports:
       - "5003:8080"
       - "5053:8081"

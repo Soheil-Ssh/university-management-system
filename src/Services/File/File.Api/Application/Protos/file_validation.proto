@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+option csharp_namespace = "File.Api.Application.Protos";
+
+service FileValidationService {
+	rpc Exists(FileExistsRequest) returns (FileExistsResponse);
+}
+
+message FileExistsRequest {
+	string file_id = 1;
+}
+
+message FileExistsResponse {
+	bool exists = 1;
+}

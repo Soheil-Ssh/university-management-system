@@ -1,4 +1,5 @@
-﻿using Scalar.AspNetCore;
+﻿using File.Api.Infrastructure.Grpc;
+using Scalar.AspNetCore;
 using SharedKernel.Persistence.Database;
 
 namespace File.Api.Common.Extensions;
@@ -16,7 +17,7 @@ public static class ApplicationBuilderExtensions
         }
 
         app.UseExceptionHandler();
-        app.UseHttpsRedirection();
+        app.MapGrpcService<FileValidationService>();
         app.MapCarter();
 
         return app;

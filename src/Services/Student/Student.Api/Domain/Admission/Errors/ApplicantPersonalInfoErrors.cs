@@ -27,4 +27,6 @@ public static class ApplicantPersonalInfoErrors
     private static readonly DateTime MinBirthDate = new(1900, 1, 1);
     public static readonly Error BirthDateFuture = new("ApplicantPersonalInfo.BirthDate.Future", "Birth date cannot be in the future.", ErrorType.Validation);
     public static readonly Error BirthDateTooOld = new("ApplicantPersonalInfo.BirthDate.TooOld", $"Birth date must be after {MinBirthDate:yyyy-MM-dd}.", ErrorType.Validation);
+
+    public static readonly Error PersonalImageFileNotFound = new("ApplicantPersonalInfo.PersonalImage.FileNotFound", "Personal image file was not found.", ErrorType.Validation);
 }
