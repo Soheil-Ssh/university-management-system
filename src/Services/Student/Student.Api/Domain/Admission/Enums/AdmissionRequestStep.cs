@@ -9,6 +9,4 @@ public enum AdmissionRequestStep
     EmergencyContactInfoCompleted = 4,
     DiplomaInfoCompleted = 5,
     EntranceInfoCompleted = 6,
-    AttachmentsCompleted = 7,
-    Completed = 8
 }

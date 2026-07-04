@@ -31,8 +31,6 @@ public static class ServiceCollectionExtensions
         var fileServiceUrl = configuration["GrpcServices:FileServiceUrl"]
                              ?? throw new InvalidOperationException("File service gRPC URL is not configured.");
 
-        Console.WriteLine($"========== File gRPC URL: {fileServiceUrl} ==========");
-
         // Add the gRPC client for the FileValidationService to the service collection
         services.AddGrpcClient<FileValidationService.FileValidationServiceClient>((serviceProvider, options) =>
         {

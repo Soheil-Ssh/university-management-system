@@ -65,11 +65,6 @@ public class AdmissionRequestConfiguration : IEntityTypeConfiguration<AdmissionR
                 id => id == null ? (Guid?)null : id.Value,
                 value => value.HasValue ? new UserId(value.Value) : null);
 
-
-        // Attachments as owned collection
-        builder.Navigation(x => x.Attachments)
-            .UsePropertyAccessMode(PropertyAccessMode.Field);
-
         // Applicant Personal Info
         ConfigureApplicantPersonalInfo(builder);
 
@@ -90,9 +85,6 @@ public class AdmissionRequestConfiguration : IEntityTypeConfiguration<AdmissionR
 
         // Entrance
         ConfigureEntrance(builder);
-
-        // Attachments
-        ConfigureAttachments(builder);
 
         // Audit
         builder.Property(x => x.CreatedAt).IsRequired();
@@ -209,42 +201,6 @@ public class AdmissionRequestConfiguration : IEntityTypeConfiguration<AdmissionR
 
             property.Property(x => x.AdmissionType)
                 .HasConversion<int>();
-        });
-    }
-
-    private static void ConfigureAttachments(EntityTypeBuilder<AdmissionRequest> builder)
-    {
-        builder.Navigation(x => x.Attachments)
-            .UsePropertyAccessMode(PropertyAccessMode.Field);
-
-        builder.OwnsMany(x => x.Attachments, owned =>
-        {
-            owned.ToTable("AdmissionAttachments");
-
-            owned.WithOwner()
-                .HasForeignKey("AdmissionRequestId");
-
-            owned.HasKey(x => x.Id);
-
-            owned.Property(x => x.Id)
-                .ValueGeneratedNever()
-                .HasConversion(id => id.Value, value => new AdmissionAttachmentId(value));
-
-            owned.Property(x => x.Type)
-                .HasConversion<int>();
-
-            owned.OwnsOne(x => x.FileId, file =>
-            {
-                file.Property(x => x.Value)
-                    .HasColumnName("FileId");
-            });
-
-            owned.Property(x => x.Description)
-                .HasMaxLength(500);
-
-            owned.Property(x => x.CreatedAt);
-
-            owned.Property(x => x.UpdatedAt);
         });
     }
 }

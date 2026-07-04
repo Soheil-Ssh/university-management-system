@@ -15,9 +15,6 @@ public sealed class AdmissionRequest : AggregateRoot<AdmissionRequestId>
     public DiplomaInfo? DiplomaInfo { get; private set; }
     public EntranceInfo? EntranceInfo { get; private set; }
 
-    private readonly List<AdmissionAttachment> _attachments = [];
-    public IReadOnlyCollection<AdmissionAttachment> Attachments => _attachments;
-
     public AdmissionRequestStatus Status { get; private set; }
     public AdmissionRequestStep Step { get; private set; }
     public string? RejectionReason { get; private set; }
@@ -179,6 +176,24 @@ public sealed class AdmissionRequest : AggregateRoot<AdmissionRequestId>
         EntranceInfo = entranceInfo;
         Step = AdmissionRequestStep.EntranceInfoCompleted;
         RegistrationToken = nextRegistrationToken;
+
+        return Result.Success();
+    }
+
+    public Result Submit(string currentRegistrationToken, string nextRegistrationToken)
+    {
+        if (RegistrationToken != currentRegistrationToken)
+            return AdmissionRequestErrors.InvalidRegistrationToken;
+
+        if (Status != AdmissionRequestStatus.Draft)
+            return AdmissionRequestErrors.CannotSubmitRequest;
+
+        if (Step != AdmissionRequestStep.EntranceInfoCompleted)
+            return AdmissionRequestErrors.AdmissionRequestIsNotComplete;
+
+        Status = AdmissionRequestStatus.Pending;
+        RegistrationToken = nextRegistrationToken;
+        SubmittedAt = DateTime.UtcNow;
 
         return Result.Success();
     }
