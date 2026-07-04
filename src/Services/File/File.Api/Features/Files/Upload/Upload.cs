@@ -1,4 +1,5 @@
 using File.Api.Domain.File.Errors;
+using System.Security.Cryptography;
 
 namespace File.Api.Features.Files.Upload;
 
@@ -35,15 +36,50 @@ public static class Upload
             var file = fileResult.Data;
 
             string relativePath = filePathGenerator.GetRelativePath(file.Id, file.FileName);
+            var storagePathResult = file.SetStoragePath(relativePath);
+            if (storagePathResult.IsFailure)
+                return storagePathResult.Error;
 
             await using var stream = request.File.OpenReadStream();
 
+            string hash = await ComputeSha256Async(stream, cancellationToken);
+
+            var hashResult = file.SetHash(hash);
+
+            if (hashResult.IsFailure)
+                return hashResult.Error;
+
             await fileStorage.SaveAsync(stream, relativePath, cancellationToken);
 
-            await fileRepository.AddAsync(file, cancellationToken);
-            await unitOfWork.SaveAsync(cancellationToken);
+            try
+            {
+                await fileRepository.AddAsync(file, cancellationToken);
+                await unitOfWork.SaveAsync(cancellationToken);
+            }
+            catch
+            {
+                await fileStorage.DeleteAsync(relativePath, CancellationToken.None);
+                throw;
+            }
             
             return file.Id.Value;
+        }
+
+        private static async Task<string> ComputeSha256Async(Stream stream, CancellationToken cancellationToken)
+        {
+            if (stream.CanSeek)
+                stream.Position = 0;
+
+            using var sha256 = SHA256.Create();
+
+            byte[] hashBytes = await sha256.ComputeHashAsync(
+                stream,
+                cancellationToken);
+
+            if (stream.CanSeek)
+                stream.Position = 0;
+
+            return Convert.ToHexString(hashBytes).ToLowerInvariant();
         }
     }
 

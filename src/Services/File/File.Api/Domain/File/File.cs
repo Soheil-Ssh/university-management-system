@@ -1,5 +1,4 @@
 ﻿using File.Api.Domain.File.Errors;
-using File.Api.Domain.File.ValueObjects;
 
 namespace File.Api.Domain.File;
 
@@ -11,6 +10,7 @@ public sealed class File : AggregateRoot<FileId>
     public long Size { get; private set; }
     public FileStatus Status { get; private set; }
     public UserId? UploadedBy { get; private set; }
+    public string StoragePath { get; private set; }
     public DateTime? AttachedAt { get; private set; }
     public DateTime? DeletedAt { get; private set; }
 
@@ -30,6 +30,7 @@ public sealed class File : AggregateRoot<FileId>
         Size = size;
         UploadedBy = uploadedBy;
         Hash = hash;
+        StoragePath = string.Empty;
         Status = FileStatus.Temporary;
     }
 
@@ -50,6 +51,24 @@ public sealed class File : AggregateRoot<FileId>
             return FileErrors.SizeInvalid;
 
         return new File(FileId.New(), fileNameResult.Data, mimeType, size, uploadedBy);
+    }
+
+    public Result SetStoragePath(string storagePath)
+    {
+        if (string.IsNullOrWhiteSpace(storagePath))
+            return FileErrors.StoragePathEmpty;
+
+        storagePath = storagePath.Trim().Replace('\\', '/');
+
+        if (storagePath.StartsWith('/') || storagePath.Contains("../"))
+            return FileErrors.StoragePathInvalid;
+
+        if (storagePath.Length > 500)
+            return FileErrors.StoragePathInvalid;
+
+        StoragePath = storagePath;
+
+        return Result.Success();
     }
 
     public Result Attach()

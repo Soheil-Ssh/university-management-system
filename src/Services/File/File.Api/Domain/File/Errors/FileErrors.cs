@@ -21,4 +21,8 @@ public static class FileErrors
     public static readonly Error AlreadyDeleted = new("File.Status.AlreadyDeleted", "File is already deleted.", ErrorType.Conflict);
     public static readonly Error CannotAttachDeleted = new("File.Status.CannotAttachDeleted", "Cannot attach a deleted file.", ErrorType.Conflict);
     public static readonly Error InvalidStatusTransition = new("File.InvalidStatusTransition", "Invalid status transition for this operation.", ErrorType.Conflict);
+
+    // Storage path errors
+    public static readonly Error StoragePathEmpty = new("File.StoragePath.Empty", "Storage path is required.");
+    public static readonly Error StoragePathInvalid = new("File.StoragePath.Invalid", "Storage path is invalid.");
 }

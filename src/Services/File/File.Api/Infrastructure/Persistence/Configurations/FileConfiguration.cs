@@ -65,6 +65,9 @@ public class FileConfiguration : IEntityTypeConfiguration<Domain.File.File>
                 value => value.HasValue ? new UserId(value.Value) : null);
         builder.HasIndex(x => x.UploadedBy);
 
+        // StoragePath
+        builder.Property(x => x.StoragePath).HasMaxLength(500).IsRequired();
+
         // AttachedAt
         builder.Property(x => x.AttachedAt);
         builder.HasIndex(x => x.AttachedAt);
