@@ -1,5 +1,3 @@
-using Student.Api.Domain.Admission.Errors;
-
 namespace Student.Api.Domain.Admission.ValueObjects;
 
 public sealed record ParentInfo
@@ -23,19 +21,19 @@ public sealed record ParentInfo
 
     public static Result<ParentInfo> Create(string firstName, string lastName, string nationalCode, string mobile)
     {
-        var firstNameResult = Name.Create(firstName);
+        var firstNameResult = Name.Create(firstName).WithPath(nameof(FirstName));
         if (firstNameResult.IsFailure)
             return ParentInfoErrors.FirstNameInvalid;
 
-        var lastNameResult = Name.Create(lastName);
+        var lastNameResult = Name.Create(lastName).WithPath(nameof(LastName));
         if (lastNameResult.IsFailure)
             return ParentInfoErrors.LastNameInvalid;
 
-        var nationalCodeResult = NationalCode.Create(nationalCode);
+        var nationalCodeResult = NationalCode.Create(nationalCode).WithPath(nameof(NationalCode));
         if (nationalCodeResult.IsFailure)
             return ParentInfoErrors.NationalCodeInvalid;
 
-        var mobileResult = MobileNumber.Create(mobile);
+        var mobileResult = MobileNumber.Create(mobile).WithPath(nameof(Mobile));
         if (mobileResult.IsFailure)
             return ParentInfoErrors.MobileInvalid;
 

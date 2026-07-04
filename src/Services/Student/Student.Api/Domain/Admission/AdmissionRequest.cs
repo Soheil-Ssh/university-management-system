@@ -84,4 +84,33 @@ public sealed class AdmissionRequest : AggregateRoot<AdmissionRequestId>
 
         return Result.Success();
     }
+
+    public Result CompleteParentsInfo(
+        ParentInfo fatherInfo,
+        ParentInfo motherInfo,
+        string currentRegistrationToken,
+        string nextRegistrationToken)
+    {
+        if (RegistrationToken != currentRegistrationToken)
+            return AdmissionRequestErrors.InvalidRegistrationToken;
+
+        if (Status != AdmissionRequestStatus.Draft)
+            return AdmissionRequestErrors.CannotModifySubmittedRequest;
+
+        if (ApplicantContactInfo is null)
+            return AdmissionRequestErrors.ApplicantContactInfoRequired;
+
+        if (Step != AdmissionRequestStep.ContactInfoCompleted && Step != AdmissionRequestStep.ParentsInfoCompleted)
+            return AdmissionRequestErrors.InvalidStep;
+
+        if (fatherInfo.NationalCode == motherInfo.NationalCode)
+            return AdmissionRequestErrors.ParentsNationalCodesMustBeDifferent;
+
+        FatherInfo = fatherInfo;
+        MotherInfo = motherInfo;
+        Step = AdmissionRequestStep.ParentsInfoCompleted;
+        RegistrationToken = nextRegistrationToken;
+
+        return Result.Success();
+    }
 }

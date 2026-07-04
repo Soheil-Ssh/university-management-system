@@ -17,7 +17,7 @@ public static class CompleteApplicantContactInfo
         string? Unit,
         string? AdditionalInfo);
 
-    public sealed record ContactInfoResponse(
+    public sealed record Response(
         Guid AdmissionRequestId,
         string TrackingCode,
         string RegistrationToken,
@@ -35,7 +35,7 @@ public static class CompleteApplicantContactInfo
         string BuildingNumber,
         string PostalCode,
         string? Unit,
-        string? AdditionalInfo) : ICommand<Result<ContactInfoResponse>>;
+        string? AdditionalInfo) : ICommand<Result<Response>>;
 
     public class Validator : AbstractValidator<Command>
     {
@@ -60,9 +60,9 @@ public static class CompleteApplicantContactInfo
         IAdmissionRequestRepository admissionRequestRepository,
         IRegistrationTokenGenerator registrationTokenGenerator,
         IUnitOfWork unitOfWork)
-        : ICommandHandler<Command, Result<ContactInfoResponse>>
+        : ICommandHandler<Command, Result<Response>>
     {
-        public async Task<Result<ContactInfoResponse>> Handle(
+        public async Task<Result<Response>> Handle(
             Command request,
             CancellationToken cancellationToken)
         {
@@ -100,7 +100,7 @@ public static class CompleteApplicantContactInfo
 
             await unitOfWork.SaveAsync(cancellationToken);
 
-            return new ContactInfoResponse(
+            return new Response(
                 admissionRequest.Id.Value,
                 admissionRequest.TrackingCode.Value,
                 admissionRequest.RegistrationToken,

@@ -17,7 +17,7 @@ public static class CompleteApplicantPersonalInfo
         MaritalStatus MaritalStatus,
         Guid PersonalImageFileId);
 
-    public sealed record PersonalInfoResponse(
+    public sealed record Response(
         Guid AdmissionRequestId,
         string TrackingCode,
         string RegistrationToken,
@@ -36,7 +36,7 @@ public static class CompleteApplicantPersonalInfo
         DateTime BirthDate,
         Gender Gender,
         MaritalStatus MaritalStatus,
-        Guid PersonalImageFileId) : ICommand<Result<PersonalInfoResponse>>;
+        Guid PersonalImageFileId) : ICommand<Result<Response>>;
     
     public class Validator : AbstractValidator<Command>
     {
@@ -73,9 +73,9 @@ public static class CompleteApplicantPersonalInfo
     public class Handler(IAdmissionRequestRepository admissionRequestRepository,
         IRegistrationTokenGenerator registrationTokenGenerator,
         IUnitOfWork unitOfWork)
-        : ICommandHandler<Command, Result<PersonalInfoResponse>>
+        : ICommandHandler<Command, Result<Response>>
     {
-        public async Task<Result<PersonalInfoResponse>> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Result<Response>> Handle(Command request, CancellationToken cancellationToken)
         {
             var admissionRequestId = new AdmissionRequestId(request.AdmissionRequestId);
 
@@ -111,7 +111,7 @@ public static class CompleteApplicantPersonalInfo
 
             await unitOfWork.SaveAsync(cancellationToken);
 
-            return new PersonalInfoResponse(admissionRequest.Id.Value,
+            return new Response(admissionRequest.Id.Value,
                 admissionRequest.TrackingCode.Value,
                 admissionRequest.RegistrationToken,
                 admissionRequest.Step);
