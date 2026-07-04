@@ -1,7 +1,4 @@
-﻿using SharedKernel.Domain.Extensions;
-using Student.Api.Domain.Admission.Errors;
-
-namespace Student.Api.Domain.Admission.ValueObjects;
+﻿namespace Student.Api.Domain.Admission.ValueObjects;
 
 public sealed record EmergencyContact
 {

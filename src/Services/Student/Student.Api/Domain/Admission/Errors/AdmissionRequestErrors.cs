@@ -18,4 +18,7 @@ public class AdmissionRequestErrors
 
         public static readonly Error ParentsNationalCodesMustBeDifferent = new("AdmissionRequest.ParentsInfo.ParentsNationalCodesMustBeDifferent",
             "Father and mother national codes must be different.", ErrorType.Validation);
+
+        public static readonly Error ParentsInfoRequired = new("AdmissionRequest.ParentsInfo.Required",
+            "Parents information must be completed before emergency contact.", ErrorType.Conflict);
 }

@@ -6,8 +6,9 @@ public enum AdmissionRequestStep
     PersonalInfoCompleted = 1,
     ContactInfoCompleted = 2,
     ParentsInfoCompleted = 3,
-    DiplomaInfoCompleted = 4,
-    EntranceInfoCompleted = 5,
-    AttachmentsCompleted = 6,
-    Completed = 7 
+    EmergencyContactInfoCompleted = 4,
+    DiplomaInfoCompleted = 5,
+    EntranceInfoCompleted = 6,
+    AttachmentsCompleted = 7,
+    Completed = 8
 }

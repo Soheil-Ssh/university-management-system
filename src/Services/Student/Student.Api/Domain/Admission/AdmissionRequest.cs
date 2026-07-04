@@ -85,8 +85,7 @@ public sealed class AdmissionRequest : AggregateRoot<AdmissionRequestId>
         return Result.Success();
     }
 
-    public Result CompleteParentsInfo(
-        ParentInfo fatherInfo,
+    public Result CompleteParentsInfo(ParentInfo fatherInfo,
         ParentInfo motherInfo,
         string currentRegistrationToken,
         string nextRegistrationToken)
@@ -109,6 +108,29 @@ public sealed class AdmissionRequest : AggregateRoot<AdmissionRequestId>
         FatherInfo = fatherInfo;
         MotherInfo = motherInfo;
         Step = AdmissionRequestStep.ParentsInfoCompleted;
+        RegistrationToken = nextRegistrationToken;
+
+        return Result.Success();
+    }
+
+    public Result CompleteEmergencyContact(EmergencyContact emergencyContact,
+        string currentRegistrationToken,
+        string nextRegistrationToken)
+    {
+        if (RegistrationToken != currentRegistrationToken)
+            return AdmissionRequestErrors.InvalidRegistrationToken;
+
+        if (Status != AdmissionRequestStatus.Draft)
+            return AdmissionRequestErrors.CannotModifySubmittedRequest;
+
+        if (FatherInfo is null || MotherInfo is null)
+            return AdmissionRequestErrors.ParentsInfoRequired;
+
+        if (Step != AdmissionRequestStep.ParentsInfoCompleted && Step != AdmissionRequestStep.EmergencyContactInfoCompleted)
+            return AdmissionRequestErrors.InvalidStep;
+
+        EmergencyContact = emergencyContact;
+        Step = AdmissionRequestStep.EmergencyContactInfoCompleted;
         RegistrationToken = nextRegistrationToken;
 
         return Result.Success();
