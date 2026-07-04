@@ -21,4 +21,7 @@ public class AdmissionRequestErrors
 
         public static readonly Error ParentsInfoRequired = new("AdmissionRequest.ParentsInfo.Required",
             "Parents information must be completed before emergency contact.", ErrorType.Conflict);
+
+        public static readonly Error EmergencyContactRequired =new ("AdmissionRequest.EmergencyContact.Required",
+            "Emergency contact must be completed before diploma information.", ErrorType.Conflict);
 }

@@ -135,4 +135,28 @@ public sealed class AdmissionRequest : AggregateRoot<AdmissionRequestId>
 
         return Result.Success();
     }
+
+    public Result CompleteDiplomaInfo(DiplomaInfo diplomaInfo,
+        string currentRegistrationToken,
+        string nextRegistrationToken)
+    {
+        if (RegistrationToken != currentRegistrationToken)
+            return AdmissionRequestErrors.InvalidRegistrationToken;
+
+        if (Status != AdmissionRequestStatus.Draft)
+            return AdmissionRequestErrors.CannotModifySubmittedRequest;
+
+        if (EmergencyContact is null)
+            return AdmissionRequestErrors.EmergencyContactRequired;
+
+        if (Step != AdmissionRequestStep.EmergencyContactInfoCompleted &&
+            Step != AdmissionRequestStep.DiplomaInfoCompleted)
+            return AdmissionRequestErrors.InvalidStep;
+
+        DiplomaInfo = diplomaInfo;
+        Step = AdmissionRequestStep.DiplomaInfoCompleted;
+        RegistrationToken = nextRegistrationToken;
+
+        return Result.Success();
+    }
 }
