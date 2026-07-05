@@ -1,4 +1,6 @@
-﻿namespace Student.Api.Features.Admissions.GetAll;
+﻿using SharedKernel.Identity.Permissions;
+
+namespace Student.Api.Features.Admissions.GetAll;
 
 public class GetAll
 {
@@ -101,6 +103,7 @@ public class GetAll
                         var result = await sender.Send(query);
                         return result.ToHttpResult();
                     })
+                .RequireAuthorization(PermissionCodes.Identity.RolesRead)
                 .Version(app, 1.0)
                 .WithName("GetAllAdmissionRequests")
                 .WithTags("Admission Requests");

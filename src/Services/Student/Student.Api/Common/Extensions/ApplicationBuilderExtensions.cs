@@ -12,11 +12,31 @@ public static class ApplicationBuilderExtensions
         if (app.Environment.IsDevelopment())
         {
             app.MapOpenApi();
-            app.MapScalarApiReference();
+            app.MapScalarApiReference("/scalar", options =>
+                {
+                    options
+                        .AddPreferredSecuritySchemes("OAuth2")
+                        .AddOAuth2Flows("OAuth2", flows =>
+                        {
+                            var authorizationCodeFlow = new AuthorizationCodeFlow
+                            {
+                                ClientId = "ums-scalar",
+                                AuthorizationUrl = "https://localhost:5051/connect/authorize",
+                                TokenUrl = "https://localhost:5051/connect/token",
+                                Pkce = Pkce.Sha256
+                            };
+
+                            authorizationCodeFlow.AddQueryParameter("scope", "openid profile email offline_access student-api");
+                            flows.AuthorizationCode = authorizationCodeFlow;
+                        });
+                })
+                .AllowAnonymous();
         }
 
-        app.UseExceptionHandler();
         app.UseHttpsRedirection();
+        app.UseAuthentication();
+        app.UseAuthorization();
+        app.UseExceptionHandler();
         app.MapCarter();
 
         return app;

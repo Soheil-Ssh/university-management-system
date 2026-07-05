@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using SharedKernel.Abstractions;
 using SharedKernel.Api;
+using SharedKernel.Identity;
+using SharedKernel.Identity.Extensions;
 using SharedKernel.Persistence;
 using Student.Api.Infrastructure.FileServices;
 using Student.Api.Infrastructure.Persistence.Repositories;
@@ -26,6 +28,10 @@ public static class ServiceCollectionExtensions
             options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
             options.UseNpgsql(postgresConnectionString);
         });
+
+        // Add authentication to the service collection
+        services.AddUmsJwtAuthentication(configuration);
+        services.AddUmsAuthorization();
 
         // Get the file service gRPC URL from the configuration
         var fileServiceUrl = configuration["GrpcServices:FileServiceUrl"]

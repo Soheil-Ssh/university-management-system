@@ -1,6 +1,5 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 using Duende.IdentityServer.Services;
-using Identity.Api.Infrastructure.Authorization;
 using Identity.Api.Infrastructure.IdentityServer;
 using Identity.Api.Infrastructure.Persistence.Options;
 using Identity.Api.Infrastructure.Persistence.Repositories;
@@ -9,6 +8,7 @@ using Identity.Api.Infrastructure.Security;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using SharedKernel.Abstractions;
 using SharedKernel.Api;
+using SharedKernel.Identity;
 using SharedKernel.Identity.Extensions;
 using SharedKernel.Persistence;
 using SharedKernel.Persistence.Database;
@@ -38,6 +38,7 @@ public static class ServiceCollectionExtensions
 
         // Add authentication to the service collection
         services.AddUmsJwtAuthentication(configuration, useJwtBearerAsDefaultScheme: false);
+        services.AddUmsAuthorization();
 
         // Add IdentityServer to the service collection
         var identityBuilder = services.AddIdentityServer(options =>
@@ -83,9 +84,6 @@ public static class ServiceCollectionExtensions
 
         // Add the IdentityServer profile service to the service collection
         services.AddScoped<IProfileService, IdentityServerProfileService>();
-
-        // Add permission authentication to the service collection
-        services.AddIdentityAuthorizationPolicies();
 
         // Add repositories and unit of work to the service collection
         services.AddScoped<IUnitOfWork, UnitOfWork>();

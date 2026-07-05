@@ -55,8 +55,6 @@ public static class JwtAuthenticationExtensions
             if (!string.IsNullOrWhiteSpace(jwtOptions.MetadataAddress))
                 options.MetadataAddress = jwtOptions.MetadataAddress;
 
-            Console.WriteLine($"---------------- {jwtOptions.MetadataAddress} ------------------");
-
             options.RequireHttpsMetadata = jwtOptions.RequireHttpsMetadata;
             options.MapInboundClaims = jwtOptions.MapInboundClaims;
             options.IncludeErrorDetails = jwtOptions.IncludeErrorDetails;

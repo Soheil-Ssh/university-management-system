@@ -14,7 +14,6 @@ public static class IdentityServerConfig
 
     public static IEnumerable<ApiScope> ApiScopes =>
     [
-
         new("identity-api", "Identity API"),
         new("student-api", "Student API"),
         new("file-api", "File API")
@@ -41,18 +40,23 @@ public static class IdentityServerConfig
             RedirectUris =
             {
                 "https://localhost:5051/scalar/",
-                "https://localhost:5051/scalar"
+                "https://localhost:5051/scalar",
+                "https://localhost:5053/scalar/",
+                "https://localhost:5053/scalar"
             },
 
             PostLogoutRedirectUris =
             {
                 "https://localhost:5051/scalar/",
-                "https://localhost:5051/scalar"
+                "https://localhost:5051/scalar",
+                "https://localhost:5053/scalar/",
+                "https://localhost:5053/scalar"
             },
 
             AllowedCorsOrigins =
             {
-                "https://localhost:5051"
+                "https://localhost:5051",
+                "https://localhost:5053"
             },
 
             AllowedScopes =
@@ -62,6 +66,7 @@ public static class IdentityServerConfig
                 IdentityServerConstants.StandardScopes.Email,
                 IdentityServerConstants.StandardScopes.OfflineAccess,
                 "identity-api",
+                "student-api",
             },
 
             RequireConsent = false,

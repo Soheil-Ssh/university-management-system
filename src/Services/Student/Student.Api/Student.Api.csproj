@@ -29,6 +29,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\SharedKernel\SharedKernel.Abstractions\SharedKernel.Abstractions.csproj" />
 		<ProjectReference Include="..\..\..\SharedKernel\SharedKernel.Api\SharedKernel.Api.csproj" />
+		<ProjectReference Include="..\..\..\SharedKernel\SharedKernel.Identity\SharedKernel.Identity.csproj" />
 		<ProjectReference Include="..\..\..\SharedKernel\SharedKernel.Persistence\SharedKernel.Persistence.csproj" />
 	</ItemGroup>
 

@@ -1,4 +1,6 @@
 
+using SharedKernel.Identity.Extensions;
+
 namespace Identity.Api.Features.Users.GetAll;
 
 public static class GetAll
@@ -83,7 +85,7 @@ public static class GetAll
                 var result = await sender.Send(query);
                 return result.ToHttpResult();
             })
-            .RequireAuthorization(PermissionCodes.Identity.UsersRead)
+            .RequirePermission(PermissionCodes.Identity.UsersRead)
             .Version(app, 1.0)
             .WithName("GetAllUsers")
             .WithTags("Users");
