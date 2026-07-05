@@ -23,3 +23,5 @@ global using Asp.Versioning;
 global using SharedKernel.Abstractions.CQRS;
 global using Identity.Api.Common.Abstractions;
 global using SharedKernel.Domain.Identifiers;
+global using Identity.Api.Infrastructure.Authorization.Permissions;
+global using SharedKernel.Identity.Permissions;

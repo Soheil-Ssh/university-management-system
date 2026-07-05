@@ -46,7 +46,14 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
-      - ConnectionStrings__SqlServerDefaultConnection=Server=sqlserver;Database=Identity_Db;User=sa;Password=Password123;TrustServerCertificate=True;  
+      - ConnectionStrings__SqlServerDefaultConnection=Server=sqlserver;Database=Identity_Db;User=sa;Password=Password123;TrustServerCertificate=True;
+      - Jwt__Authority=https://localhost:5051
+      - Jwt__ValidIssuer=https://localhost:5051
+      - Jwt__MetadataAddress=https://identity.api:8081/.well-known/openid-configuration
+      - Jwt__RequireHttpsMetadata=false
+      - Jwt__BackchannelIgnoreCertificateErrors=true
+      - IdentityServer__Signing__PfxPath=/certs/identity-signing.pfx
+      - IdentityServer__Signing__PfxPassword=change-this-password
     ports:
       - "5001:8080"
       - "5051:8081"
@@ -60,6 +67,7 @@ services:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+      - ./certs:/certs:ro
 
   # File Api
   file.api:

@@ -1,0 +1,36 @@
+﻿@page
+@model Identity.Api.Pages.Auth.ErrorModel
+
+@{
+    ViewData["Title"] = "خطای ورود";
+}
+
+<section class="auth-card">
+    <div class="auth-brand">
+        <div class="auth-logo">UMS</div>
+        <div>
+            <h1 class="auth-title">خطا در فرایند ورود</h1>
+            <p class="auth-subtitle">
+                درخواست ورود معتبر نبود یا تنظیمات کلاینت کامل نیست.
+            </p>
+        </div>
+    </div>
+
+    <div class="validation-summary">
+        <strong>@Model.Error</strong>
+
+        @if (!string.IsNullOrWhiteSpace(Model.ErrorDescription))
+        {
+            <div style="margin-top: 8px;">
+                @Model.ErrorDescription
+            </div>
+        }
+
+        @if (!string.IsNullOrWhiteSpace(Model.RequestId))
+        {
+            <div style="margin-top: 8px; direction:ltr;">
+                RequestId: @Model.RequestId
+            </div>
+        }
+    </div>
+</section>

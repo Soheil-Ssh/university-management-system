@@ -1,5 +1,3 @@
-using Identity.Api.Infrastructure.Persistence.Contexts;
-
 namespace Identity.Api.Features.Roles.GetAll;
 
 public static class GetAll
@@ -93,6 +91,7 @@ public static class GetAll
                 var result = await sender.Send(query);
                 return result.ToHttpResult();
             })
+            .RequireAuthorization(PermissionCodes.Identity.RolesRead)
             .Version(app, 1.0)
             .WithName("GetAllRoles")
             .WithTags("Roles");

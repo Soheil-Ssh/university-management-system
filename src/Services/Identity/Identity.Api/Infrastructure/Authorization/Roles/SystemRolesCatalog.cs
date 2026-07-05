@@ -1,6 +1,6 @@
 ﻿namespace Identity.Api.Infrastructure.Authorization.Roles;
 
-public class RolesRegistry
+public static class SystemRolesCatalog
 {
     public static readonly RoleDefinition SuperAdmin = new("SuperAdmin", "مدیر کل سامانه", "دسترسی کامل به تمام امکانات سامانه");
     public static readonly RoleDefinition UniversityPresident = new("UniversityPresident", "رئیس دانشگاه", "مدیریت و نظارت در سطح کل دانشگاه");

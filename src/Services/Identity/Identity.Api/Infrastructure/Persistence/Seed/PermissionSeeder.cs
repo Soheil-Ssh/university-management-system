@@ -1,5 +1,4 @@
-﻿using Identity.Api.Infrastructure.Authorization.Permissions;
-using SharedKernel.Persistence.Database;
+﻿using SharedKernel.Persistence.Database;
 
 namespace Identity.Api.Infrastructure.Persistence.Seed;
 
@@ -11,7 +10,7 @@ public class PermissionSeeder(IdentityDbContext context) : IDataSeeder
     {
         var permissions = await context.Permissions.ToDictionaryAsync(x => x.Code, cancellationToken);
 
-        foreach (var definition in PermissionRegistry.All)
+        foreach (var definition in SystemPermissionsCatalog.All)
         {
             if (!permissions.TryGetValue(definition.Code, out var permission))
             {

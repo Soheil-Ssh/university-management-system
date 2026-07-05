@@ -1,10 +1,15 @@
-﻿using Identity.Api.Infrastructure.Persistence.Options;
+﻿using System.Security.Cryptography.X509Certificates;
+using Duende.IdentityServer.Services;
+using Identity.Api.Infrastructure.Authorization;
+using Identity.Api.Infrastructure.IdentityServer;
+using Identity.Api.Infrastructure.Persistence.Options;
 using Identity.Api.Infrastructure.Persistence.Repositories;
 using Identity.Api.Infrastructure.Persistence.Seed;
 using Identity.Api.Infrastructure.Security;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using SharedKernel.Abstractions;
 using SharedKernel.Api;
+using SharedKernel.Identity.Extensions;
 using SharedKernel.Persistence;
 using SharedKernel.Persistence.Database;
 
@@ -12,6 +17,7 @@ namespace Identity.Api.Common.Extensions;
 
 public static class ServiceCollectionExtensions
 {
+    [Obsolete("Obsolete")]
     public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration configuration)
     {
         // Get the sql server connection string from the configuration
@@ -29,6 +35,57 @@ public static class ServiceCollectionExtensions
 
         // Add options to the service collection
         services.Configure<SuperAdminOptions>(configuration.GetSection("SuperAdmin"));
+
+        // Add authentication to the service collection
+        services.AddUmsJwtAuthentication(configuration, useJwtBearerAsDefaultScheme: false);
+
+        // Add IdentityServer to the service collection
+        var identityBuilder = services.AddIdentityServer(options =>
+        {
+            options.IssuerUri = configuration["Jwt:ValidIssuer"] ?? configuration["Jwt:Authority"];
+
+            options.UserInteraction.LoginUrl = "/auth/login";
+            options.UserInteraction.LogoutUrl = "/auth/logout";
+            options.UserInteraction.ErrorUrl = "/auth/error";
+
+            options.Authentication.CookieLifetime = TimeSpan.FromHours(8);
+            options.Authentication.CookieSlidingExpiration = true;
+
+            options.Events.RaiseErrorEvents = true;
+            options.Events.RaiseInformationEvents = true;
+            options.Events.RaiseFailureEvents = true;
+            options.Events.RaiseSuccessEvents = true;
+
+            options.EmitStaticAudienceClaim = true;
+        })
+          .AddInMemoryIdentityResources(IdentityServerConfig.IdentityResources)
+          .AddInMemoryApiScopes(IdentityServerConfig.ApiScopes)
+          .AddInMemoryApiResources(IdentityServerConfig.ApiResources)
+          .AddInMemoryClients(IdentityServerConfig.Clients);
+
+        var signingPfxPath = configuration["IdentityServer:Signing:PfxPath"];
+        var signingPfxPassword = configuration["IdentityServer:Signing:PfxPassword"];
+
+        if (!string.IsNullOrWhiteSpace(signingPfxPath) && File.Exists(signingPfxPath))
+        {
+            var cert = new X509Certificate2(
+                signingPfxPath,
+                signingPfxPassword,
+                X509KeyStorageFlags.MachineKeySet |
+                X509KeyStorageFlags.EphemeralKeySet);
+
+            identityBuilder.AddSigningCredential(cert);
+        }
+        else
+        {
+            identityBuilder.AddDeveloperSigningCredential(persistKey: true);
+        }
+
+        // Add the IdentityServer profile service to the service collection
+        services.AddScoped<IProfileService, IdentityServerProfileService>();
+
+        // Add permission authentication to the service collection
+        services.AddIdentityAuthorizationPolicies();
 
         // Add repositories and unit of work to the service collection
         services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -53,6 +110,9 @@ public static class ServiceCollectionExtensions
 
         // Add Carter to the service collection
         services.AddCarter();
+
+        // Add Razor Pages to the service collection
+        services.AddRazorPages();
 
         return services;
     }

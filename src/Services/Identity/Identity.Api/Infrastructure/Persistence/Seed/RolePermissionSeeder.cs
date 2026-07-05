@@ -1,4 +1,4 @@
-﻿using Identity.Api.Infrastructure.Authorization;
+﻿using Identity.Api.Infrastructure.Authorization.RolePermissions;
 using SharedKernel.Persistence.Database;
 
 namespace Identity.Api.Infrastructure.Persistence.Seed;
@@ -15,7 +15,7 @@ public class RolePermissionSeeder(IdentityDbContext context) : IDataSeeder
         var permissions = await context.Permissions
             .ToDictionaryAsync(x => x.Code, cancellationToken);
 
-        foreach (var (roleName, permissionCodes) in RolePermissionRegistry.All)
+        foreach (var (roleName, permissionCodes) in RolePermissionsCatalog.All)
         {
             if (!roles.TryGetValue(roleName, out var role))
                 throw new Exception($"Role '{roleName}' not found.");

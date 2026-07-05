@@ -19,7 +19,7 @@ public class UserSeeder(IdentityDbContext context,
             .FirstOrDefaultAsync(u => u.UserName == config.UserName, cancellationToken);
 
         var superAdminRole = await context.Roles
-            .FirstOrDefaultAsync(u => u.Name == RolesRegistry.SuperAdmin.Name, cancellationToken);
+            .FirstOrDefaultAsync(u => u.Name == SystemRolesCatalog.SuperAdmin.Name, cancellationToken);
 
         if (superAdminRole is null)
             throw new Exception("SuperAdmin role was not found.");
