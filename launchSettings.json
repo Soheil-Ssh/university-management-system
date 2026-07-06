@@ -6,7 +6,8 @@
       "serviceActions": {
         "identity.api": "StartDebugging",
         "file.api": "StartDebugging",
-        "student.api": "StartDebugging"
+        "student.api": "StartDebugging",
+        "centralorganization.api": "StartDebugging"
       }
     }
   }

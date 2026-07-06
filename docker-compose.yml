@@ -36,6 +36,13 @@ services:
       context: .
       dockerfile: src/Services/Student/Student.Api/Dockerfile
 
+  # Central Organization Api
+  central.organization.api:
+    image: ${DOCKER_REGISTRY-}centralorganizationapi
+    build:
+      context: .
+      dockerfile: src/Services/CentralOrganization/CentralOrganization.Api/Dockerfile
+
 networks:
   ums_network:
     driver: bridge

@@ -1,7 +1,6 @@
 ﻿using CentralOrganization.Api.Domain.Employee.Enums;
 using CentralOrganization.Api.Domain.Employee.Errors;
 using CentralOrganization.Api.Domain.Employee.ValueObjects;
-using CentralOrganization.Api.Domain.Unit;
 using SharedKernel.Domain.Enums;
 using SharedKernel.Domain.Extensions;
 using SharedKernel.Domain.Identifiers;

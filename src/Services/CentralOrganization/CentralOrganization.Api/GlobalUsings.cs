@@ -2,3 +2,9 @@
 global using SharedKernel.Domain.Error;
 global using SharedKernel.Domain.Result;
 global using SharedKernel.Domain.ValueObjects;
+global using Microsoft.EntityFrameworkCore;
+global using CentralOrganization.Api.Domain.Employee;
+global using CentralOrganization.Api.Domain.Unit;
+global using Carter;
+global using SharedKernel.Persistence.Database;
+global using CentralOrganization.Api.Common.Extensions;
