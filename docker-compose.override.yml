@@ -48,6 +48,8 @@ services:
     networks:
       - ums_network
     command: -config.file=/etc/loki/local-config.yaml
+    volumes:
+      - loki_data:/loki
 
   # Grafana
   grafana:
@@ -61,6 +63,8 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=admin
     depends_on:
       - loki
+    volumes:
+      - grafana_data:/var/lib/grafana
 
   # Identity Api
   identity.api:
