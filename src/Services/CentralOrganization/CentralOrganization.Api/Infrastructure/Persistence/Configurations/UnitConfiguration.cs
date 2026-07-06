@@ -1,5 +1,5 @@
-﻿using CentralOrganization.Api.Domain.Unit.ValueObjects;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Unit = CentralOrganization.Api.Domain.Unit.Unit;
 
 namespace CentralOrganization.Api.Infrastructure.Persistence.Configurations;
 

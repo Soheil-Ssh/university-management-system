@@ -1,5 +1,4 @@
 ﻿using CentralOrganization.Api.Domain.Unit.Errors;
-using CentralOrganization.Api.Domain.Unit.ValueObjects;
 
 namespace CentralOrganization.Api.Domain.Unit;
 

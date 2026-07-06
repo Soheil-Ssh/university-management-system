@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SharedKernel.Domain.Identifiers;
 using SharedKernel.Persistence.Extensions;
+using Unit = CentralOrganization.Api.Domain.Unit.Unit;
 
 namespace CentralOrganization.Api.Infrastructure.Persistence.Configurations;
 

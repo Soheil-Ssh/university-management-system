@@ -1,5 +1,4 @@
 ﻿using CentralOrganization.Api.Domain.Unit.Errors;
-using SharedKernel.Domain.Result;
 using System.Text.RegularExpressions;
 
 namespace CentralOrganization.Api.Domain.Unit.ValueObjects;
