@@ -1,6 +1,6 @@
 ﻿namespace CentralOrganization.Api.Features.Units.Activate;
 
-public class Activate
+public static class Activate
 {
     public sealed record Command(Guid Id) : ICommand<Result>;
 

@@ -1,6 +1,6 @@
 ﻿namespace CentralOrganization.Api.Features.Units.Deactivate;
 
-public class Deactivate
+public static class Deactivate
 {
     public sealed record Command(Guid Id) : ICommand<Result>;
 
