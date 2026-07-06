@@ -13,7 +13,7 @@ namespace Student.Api.Common.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddStudentServices(this IServiceCollection services, IConfiguration configuration)
     {
         // Get the sql server connection string from the configuration
         var postgresConnectionString = configuration.GetConnectionString("PostgresDefaultConnection") 

@@ -10,7 +10,7 @@ namespace File.Api.Common.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddFileServices(this IServiceCollection services, IConfiguration configuration)
     {
         // Get the sql server connection string from the configuration
         var sqlServerConnectionString = configuration.GetConnectionString("PostgresDefaultConnection");

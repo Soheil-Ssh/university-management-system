@@ -6,7 +6,7 @@ namespace File.Api.Common.Extensions;
 
 public static class ApplicationBuilderExtensions
 {
-    public static async Task<WebApplication> UseIdentityPipeline(this WebApplication app)
+    public static async Task<WebApplication> UseFilePipeline(this WebApplication app)
     {
         await app.Services.ApplyMigrationsAsync<FileDbContext>();
 

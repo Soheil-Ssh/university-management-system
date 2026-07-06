@@ -6,6 +6,14 @@ services:
   # Postgres
   postgres:
     image: postgres:alpine
+    
+  # Loki
+  loki:
+    image: grafana/loki:latest
+
+  # Grafana
+  grafana:
+    image: grafana/grafana:latest
 
   # Identity Api
   identity.api:

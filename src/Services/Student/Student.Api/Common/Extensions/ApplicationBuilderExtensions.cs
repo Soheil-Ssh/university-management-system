@@ -5,7 +5,7 @@ namespace Student.Api.Common.Extensions;
 
 public static class ApplicationBuilderExtensions
 {
-    public static async Task<WebApplication> UseIdentityPipeline(this WebApplication app)
+    public static async Task<WebApplication> UseStudentPipeline(this WebApplication app)
     {
         await app.Services.ApplyMigrationsAsync<StudentDbContext>();
 
