@@ -1,7 +1,9 @@
-﻿using CentralOrganization.Api.Infrastructure.Persistence.Contexts;
+﻿using CentralOrganization.Api.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using SharedKernel.Abstractions;
 using SharedKernel.Api;
+using SharedKernel.Identity;
+using SharedKernel.Identity.Extensions;
 using SharedKernel.Persistence;
 
 namespace CentralOrganization.Api.Common.Extensions;
@@ -23,7 +25,14 @@ public static class ServiceCollectionExtensions
             options.UseNpgsql(sqlServerConnectionString);
         });
 
+        // Add authentication to the service collection
+        services.AddUmsJwtAuthentication(configuration);
+        services.AddUmsAuthorization();
+
         // Add repositories and unit of work to the service collection
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IUnitRepository, UnitRepository>();
+        services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
         // Add the shared kernel abstractions to the service collection
         services.AddSharedKernelAbstractions<Program>();

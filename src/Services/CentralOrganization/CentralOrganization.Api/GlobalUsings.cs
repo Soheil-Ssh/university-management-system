@@ -8,3 +8,6 @@ global using CentralOrganization.Api.Domain.Unit;
 global using Carter;
 global using SharedKernel.Persistence.Database;
 global using CentralOrganization.Api.Common.Extensions;
+global using CentralOrganization.Api.Domain.Unit.ValueObjects;
+global using SharedKernel.Abstractions.Persistence;
+global using CentralOrganization.Api.Infrastructure.Persistence.Contexts;
