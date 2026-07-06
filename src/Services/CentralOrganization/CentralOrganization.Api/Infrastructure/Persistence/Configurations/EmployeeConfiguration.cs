@@ -41,13 +41,19 @@ public sealed class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
         builder.ConfigureName(x => x.FirstName, "FirstName", true);
 
         // LastName
-        builder.ConfigureName(x => x.LastName, "LastName", true);
+        builder.ConfigureNameAsConversion(x => x.LastName, "LastName", true);
 
         // FatherName
-        builder.ConfigureName(x => x.FatherName!, "FatherName");
+        builder.Property(x => x.FatherName)
+            .HasColumnName("FatherName")
+            .HasMaxLength(100)
+            .HasConversion(
+                name => name == null ? null : name.Value,
+                value => string.IsNullOrWhiteSpace(value) ? null : Name.Create(value).Data)
+            .IsRequired(false);
 
         // NationalCode
-        builder.ConfigureNationalCode(x => x.NationalCode, "NationalCode", true);
+        builder.ConfigureNationalCodeAsConversion(x => x.NationalCode, "NationalCode", true);
         builder.HasIndex(x => x.NationalCode).IsUnique();
 
         // BirthDate
@@ -60,10 +66,16 @@ public sealed class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
         builder.ConfigureMobile(x => x.MobileNumber, "MobileNumber", true);
 
         // PhoneNumber
-        builder.ConfigurePhone(x => x.PhoneNumber!, "PhoneNumber");
+        builder.Property(x => x.PhoneNumber)
+            .HasColumnName("PhoneNumber")
+            .HasMaxLength(20)
+            .HasConversion(
+                name => name == null ? null : name.Value,
+                value => string.IsNullOrWhiteSpace(value) ? null : PhoneNumber.Create(value).Data)
+            .IsRequired(false);
 
         // Email
-        builder.ConfigureEmail(x => x.Email, "Email", true);
+        builder.ConfigureEmailAsConversion(x => x.Email, "Email", true);
         builder.HasIndex(x => x.Email).IsUnique();
 
         // EducationField

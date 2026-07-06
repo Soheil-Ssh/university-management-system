@@ -24,21 +24,21 @@ services:
 
   # File Api
   file.api:
-    image: ${DOCKER_REGISTRY-}fileapi
+    image: ${DOCKER_REGISTRY-}file.api
     build:
       context: .
       dockerfile: src/Services/File/File.Api/Dockerfile
 
   # Student Api
   student.api:
-    image: ${DOCKER_REGISTRY-}studentapi
+    image: ${DOCKER_REGISTRY-}student.api
     build:
       context: .
       dockerfile: src/Services/Student/Student.Api/Dockerfile
 
   # Central Organization Api
   central.organization.api:
-    image: ${DOCKER_REGISTRY-}centralorganizationapi
+    image: ${DOCKER_REGISTRY-}central.organization.api
     build:
       context: .
       dockerfile: src/Services/CentralOrganization/CentralOrganization.Api/Dockerfile

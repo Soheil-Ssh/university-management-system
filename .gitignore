@@ -431,3 +431,4 @@ FodyWeavers.xsd
 
 # Temp
 docs/
+grafana dashboards/**

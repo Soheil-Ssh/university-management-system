@@ -42,7 +42,7 @@ services:
 
   # Loki
   loki:
-    container_name: ums-loki
+    container_name: ums.loki
     ports:
       - "3100:3100"
     networks:
@@ -51,7 +51,7 @@ services:
 
   # Grafana
   grafana:
-    container_name: ums-grafana
+    container_name: ums.grafana
     ports:
       - "3000:3000"
     networks:
@@ -151,7 +151,7 @@ services:
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
 
   # Central Organization Api
-  centralorganization.api:
+  central.organization.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
@@ -163,6 +163,11 @@ services:
     ports:
       - "5004:8080"
       - "5054:8081"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - ums_network
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
