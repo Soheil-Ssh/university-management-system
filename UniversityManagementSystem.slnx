@@ -1,6 +1,9 @@
 <Solution>
   <Folder Name="/src/" />
   <Folder Name="/src/Services/" />
+  <Folder Name="/src/Services/CentralOrganization/">
+    <Project Path="src/Services/CentralOrganization/CentralOrganization.Api/CentralOrganization.Api.csproj" Id="83697103-f96b-493c-b00b-c0024a8ad5ef" />
+  </Folder>
   <Folder Name="/src/Services/File/">
     <Project Path="src/Services/File/File.Api/File.Api.csproj" Id="2577b22f-6bf1-42d8-8564-8b3f0edbc159" />
   </Folder>
