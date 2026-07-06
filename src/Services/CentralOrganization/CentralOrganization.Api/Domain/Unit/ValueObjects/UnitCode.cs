@@ -5,10 +5,10 @@ namespace CentralOrganization.Api.Domain.Unit.ValueObjects;
 
 public sealed record UnitCode
 {
-    private static readonly Regex Pattern = new(@"^UMS_CO_[0-9]{4}$",
+    private static readonly Regex Pattern = new(@"^UMS_CO_UNIT_[0-9]{4}$",
         RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-    private const string Prefix = "UMS_CO";
+    private const string Prefix = "UMS_CO_UNIT";
     private const int NumberLength = 4;
     private const char Separator = '_';
 
@@ -43,7 +43,7 @@ public sealed record UnitCode
 
         value = value.Trim().ToUpperInvariant();
 
-        if (Pattern.IsMatch(value))
+        if (!Pattern.IsMatch(value))
             return UnitCodeErrors.InvalidFormat;
 
         return new UnitCode(value);

@@ -17,7 +17,7 @@ public class UnitRepository(CentralOrganizationDbContext context) : IUnitReposit
 
     public async Task<int> GetNextUnitCodeAsync(CancellationToken cancellationToken)
     {
-        var prefix = "UMS_CO_";
+        var prefix = "UMS_CO_UNIT_";
 
         var lastCode = await context.Units
             .AsNoTracking()

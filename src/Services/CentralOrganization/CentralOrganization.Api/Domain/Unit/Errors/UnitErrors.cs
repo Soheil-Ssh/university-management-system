@@ -2,6 +2,8 @@
 
 public static class UnitErrors
 {
+    public static readonly Error NotFound = new("Unit.NotFound", "The specified unit was not found.", ErrorType.NotFound);
+
     // Code
     public static readonly Error CodeAlreadyExists = new("Unit.Code.AlreadyExists", "A unit with the specified code already exists.", ErrorType.Conflict);
 

@@ -2,7 +2,7 @@
 
 namespace CentralOrganization.Api.Features.Units.Create;
 
-public class Create
+public static class Create
 {
     public sealed record CreateUnitRequest(string Name, string? Description);
 

@@ -23,7 +23,7 @@ public sealed class UnitConfiguration : IEntityTypeConfiguration<Unit>
         // Code
         builder.Property(x => x.Code)
             .HasColumnName("Code")
-            .HasMaxLength(11)
+            .HasMaxLength(16)
             .IsRequired()
             .HasConversion(code => code.Value, value => UnitCode.FromString(value).Data);
         builder.HasIndex(x => x.Code).IsUnique();
