@@ -19,7 +19,8 @@ public sealed record EntranceInfo
         AdmissionType = admissionType;
     }
 
-    public static Result<EntranceInfo> Create(Quota quota, int? entranceExamRank, 
+    public static Result<EntranceInfo> Create(Quota quota,
+        int? entranceExamRank,
         double? entranceScore,
         AdmissionMethod admissionMethod,
         AdmissionType admissionType)
@@ -44,18 +45,17 @@ public sealed record EntranceInfo
             case AdmissionMethod.NationalExam:
                 if (!entranceExamRank.HasValue)
                     return EntranceInfoErrors.EntranceExamRankRequired;
+
                 if (!entranceScore.HasValue)
                     return EntranceInfoErrors.EntranceScoreRequired;
 
                 if (admissionType is not AdmissionType.Daytime
-                    and not AdmissionType.Nighttime
-                    and not AdmissionType.NonGovernmental)
+                    and not AdmissionType.Nighttime)
                     return EntranceInfoErrors.AdmissionTypeInvalidForMethod;
+
                 break;
 
             case AdmissionMethod.AcademicRecord:
-            case AdmissionMethod.AcademicRecordWithQuota:
-            case AdmissionMethod.Talented:
                 if (entranceExamRank.HasValue)
                     return EntranceInfoErrors.EntranceExamRankMustBeNull;
 
@@ -63,13 +63,12 @@ public sealed record EntranceInfo
                     return EntranceInfoErrors.EntranceScoreRequired;
 
                 if (admissionType is not AdmissionType.Daytime
-                    and not AdmissionType.Nighttime
-                    and not AdmissionType.NonGovernmental)
+                    and not AdmissionType.Nighttime)
                     return EntranceInfoErrors.AdmissionTypeInvalidForMethod;
+
                 break;
 
             case AdmissionMethod.InternationalScholarship:
-            case AdmissionMethod.InternationalFree:
                 if (entranceExamRank.HasValue)
                     return EntranceInfoErrors.EntranceExamRankMustBeNull;
 
@@ -80,24 +79,17 @@ public sealed record EntranceInfo
                     return EntranceInfoErrors.AdmissionTypeMustBeInternational;
 
                 break;
-
-            case AdmissionMethod.TransferFromAbroad:
-                if (entranceExamRank.HasValue)
-                    return EntranceInfoErrors.EntranceExamRankMustBeNull;
-
-                if (quota != Quota.Free)
-                    return EntranceInfoErrors.QuotaMustBeFree;
-
-                if (admissionType is not AdmissionType.Transfer and not AdmissionType.Exchange)
-                    return EntranceInfoErrors.AdmissionTypeInvalidForMethod;
-
-                break;
         }
 
-        if ((quota is Quota.Region1 or Quota.Region2 or Quota.Region3) &&
+        if (quota is Quota.Region1 or Quota.Region2 or Quota.Region3 &&
             admissionMethod != AdmissionMethod.NationalExam)
             return EntranceInfoErrors.RegionalQuotaOnlyForNationalExam;
 
-        return new EntranceInfo(quota, entranceExamRank, entranceScore, admissionMethod, admissionType);
+        return new EntranceInfo(
+            quota,
+            entranceExamRank,
+            entranceScore,
+            admissionMethod,
+            admissionType);
     }
 }

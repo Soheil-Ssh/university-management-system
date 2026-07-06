@@ -72,56 +72,38 @@ public static class CompleteEntranceInfo
                     .WithMessage("Entrance score is required for national exam admission.");
 
                 RuleFor(x => x.AdmissionType)
-                    .Must(IsValidNationalAdmissionType)
+                    .Must(IsValidDomesticAdmissionType)
                     .WithMessage("Admission type is invalid for national exam admission.");
             });
 
-            When(x => x.AdmissionMethod is AdmissionMethod.AcademicRecord
-                or AdmissionMethod.AcademicRecordWithQuota
-                or AdmissionMethod.Talented, () =>
-                {
-                    RuleFor(x => x.EntranceExamRank)
-                        .Null()
-                        .WithMessage("Entrance exam rank must be empty for this admission method.");
-
-                    RuleFor(x => x.EntranceScore)
-                        .NotNull()
-                        .WithMessage("Entrance score is required for this admission method.");
-
-                    RuleFor(x => x.AdmissionType)
-                        .Must(IsValidNationalAdmissionType)
-                        .WithMessage("Admission type is invalid for this admission method.");
-                });
-
-            When(x => x.AdmissionMethod is AdmissionMethod.InternationalScholarship
-                or AdmissionMethod.InternationalFree, () =>
-                {
-                    RuleFor(x => x.EntranceExamRank)
-                        .Null()
-                        .WithMessage("Entrance exam rank must be empty for international admission.");
-
-                    RuleFor(x => x.Quota)
-                        .Equal(Quota.Free)
-                        .WithMessage("Quota must be free for international admission.");
-
-                    RuleFor(x => x.AdmissionType)
-                        .Equal(AdmissionType.International)
-                        .WithMessage("Admission type must be international.");
-                });
-
-            When(x => x.AdmissionMethod == AdmissionMethod.TransferFromAbroad, () =>
+            When(x => x.AdmissionMethod == AdmissionMethod.AcademicRecord, () =>
             {
                 RuleFor(x => x.EntranceExamRank)
                     .Null()
-                    .WithMessage("Entrance exam rank must be empty for transfer from abroad.");
+                    .WithMessage("Entrance exam rank must be empty for academic record admission.");
+
+                RuleFor(x => x.EntranceScore)
+                    .NotNull()
+                    .WithMessage("Entrance score is required for academic record admission.");
+
+                RuleFor(x => x.AdmissionType)
+                    .Must(IsValidDomesticAdmissionType)
+                    .WithMessage("Admission type is invalid for academic record admission.");
+            });
+
+            When(x => x.AdmissionMethod == AdmissionMethod.InternationalScholarship, () =>
+            {
+                RuleFor(x => x.EntranceExamRank)
+                    .Null()
+                    .WithMessage("Entrance exam rank must be empty for international scholarship admission.");
 
                 RuleFor(x => x.Quota)
                     .Equal(Quota.Free)
-                    .WithMessage("Quota must be free for transfer from abroad.");
+                    .WithMessage("Quota must be free for international scholarship admission.");
 
                 RuleFor(x => x.AdmissionType)
-                    .Must(x => x is AdmissionType.Transfer or AdmissionType.Exchange)
-                    .WithMessage("Admission type must be transfer or exchange.");
+                    .Equal(AdmissionType.International)
+                    .WithMessage("Admission type must be international.");
             });
 
             RuleFor(x => x)
@@ -130,11 +112,10 @@ public static class CompleteEntranceInfo
                 .WithMessage("Regional quota is only allowed for national exam admission.");
         }
 
-        private static bool IsValidNationalAdmissionType(AdmissionType admissionType)
+        private static bool IsValidDomesticAdmissionType(AdmissionType admissionType)
         {
             return admissionType is AdmissionType.Daytime
-                or AdmissionType.Nighttime
-                or AdmissionType.NonGovernmental;
+                or AdmissionType.Nighttime;
         }
 
         private static bool IsRegionalQuota(Quota quota)
