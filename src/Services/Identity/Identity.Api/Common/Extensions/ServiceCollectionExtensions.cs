@@ -85,6 +85,9 @@ public static class ServiceCollectionExtensions
         // Add the IdentityServer profile service to the service collection
         services.AddScoped<IProfileService, IdentityServerProfileService>();
 
+        // Add gRPC services to the service collection
+        services.AddGrpc();
+
         // Add repositories and unit of work to the service collection
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IUserRepository, UserRepository>();

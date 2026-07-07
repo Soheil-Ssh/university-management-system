@@ -9,4 +9,5 @@ public enum ErrorType
     Unauthorized,
     Forbidden,
     Unexpected,
+    Failure
 }

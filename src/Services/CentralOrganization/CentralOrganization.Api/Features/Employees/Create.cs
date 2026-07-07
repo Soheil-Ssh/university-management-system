@@ -1,6 +1,5 @@
 ﻿using CentralOrganization.Api.Domain.Employee.Errors;
 using SharedKernel.Domain.Enums;
-using SharedKernel.Domain.Identifiers;
 using System.Text.RegularExpressions;
 
 namespace CentralOrganization.Api.Features.Employees;
@@ -55,7 +54,10 @@ public static class Create
         }
     }
 
-    public class Handler(IUnitRepository unitRepository, IEmployeeRepository employeeRepository, IUnitOfWork unitOfWork)
+    public class Handler(IUnitRepository unitRepository,
+        IEmployeeRepository employeeRepository,
+        IUnitOfWork unitOfWork,
+        IIdentityUserClient identityUserClient)
         : ICommandHandler<Command, Result<Guid>>
     {
         public async Task<Result<Guid>> Handle(Command request, CancellationToken cancellationToken)
@@ -106,9 +108,6 @@ public static class Create
             if (emailExists)
                 return EmployeeErrors.EmailAlreadyExists;
 
-            // TODO Grpc call and create user
-            var identityUserId = Guid.NewGuid();
-
             var employeeResult = Employee.Create(
                 unitId,
                 personnelCodeResult.Data,
@@ -123,7 +122,7 @@ public static class Create
                 request.Email,
                 request.EducationField,
                 request.JobTitle,
-                identityUserId,
+                Guid.NewGuid(),
                 request.ProfileImageFileId);
 
             if (employeeResult.IsFailure)

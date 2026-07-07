@@ -1,6 +1,4 @@
-﻿using CentralOrganization.Api.Domain.Unit.Errors;
-
-namespace CentralOrganization.Api.Domain.Unit;
+﻿namespace CentralOrganization.Api.Domain.Unit;
 
 public sealed class Unit : AggregateRoot<UnitId>
 {

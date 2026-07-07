@@ -11,6 +11,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Grpc.AspNetCore" Version="2.49.0" />
 		<PackageReference Include="BCrypt.Net-Next" Version="4.2.0" />
 		<PackageReference Include="Carter" Version="10.0.0" />
 		<PackageReference Include="Duende.IdentityServer" Version="8.0.2" />
@@ -30,9 +31,19 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\SharedKernel\SharedKernel.Abstractions\SharedKernel.Abstractions.csproj" />
 		<ProjectReference Include="..\..\..\SharedKernel\SharedKernel.Api\SharedKernel.Api.csproj" />
+		<ProjectReference Include="..\..\..\SharedKernel\SharedKernel.Contracts\SharedKernel.Contracts.csproj" />
 		<ProjectReference Include="..\..\..\SharedKernel\SharedKernel.Identity\SharedKernel.Identity.csproj" />
 		<ProjectReference Include="..\..\..\SharedKernel\SharedKernel.Observability\SharedKernel.Observability.csproj" />
 		<ProjectReference Include="..\..\..\SharedKernel\SharedKernel.Persistence\SharedKernel.Persistence.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Protobuf Include="..\..\..\SharedKernel\SharedKernel.Contracts\Grpc\Identity\v1\identity_user.proto" GrpcServices="Server">
+		</Protobuf>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Application\" />
 	</ItemGroup>
 
 </Project>

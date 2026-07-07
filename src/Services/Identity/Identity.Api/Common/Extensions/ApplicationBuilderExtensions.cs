@@ -1,4 +1,5 @@
-﻿using Scalar.AspNetCore;
+﻿using Identity.Api.Infrastructure.Grpc;
+using Scalar.AspNetCore;
 using SharedKernel.Persistence.Database;
 
 namespace Identity.Api.Common.Extensions;
@@ -42,6 +43,7 @@ public static class ApplicationBuilderExtensions
         app.UseIdentityServer();
         app.UseAuthorization();
         app.UseExceptionHandler();
+        app.MapGrpcService<IdentityUserGrpcService>();
         app.MapCarter();
         app.MapRazorPages();
 
