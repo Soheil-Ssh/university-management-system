@@ -2,6 +2,6 @@
 
 public interface IAggregateRoot
 {
-    IReadOnlyCollection<IDomainEvent> DomainEvents { get; }
-    IReadOnlyList<IDomainEvent> PopDomainEvents();
+    IReadOnlyCollection<DomainEvent> DomainEvents { get; }
+    IReadOnlyList<DomainEvent> PopDomainEvents();
 }
