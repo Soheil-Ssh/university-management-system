@@ -4,7 +4,7 @@ namespace SharedKernel.Domain.Abstractions;
 
 public abstract class DomainEvent : INotification
 {
-    protected Guid EventId = Guid.NewGuid();
-    public DateTime OccurredOn => DateTime.UtcNow;
-    public string? EventType => GetType().AssemblyQualifiedName;
+    public Guid EventId { get; } = Guid.NewGuid();
+    public DateTime OccurredOnUtc { get; } = DateTime.UtcNow;
+    public string EventType => GetType().AssemblyQualifiedName ?? GetType().FullName ?? GetType().Name;
 }
