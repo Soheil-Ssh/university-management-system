@@ -66,6 +66,19 @@ services:
     volumes:
       - grafana_data:/var/lib/grafana
 
+  # RabbitMQ
+  rabbitmq:
+    container_name: rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    restart: always
+    networks:
+      - ums_network
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
   # Identity Api
   identity.api:
     environment:
