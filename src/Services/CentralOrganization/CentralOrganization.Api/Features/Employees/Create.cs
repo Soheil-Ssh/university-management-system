@@ -16,7 +16,7 @@ public static class Create
         string MobileNumber,
         string? PhoneNumber,
         string Email,
-        string? EducationField,
+        string EducationField,
         string JobTitle,
         Guid ProfileImageFileId);
 
@@ -30,7 +30,7 @@ public static class Create
         string MobileNumber,
         string? PhoneNumber,
         string Email,
-        string? EducationField,
+        string EducationField,
         string JobTitle,
         Guid ProfileImageFileId) : ICommand<Result<Guid>>;
 
@@ -121,7 +121,6 @@ public static class Create
                 request.Email,
                 request.EducationField,
                 request.JobTitle,
-                Guid.NewGuid(),
                 request.ProfileImageFileId);
 
             if (employeeResult.IsFailure)
@@ -131,6 +130,23 @@ public static class Create
             await unitOfWork.SaveAsync(cancellationToken);
 
             return employeeResult.Data.Id.Value;
+        }
+    }
+
+    public class Endpoint : ICarterModule
+    {
+        public void AddRoutes(IEndpointRouteBuilder app)
+        {
+            app.MapPost("api/v{v:apiVersion}/employees", async (ISender sender, CreateEmployeeRequest request) =>
+                {
+                    var command = request.Adapt<Command>();
+                    var result = await sender.Send(command);
+                    return result.ToHttpResult();
+                })
+                //.RequirePermission(PermissionCodes.CentralOrganization.EmployeesCreate)
+                .Version(app, 1.0)
+                .WithName("CreateEmployee")
+                .WithTags("Employees");
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using CentralOrganization.Api.Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CentralOrganization.Api.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(CentralOrganizationDbContext))]
-    partial class CentralOrganizationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260707201633_AddIdentityProvisioningStatusToEmplyeeTable")]
+    partial class AddIdentityProvisioningStatusToEmplyeeTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -82,8 +85,8 @@ namespace CentralOrganization.Api.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("PersonnelCode")
                         .IsRequired()
-                        .HasMaxLength(17)
-                        .HasColumnType("character varying(17)")
+                        .HasMaxLength(15)
+                        .HasColumnType("character varying(15)")
                         .HasColumnName("PersonnelCode");
 
                     b.Property<string>("PhoneNumber")

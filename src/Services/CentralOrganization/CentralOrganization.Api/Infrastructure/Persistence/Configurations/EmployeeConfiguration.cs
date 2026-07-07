@@ -1,5 +1,4 @@
-﻿using CentralOrganization.Api.Domain.Employee.ValueObjects;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SharedKernel.Domain.Identifiers;
 using SharedKernel.Persistence.Extensions;
 using Unit = CentralOrganization.Api.Domain.Unit.Unit;
@@ -33,7 +32,7 @@ public sealed class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
         // PersonnelCode
         builder.Property(x => x.PersonnelCode)
             .HasColumnName("PersonnelCode")
-            .HasMaxLength(15)
+            .HasMaxLength(17)
             .IsRequired()
             .HasConversion(code => code.Value, value => PersonnelCode.FromString(value).Data);
         builder.HasIndex(x => x.PersonnelCode).IsUnique();
@@ -88,6 +87,9 @@ public sealed class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
         // EmploymentStatus
         builder.Property(x => x.EmploymentStatus).HasConversion<int>().IsRequired();
         builder.HasIndex(x => x.EmploymentStatus);
+
+        // IdentityProvisioningStatus
+        builder.Property(x => x.IdentityProvisioningStatus).HasConversion<int>().IsRequired();
 
         // IdentityUserId
         builder.Property(x => x.IdentityUserId)

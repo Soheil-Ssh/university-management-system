@@ -1,6 +1,5 @@
 ﻿using CentralOrganization.Api.Domain.Employee.Enums;
 using CentralOrganization.Api.Domain.Employee.Errors;
-using CentralOrganization.Api.Domain.Employee.ValueObjects;
 using SharedKernel.Domain.Enums;
 using SharedKernel.Domain.Identifiers;
 
@@ -22,15 +21,19 @@ public sealed class Employee : AggregateRoot<EmployeeId>
     public MobileNumber MobileNumber { get; private set; }
     public PhoneNumber? PhoneNumber { get; private set; }
     public Email Email { get; private set; }
-    public string? EducationField { get; private set; }
+    public string EducationField { get; private set; }
     public string JobTitle { get; private set; }
     public EmploymentStatus EmploymentStatus { get; private set; }
+    public IdentityProvisioningStatus IdentityProvisioningStatus { get; private set; }
     public UserId? IdentityUserId { get; private set; }
     public FileId? ProfileImageFileId { get; private set; }
     public string FullName => $"{FirstName} {LastName}";
 
 #pragma warning disable CS8618
-    private Employee() { }
+    private Employee(IdentityProvisioningStatus identityProvisioningStatus)
+    {
+        IdentityProvisioningStatus = identityProvisioningStatus;
+    }
 #pragma warning restore CS8618
 
     private Employee(EmployeeId id,
@@ -45,9 +48,8 @@ public sealed class Employee : AggregateRoot<EmployeeId>
         MobileNumber mobileNumber,
         PhoneNumber? phoneNumber,
         Email email,
-        string? educationField,
+        string educationField,
         string jobTitle,
-        UserId identityUserId,
         FileId profileImageFileId)
         : base(id)
     {
@@ -64,9 +66,11 @@ public sealed class Employee : AggregateRoot<EmployeeId>
         Email = email;
         EducationField = educationField;
         JobTitle = jobTitle;
-        IdentityUserId = identityUserId;
         ProfileImageFileId = profileImageFileId;
-        EmploymentStatus = EmploymentStatus.Active;
+
+        EmploymentStatus = EmploymentStatus.Inactive;
+        IdentityProvisioningStatus = IdentityProvisioningStatus.Pending;
+        IdentityUserId = null;
     }
 
     public static Result<Employee> Create(UnitId unitId,
@@ -80,9 +84,8 @@ public sealed class Employee : AggregateRoot<EmployeeId>
         string mobileNumber,
         string? phoneNumber,
         string email,
-        string? educationField,
+        string educationField,
         string jobTitle,
-        Guid identityUserId,
         Guid profileImageFileId)
     {
         var firstNameResult = Name.Create(firstName).WithPath(nameof(FirstName));
@@ -144,9 +147,6 @@ public sealed class Employee : AggregateRoot<EmployeeId>
         if (jobTitle.Length > MaxJobTitleLength)
             return EmployeeErrors.JobTitleTooLong;
 
-        if (identityUserId == Guid.Empty)
-            return EmployeeErrors.IdentityUserIdInvalid;
-
         if (profileImageFileId == Guid.Empty)
             return EmployeeErrors.ProfileImageFileIdInvalid;
 
@@ -164,7 +164,6 @@ public sealed class Employee : AggregateRoot<EmployeeId>
             emailResult.Data,
             educationField,
             jobTitle,
-            new UserId(identityUserId),
             new FileId(profileImageFileId));
     }
 }
