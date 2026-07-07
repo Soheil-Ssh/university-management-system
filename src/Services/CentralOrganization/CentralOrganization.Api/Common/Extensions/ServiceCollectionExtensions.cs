@@ -1,9 +1,7 @@
-﻿using CentralOrganization.Api.Infrastructure.Grpc;
-using CentralOrganization.Api.Infrastructure.Persistence.Repositories;
+﻿using CentralOrganization.Api.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using SharedKernel.Abstractions;
 using SharedKernel.Api;
-using SharedKernel.Contracts.Grpc.Identity.v1;
 using SharedKernel.Identity;
 using SharedKernel.Identity.Extensions;
 using SharedKernel.Persistence;
@@ -32,21 +30,10 @@ public static class ServiceCollectionExtensions
         services.AddUmsJwtAuthentication(configuration);
         services.AddUmsAuthorization();
 
-        // Get the identity service gRPC URL from the configuration
-        var identityServiceUrl = configuration["GrpcServices:IdentityServiceUrl"]
-                             ?? throw new InvalidOperationException("File service gRPC URL is not configured.");
-
-        // Add the gRPC client for the FileValidationService to the service collection
-        services.AddGrpcClient<IdentityUserService.IdentityUserServiceClient>((serviceProvider, options) =>
-        {
-            options.Address = new Uri(identityServiceUrl);
-        });
-
         // Add repositories and unit of work to the service collection
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IUnitRepository, UnitRepository>();
         services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-        services.AddScoped<IIdentityUserClient, IdentityUserGrpcClient>();
 
         // Add the shared kernel abstractions to the service collection
         services.AddSharedKernelAbstractions<Program>();

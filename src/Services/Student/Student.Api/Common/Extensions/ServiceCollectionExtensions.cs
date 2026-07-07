@@ -1,11 +1,11 @@
-﻿using File.Api.Application.Protos;
-using Microsoft.EntityFrameworkCore.Diagnostics;
+﻿using Microsoft.EntityFrameworkCore.Diagnostics;
 using SharedKernel.Abstractions;
 using SharedKernel.Api;
+using SharedKernel.Contracts.Grpc.File.v1;
 using SharedKernel.Identity;
 using SharedKernel.Identity.Extensions;
 using SharedKernel.Persistence;
-using Student.Api.Infrastructure.FileServices;
+using Student.Api.Infrastructure.Grpc;
 using Student.Api.Infrastructure.Persistence.Repositories;
 using Student.Api.Infrastructure.Security;
 
@@ -48,7 +48,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IAdmissionRequestRepository, AdmissionRequestRepository>();
 
         // Add services to the service collection
-        services.AddScoped<IFileValidator, GrpcFileValidator>();
+        services.AddScoped<IFileValidatorClient, FileValidatorGrpcClient>();
         services.AddSingleton<IRegistrationTokenGenerator, RegistrationTokenGenerator>();
 
         // Add the shared kernel abstractions to the service collection

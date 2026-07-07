@@ -62,7 +62,7 @@ public static class CompleteApplicantPersonalInfo
 
     public class Handler(IAdmissionRequestRepository admissionRequestRepository,
         IRegistrationTokenGenerator registrationTokenGenerator,
-        IFileValidator fileValidator,
+        IFileValidatorClient fileValidator,
         IUnitOfWork unitOfWork)
         : ICommandHandler<Command, Result<Response>>
     {

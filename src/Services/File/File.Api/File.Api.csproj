@@ -35,9 +35,9 @@
   <ItemGroup>
     <Folder Include="Uploads\" />
   </ItemGroup>
-	
+
 	<ItemGroup>
-		<Protobuf Include="Application\Protos\file_validation.proto" GrpcServices="Server" />
+		<Protobuf Include="..\..\..\SharedKernel\SharedKernel.Contracts\Grpc\File\v1\file_validation.proto" GrpcServices="Server"></Protobuf>
 	</ItemGroup>
 
 </Project>

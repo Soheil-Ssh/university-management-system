@@ -2,7 +2,7 @@
 
 namespace Student.Api.Application.Abstractions;
 
-public interface IFileValidator
+public interface IFileValidatorClient
 {
     Task<Result<bool>> ExistsAsync(FileId fileId, CancellationToken cancellationToken);
 }

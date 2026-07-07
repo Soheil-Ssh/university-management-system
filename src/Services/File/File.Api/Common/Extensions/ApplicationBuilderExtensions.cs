@@ -17,7 +17,7 @@ public static class ApplicationBuilderExtensions
         }
 
         app.UseExceptionHandler();
-        app.MapGrpcService<FileValidationService>();
+        app.MapGrpcService<FileValidationGrpcService>();
         app.MapCarter();
 
         return app;

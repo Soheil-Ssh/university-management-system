@@ -1,9 +1,9 @@
-﻿using File.Api.Application.Protos;
-using Grpc.Core;
+﻿using Grpc.Core;
+using SharedKernel.Contracts.Grpc.File.v1;
 
 namespace File.Api.Infrastructure.Grpc;
 
-public class FileValidationService(FileDbContext dbContext) : Application.Protos.FileValidationService.FileValidationServiceBase
+public class FileValidationGrpcService(FileDbContext dbContext) : FileValidationService.FileValidationServiceBase
 {
     public override async Task<FileExistsResponse> Exists(FileExistsRequest request, ServerCallContext context)
     {

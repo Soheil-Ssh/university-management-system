@@ -37,13 +37,4 @@
 		<ProjectReference Include="..\..\..\SharedKernel\SharedKernel.Persistence\SharedKernel.Persistence.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<Protobuf Include="..\..\..\SharedKernel\SharedKernel.Contracts\Grpc\Identity\v1\identity_user.proto" GrpcServices="Server">
-		</Protobuf>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Application\" />
-	</ItemGroup>
-
 </Project>

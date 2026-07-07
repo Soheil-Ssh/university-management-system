@@ -1,11 +1,11 @@
-﻿using File.Api.Application.Protos;
-using Grpc.Core;
+﻿using Grpc.Core;
+using SharedKernel.Contracts.Grpc.File.v1;
 using SharedKernel.Domain.Identifiers;
 using Student.Api.Application.Abstractions.Errors;
 
-namespace Student.Api.Infrastructure.FileServices;
+namespace Student.Api.Infrastructure.Grpc;
 
-public class GrpcFileValidator(FileValidationService.FileValidationServiceClient client) : IFileValidator
+public class FileValidatorGrpcClient(FileValidationService.FileValidationServiceClient client) : IFileValidatorClient
 {
     public async Task<Result<bool>> ExistsAsync(FileId fileId, CancellationToken cancellationToken)
     {
@@ -21,7 +21,7 @@ public class GrpcFileValidator(FileValidationService.FileValidationServiceClient
                 or StatusCode.DeadlineExceeded
                 or StatusCode.Internal)
         {
-            return FileValidator.Unavailable;
+            return FileValidatorClientErrors.Unavailable;
         }
     }
 }

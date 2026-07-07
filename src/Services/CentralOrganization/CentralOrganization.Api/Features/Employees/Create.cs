@@ -56,8 +56,7 @@ public static class Create
 
     public class Handler(IUnitRepository unitRepository,
         IEmployeeRepository employeeRepository,
-        IUnitOfWork unitOfWork,
-        IIdentityUserClient identityUserClient)
+        IUnitOfWork unitOfWork)
         : ICommandHandler<Command, Result<Guid>>
     {
         public async Task<Result<Guid>> Handle(Command request, CancellationToken cancellationToken)
