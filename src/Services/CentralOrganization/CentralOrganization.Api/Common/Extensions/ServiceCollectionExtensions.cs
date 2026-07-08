@@ -5,6 +5,8 @@ using SharedKernel.Abstractions;
 using SharedKernel.Api;
 using SharedKernel.Identity;
 using SharedKernel.Identity.Extensions;
+using SharedKernel.Messaging;
+using SharedKernel.Messaging.Enums;
 using SharedKernel.Observability.HealthCheck;
 using SharedKernel.Persistence;
 
@@ -57,6 +59,9 @@ public static class ServiceCollectionExtensions
                 name: HealthCheckNames.DatabasePostgresSql,
                 failureStatus: HealthStatus.Unhealthy,
                 tags: [HealthCheckTags.Ready, HealthCheckTags.Database, HealthCheckTags.PostgresSql]);
+
+        // Add Masstransit messaging to the service collection
+        services.AddApplicationMessagingWithEfOutbox<CentralOrganizationDbContext>(configuration, MessagingOutboxProvider.Postgres);
 
         return services;
     }

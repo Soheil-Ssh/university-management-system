@@ -22,6 +22,7 @@
     <Project Path="src/SharedKernel/SharedKernel.Contracts/SharedKernel.Contracts.csproj" Id="b155dad9-67cc-470d-8e59-ce4f7f6856e1" />
     <Project Path="src/SharedKernel/SharedKernel.Domain/SharedKernel.Domain.csproj" Id="a5471819-dace-4dde-8f02-8290f596fe8a" />
     <Project Path="src/SharedKernel/SharedKernel.Identity/SharedKernel.Identity.csproj" Id="4e5efbe4-0ce8-472b-8ea6-a7aec868dbd1" />
+    <Project Path="src/SharedKernel/SharedKernel.Messaging/SharedKernel.Messaging.csproj" Id="e0581a75-48fe-407a-a5fd-17c0e9ac4ad1" />
     <Project Path="src/SharedKernel/SharedKernel.Observability/SharedKernel.Observability.csproj" Id="5f24e34c-184a-4949-b217-c618ed79b7b1" />
     <Project Path="src/SharedKernel/SharedKernel.Persistence/SharedKernel.Persistence.csproj" Id="880781c8-328c-48d8-a0f6-17b7128021dc" />
   </Folder>

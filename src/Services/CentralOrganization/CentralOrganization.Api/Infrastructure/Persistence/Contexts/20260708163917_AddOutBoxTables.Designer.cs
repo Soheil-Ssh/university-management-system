@@ -4,17 +4,20 @@ using System.Collections.Generic;
 using CentralOrganization.Api.Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace CentralOrganization.Api.Infrastructure.Persistence.Migrations
+namespace CentralOrganization.Api.Infrastructure.Persistence.Contexts
 {
     [DbContext(typeof(CentralOrganizationDbContext))]
-    partial class CentralOrganizationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260708163917_AddOutBoxTables")]
+    partial class AddOutBoxTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -335,6 +338,10 @@ namespace CentralOrganization.Api.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("BusName")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
 
@@ -355,6 +362,8 @@ namespace CentralOrganization.Api.Infrastructure.Persistence.Migrations
                     b.HasKey("OutboxId");
 
                     b.HasIndex("Created");
+
+                    b.HasIndex("BusName", "Created");
 
                     b.ToTable("OutboxState");
                 });

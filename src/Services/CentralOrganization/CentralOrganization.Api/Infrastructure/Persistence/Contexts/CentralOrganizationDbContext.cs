@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using SharedKernel.Messaging.Extensions;
 using Unit = CentralOrganization.Api.Domain.Unit.Unit;
 
 namespace CentralOrganization.Api.Infrastructure.Persistence.Contexts;
@@ -12,6 +13,7 @@ public class CentralOrganizationDbContext(DbContextOptions<CentralOrganizationDb
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        modelBuilder.AddMassTransitOutboxEntities();
         base.OnModelCreating(modelBuilder);
     }
 }

@@ -30,6 +30,7 @@
     <ProjectReference Include="..\..\..\SharedKernel\SharedKernel.Abstractions\SharedKernel.Abstractions.csproj" />
     <ProjectReference Include="..\..\..\SharedKernel\SharedKernel.Api\SharedKernel.Api.csproj" />
     <ProjectReference Include="..\..\..\SharedKernel\SharedKernel.Identity\SharedKernel.Identity.csproj" />
+    <ProjectReference Include="..\..\..\SharedKernel\SharedKernel.Messaging\SharedKernel.Messaging.csproj" />
     <ProjectReference Include="..\..\..\SharedKernel\SharedKernel.Observability\SharedKernel.Observability.csproj" />
     <ProjectReference Include="..\..\..\SharedKernel\SharedKernel.Persistence\SharedKernel.Persistence.csproj" />
   </ItemGroup>

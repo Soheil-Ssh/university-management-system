@@ -189,6 +189,8 @@ services:
       - Observability__Loki__Enabled=true
       - Observability__Loki__Uri=http://loki:3100
       - Observability__Loki__MinimumLevel=Information
+      - Messaging__Host=rabbitmq
+      - Messaging__Port=5672
     ports:
       - "5004:8080"
       - "5054:8081"
