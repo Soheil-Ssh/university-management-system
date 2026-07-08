@@ -6,10 +6,12 @@ using Identity.Api.Infrastructure.Persistence.Repositories;
 using Identity.Api.Infrastructure.Persistence.Seed;
 using Identity.Api.Infrastructure.Security;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using SharedKernel.Abstractions;
 using SharedKernel.Api;
 using SharedKernel.Identity;
 using SharedKernel.Identity.Extensions;
+using SharedKernel.Observability.HealthCheck;
 using SharedKernel.Persistence;
 using SharedKernel.Persistence.Database;
 
@@ -114,6 +116,18 @@ public static class ServiceCollectionExtensions
 
         // Add Razor Pages to the service collection
         services.AddRazorPages();
+
+        // Add health checks to the service collection
+        services.AddHealthChecks()
+            .AddCheck(
+                name: HealthCheckNames.Api,
+                check: () => HealthCheckResult.Healthy("Identity API is running."),
+                tags: [ HealthCheckTags.Live, HealthCheckTags.Ready, HealthCheckTags.Api])
+            .AddSqlServer(
+                connectionString: sqlServerConnectionString!,
+                name: HealthCheckNames.DatabaseSqlServer,
+                failureStatus: HealthStatus.Unhealthy,
+                tags: [HealthCheckTags.Ready, HealthCheckTags.Database, HealthCheckTags.SqlServer]);
 
         return services;
     }

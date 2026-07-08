@@ -1,5 +1,8 @@
 <Solution>
   <Folder Name="/src/" />
+  <Folder Name="/src/Monitoring/">
+    <Project Path="src/Monitoring/Monitoring.HealthChecks/Monitoring.HealthChecks.csproj" Id="d08a18c8-1d74-4dbf-82f4-637fb824284b" />
+  </Folder>
   <Folder Name="/src/Services/" />
   <Folder Name="/src/Services/CentralOrganization/">
     <Project Path="src/Services/CentralOrganization/CentralOrganization.Api/CentralOrganization.Api.csproj" Id="83697103-f96b-493c-b00b-c0024a8ad5ef" />

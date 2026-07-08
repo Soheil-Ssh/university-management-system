@@ -16,7 +16,7 @@ public static class LoggingExtensions
     {
         builder.Services.Configure<ObservabilityOptions>(
             builder.Configuration.GetSection(ObservabilityOptions.SectionName));
-        
+
         builder.Services.AddHttpContextAccessor();
 
         builder.Services.AddSerilog((services, loggerConfiguration) =>
@@ -65,8 +65,25 @@ public static class LoggingExtensions
                 if (exception is not null)
                     return LogEventLevel.Error;
 
+                var statusCode = httpContext.Response.StatusCode;
+                var requestPath = httpContext.Request.Path;
+
+                if (IsHealthCheckRequest(requestPath))
+                {
+                    if (statusCode >= StatusCodes.Status500InternalServerError)
+                        return LogEventLevel.Warning;
+
+                    if (statusCode >= StatusCodes.Status400BadRequest)
+                        return LogEventLevel.Warning;
+
+                    return LogEventLevel.Verbose;
+                }
+
                 if (httpContext.Response.StatusCode >= StatusCodes.Status500InternalServerError)
                     return LogEventLevel.Error;
+
+                if (statusCode >= StatusCodes.Status400BadRequest)
+                    return LogEventLevel.Warning;
 
                 if (elapsed >= 1000)
                     return LogEventLevel.Warning;
@@ -80,6 +97,7 @@ public static class LoggingExtensions
                 diagnosticContext.Set("RequestScheme", httpContext.Request.Scheme);
                 diagnosticContext.Set("RemoteIpAddress", httpContext.Connection.RemoteIpAddress?.ToString());
                 diagnosticContext.Set("RequestMethod", httpContext.Request.Method);
+                diagnosticContext.Set("RequestPath", httpContext.Request.Path.Value);
                 diagnosticContext.Set("StatusCode", httpContext.Response.StatusCode);
 
                 if (httpContext.Request.Headers.TryGetValue(CorrelationIdConstants.HeaderName, out var correlationId))
@@ -129,4 +147,7 @@ public static class LoggingExtensions
 
         return LogEventLevel.Information;
     }
+
+    private static bool IsHealthCheckRequest(PathString path)
+        => path.StartsWithSegments("/health") || path.StartsWithSegments("/health-checks-api");
 }

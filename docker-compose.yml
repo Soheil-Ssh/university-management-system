@@ -47,6 +47,13 @@ services:
       context: .
       dockerfile: src/Services/CentralOrganization/CentralOrganization.Api/Dockerfile
 
+  # Monitoring Health Checks
+  monitoring.healthchecks:
+    image: ${DOCKER_REGISTRY-}monitoringhealthchecks
+    build:
+      context: .
+      dockerfile: src/Monitoring/Monitoring.HealthChecks/Dockerfile
+
 networks:
   ums_network:
     driver: bridge

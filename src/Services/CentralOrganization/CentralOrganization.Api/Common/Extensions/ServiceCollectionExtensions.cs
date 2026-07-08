@@ -1,9 +1,11 @@
 ﻿using CentralOrganization.Api.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using SharedKernel.Abstractions;
 using SharedKernel.Api;
 using SharedKernel.Identity;
 using SharedKernel.Identity.Extensions;
+using SharedKernel.Observability.HealthCheck;
 using SharedKernel.Persistence;
 
 namespace CentralOrganization.Api.Common.Extensions;
@@ -13,8 +15,8 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddCentralOrganizationServices(this IServiceCollection services, IConfiguration configuration)
     {
         // Get the postgres connection string from the configuration
-        var sqlServerConnectionString = configuration.GetConnectionString("PostgresDefaultConnection")
-                                        ?? throw new InvalidOperationException("Postgres database connection is not configured.");
+        var postgresConnectionString = configuration.GetConnectionString("PostgresDefaultConnection")
+                                       ?? throw new InvalidOperationException("Postgres database connection is not configured.");
 
         // Add the shared kernel persistence services to the service collection
         services.AddSharedKernelPersistence();
@@ -23,7 +25,7 @@ public static class ServiceCollectionExtensions
         services.AddDbContext<CentralOrganizationDbContext>((sp, options) =>
         {
             options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
-            options.UseNpgsql(sqlServerConnectionString);
+            options.UseNpgsql(postgresConnectionString);
         });
 
         // Add authentication to the service collection
@@ -43,6 +45,18 @@ public static class ServiceCollectionExtensions
 
         // Add Carter to the service collection
         services.AddCarter();
+
+        // Add health checks to the service collection
+        services.AddHealthChecks()
+            .AddCheck(
+                name: HealthCheckNames.Api,
+                check: () => HealthCheckResult.Healthy("Central Organization API is running."),
+                tags: [HealthCheckTags.Live, HealthCheckTags.Ready, HealthCheckTags.Api])
+            .AddNpgSql(
+                connectionString: postgresConnectionString!,
+                name: HealthCheckNames.DatabasePostgresSql,
+                failureStatus: HealthStatus.Unhealthy,
+                tags: [HealthCheckTags.Ready, HealthCheckTags.Database, HealthCheckTags.PostgresSql]);
 
         return services;
     }

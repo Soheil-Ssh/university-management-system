@@ -36,7 +36,7 @@ public static class ApplicationBuilderExtensions
                 .AllowAnonymous();
         }
 
-        app.UseHttpsRedirection();
+        app.UseHttpsRedirectionExceptHealthChecks();
         app.UseStaticFiles();
         app.UseAuthentication();
         app.UseIdentityServer();

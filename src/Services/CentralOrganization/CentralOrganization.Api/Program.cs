@@ -14,8 +14,11 @@ try
     builder.Services.AddCentralOrganizationServices(builder.Configuration);
 
     var app = builder.Build();
+
     app.UseApplicationObservability();
     await app.UseCentralOrganizationPipeline();
+    app.MapApplicationObservability();
+
     app.Run();
 }
 catch (Exception exception)

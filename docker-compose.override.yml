@@ -42,7 +42,7 @@ services:
 
   # Loki
   loki:
-    container_name: ums.loki
+    container_name: loki
     ports:
       - "3100:3100"
     networks:
@@ -53,7 +53,7 @@ services:
 
   # Grafana
   grafana:
-    container_name: ums.grafana
+    container_name: grafana
     ports:
       - "3000:3000"
     networks:
@@ -65,6 +65,12 @@ services:
       - loki
     volumes:
       - grafana_data:/var/lib/grafana
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:3000/api/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
 
   # RabbitMQ
   rabbitmq:
@@ -78,6 +84,12 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
 
   # Identity Api
   identity.api:
@@ -183,6 +195,55 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+    networks:
+      - ums_network
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  # Monitoring Health Checks
+  monitoring.healthchecks:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - Observability__Loki__Enabled=true
+      - Observability__Loki__Uri=http://loki:3100
+      - Observability__Loki__MinimumLevel=Information
+      - HealthChecksUI__HealthChecks__0__Name=Identity API
+      - HealthChecksUI__HealthChecks__0__Uri=http://identity.api:8080/health
+      - HealthChecksUI__HealthChecks__1__Name=File API
+      - HealthChecksUI__HealthChecks__1__Uri=http://file.api:8080/health
+      - HealthChecksUI__HealthChecks__2__Name=Student API
+      - HealthChecksUI__HealthChecks__2__Uri=http://student.api:8080/health
+      - HealthChecksUI__HealthChecks__3__Name=Central Organization API
+      - HealthChecksUI__HealthChecks__3__Uri=http://central.organization.api:8080/health
+      - HealthChecksUI__HealthChecks__4__Name=Infrastructure
+      - HealthChecksUI__HealthChecks__4__Uri=http://monitoring.healthchecks:8080/health/infrastructure
+    ports:
+      - "5010:8080"
+      - "5060:8081"
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      loki:
+        condition: service_started
+      grafana:
+        condition: service_healthy
+      identity.api:
+        condition: service_started
+      file.api:
+        condition: service_started
+      student.api:
+        condition: service_started
+      central.organization.api:
+        condition: service_started
     networks:
       - ums_network
     volumes:

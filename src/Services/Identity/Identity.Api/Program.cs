@@ -16,6 +16,8 @@ try
     var app = builder.Build();
     app.UseApplicationObservability();
     await app.UseIdentityPipeline();
+    app.MapApplicationObservability();
+
     app.Run();
 }
 catch (Exception exception)

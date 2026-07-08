@@ -16,6 +16,8 @@ try
     var app = builder.Build();
     app.UseApplicationObservability();
     await app.UseFilePipeline();
+    app.MapApplicationObservability();
+
     app.Run();
 }
 catch (Exception exception)

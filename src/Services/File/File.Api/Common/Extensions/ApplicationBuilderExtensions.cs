@@ -15,7 +15,7 @@ public static class ApplicationBuilderExtensions
             app.MapOpenApi();
             app.MapScalarApiReference();
         }
-
+        
         app.UseExceptionHandler();
         app.MapGrpcService<FileValidationGrpcService>();
         app.MapCarter();
