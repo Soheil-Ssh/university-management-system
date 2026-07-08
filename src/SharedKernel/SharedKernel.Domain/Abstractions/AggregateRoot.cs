@@ -2,17 +2,17 @@
 
 public abstract class AggregateRoot<TKey> : Entity<TKey>, IAggregateRoot where TKey : notnull
 {
-    private readonly List<DomainEvent> _domainEvents = [];
+    private readonly List<IDomainEvent> _domainEvents = [];
 
     protected AggregateRoot(TKey id)
         : base(id) { }
 
     protected AggregateRoot() { }
 
-    public IReadOnlyCollection<DomainEvent> DomainEvents =>
+    public IReadOnlyCollection<IDomainEvent> DomainEvents =>
         _domainEvents.AsReadOnly();
 
-    public IReadOnlyList<DomainEvent> PopDomainEvents()
+    public IReadOnlyList<IDomainEvent> PopDomainEvents()
     {
         var events = _domainEvents.ToList();
         _domainEvents.Clear();

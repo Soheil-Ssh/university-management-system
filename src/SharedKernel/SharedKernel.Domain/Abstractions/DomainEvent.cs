@@ -1,10 +1,8 @@
-﻿using MediatR;
+﻿namespace SharedKernel.Domain.Abstractions;
 
-namespace SharedKernel.Domain.Abstractions;
-
-public abstract class DomainEvent : INotification
+public abstract class DomainEvent : IDomainEvent
 {
     public Guid EventId { get; } = Guid.NewGuid();
-    public DateTime OccurredOnUtc { get; } = DateTime.UtcNow;
+    public DateTime OccurredOn { get; } = DateTime.UtcNow;
     public string EventType => GetType().AssemblyQualifiedName ?? GetType().FullName ?? GetType().Name;
 }
