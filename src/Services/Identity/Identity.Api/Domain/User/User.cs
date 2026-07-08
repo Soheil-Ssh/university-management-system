@@ -6,13 +6,19 @@ public sealed class User : AggregateRoot<UserId>
 {
     public string UserName { get; private set; }
     public Email Email { get; private set; }
+    public Name FirstName { get; private set; }
+    public Name LastName { get; private set; }
+    public MobileNumber Mobile { get; private set; }
     public string PasswordHash { get; private set; }
     public string SecurityStamp { get; private set; }
     public bool MustChangePassword { get; private set; }
     public bool IsActive { get; private set; }
 
+
     private readonly List<UserRole> _userRoles = [];
     public IReadOnlyCollection<UserRole> UserRoles => _userRoles;
+
+    public string FullName => $"{FirstName} {LastName}";
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     private User() { }
@@ -21,36 +27,53 @@ public sealed class User : AggregateRoot<UserId>
     private User(UserId id,
         string userName,
         Email email,
+        Name firstName,
+        Name lastName,
+        MobileNumber mobile,
         string passwordHash,
         string securityStamp,
         bool isActive) : base(id)
     {
         UserName = userName;
         Email = email;
+        FirstName = firstName;
+        LastName = lastName;
+        Mobile = mobile;
         PasswordHash = passwordHash;
         SecurityStamp = securityStamp;
         IsActive = isActive;
         MustChangePassword = true;
     }
 
-    public static Result<User> Create(string userName, Email email, string passwordHash)
+    public static Result<User> Create(string userName,
+        Name firstName,
+        Name lastName,
+        MobileNumber mobileNumber,
+        Email email,
+        string passwordHash)
     {
         if (string.IsNullOrWhiteSpace(userName))
             return UserErrors.UserNameEmpty;
 
         userName = userName.Trim();
-
         if (userName.Length > 50)
             return UserErrors.UserNameTooLong;
 
         passwordHash = passwordHash.Trim();
-
         if (string.IsNullOrWhiteSpace(passwordHash))
             return UserErrors.PasswordHashEmpty;
 
         string securityStamp = GenerateSecurityStamp();
 
-        return new User(UserId.New(), userName, email, passwordHash, securityStamp, true);
+        return new User(UserId.New(),
+            userName,
+            email,
+            firstName,
+            lastName,
+            mobileNumber,
+            passwordHash,
+            securityStamp,
+            true);
     }
 
     public Result AssignRole(RoleId roleId)

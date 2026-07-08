@@ -22,6 +22,9 @@ public class IdentityServerProfileService(IdentityDbContext dbContext) : IProfil
                 UserId = x.Id.Value,
                 x.UserName,
                 Email = x.Email.Value,
+                FirstName = x.FirstName.Value,
+                LastName = x.LastName.Value,
+                Mobile = x.Mobile.Value,
                 x.SecurityStamp,
                 x.MustChangePassword,
                 x.IsActive,
@@ -58,6 +61,9 @@ public class IdentityServerProfileService(IdentityDbContext dbContext) : IProfil
             new(UmsClaimTypes.Subject, user.UserId.ToString()),
             new(UmsClaimTypes.UserName, user.UserName),
             new(UmsClaimTypes.Email, user.Email),
+            new(UmsClaimTypes.GivenName, user.FirstName),
+            new(UmsClaimTypes.FamilyName, user.LastName),
+            new(UmsClaimTypes.FullName, $"{user.FirstName} {user.LastName}"),
             new(UmsClaimTypes.SecurityStamp, user.SecurityStamp),
             new(UmsClaimTypes.MustChangePassword, user.MustChangePassword.ToString().ToLowerInvariant())
         };

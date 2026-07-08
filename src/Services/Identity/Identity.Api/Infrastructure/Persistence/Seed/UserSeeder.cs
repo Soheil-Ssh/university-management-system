@@ -1,6 +1,7 @@
 ﻿using Identity.Api.Infrastructure.Authorization.Roles;
 using Identity.Api.Infrastructure.Persistence.Options;
 using Microsoft.Extensions.Options;
+using SharedKernel.Domain.Extensions;
 using SharedKernel.Persistence.Database;
 
 namespace Identity.Api.Infrastructure.Persistence.Seed;
@@ -30,9 +31,21 @@ public class UserSeeder(IdentityDbContext context,
             if (emailResult.IsFailure)
                 throw new Exception(emailResult.Error.ToString());
 
+            var firstNameResult = Name.Create(config.FirstName).WithPath(nameof(config.FirstName));
+            if (firstNameResult.IsFailure)
+                throw new Exception(firstNameResult.Error.ToString());
+
+            var lastNameResult = Name.Create(config.LastName).WithPath(nameof(config.LastName));
+            if (lastNameResult.IsFailure)
+                throw new Exception(lastNameResult.Error.ToString());
+
+            var mobileResult = MobileNumber.Create(config.Mobile);
+            if (mobileResult.IsFailure)
+                throw new Exception(mobileResult.Error.ToString());
+
             string passwordHash = passwordHasher.Hash(config.Password);
 
-            var userResult = User.Create(config.UserName, emailResult.Data, passwordHash);
+            var userResult = User.Create(config.UserName, firstNameResult.Data, lastNameResult.Data, mobileResult.Data, emailResult.Data, passwordHash);
             if (userResult.IsFailure)
                 throw new Exception(userResult.Error.ToString());
 

@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SharedKernel.Persistence.Extensions;
 
 namespace Identity.Api.Infrastructure.Persistence.Configurations;
 
@@ -17,30 +18,30 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .HasConversion(id => id.Value, value => new UserId(value));
 
         // UserName
-        builder.Property(x => x.UserName)
-            .IsRequired()
-            .HasMaxLength(50);
+        builder.Property(x => x.UserName).IsRequired().HasMaxLength(50);
+        builder.HasIndex(x => x.UserName).IsUnique();
 
-        builder.HasIndex(x => x.UserName)
-            .IsUnique();
+        // FirstName
+        builder.ConfigureName(x => x.FirstName, "FirstName", true);
+
+        // LastName
+        builder.ConfigureName(x => x.LastName, "LastName", true);
+
+        // Mobile
+        builder.ConfigureMobileAsConversion(x => x.Mobile, "Mobile", true);
+        builder.HasIndex(x => x.Mobile).IsUnique();
 
         // Password
-        builder.Property(x => x.PasswordHash)
-            .HasMaxLength(200)
-            .IsRequired();
+        builder.Property(x => x.PasswordHash).HasMaxLength(200).IsRequired();
 
         // SecurityStamp
-        builder.Property(x => x.SecurityStamp)
-            .HasMaxLength(100)
-            .IsRequired();
+        builder.Property(x => x.SecurityStamp).HasMaxLength(100).IsRequired();
 
         // IsActive
-        builder.Property(x => x.IsActive)
-            .IsRequired();
+        builder.Property(x => x.IsActive).IsRequired();
 
         // MustChangePassword
-        builder.Property(x => x.MustChangePassword)
-            .IsRequired();
+        builder.Property(x => x.MustChangePassword).IsRequired();
 
         // Email
         builder.OwnsOne(x => x.Email, email =>
