@@ -1,0 +1,1 @@
+﻿global using SharedKernel.Contracts.Integration.Abstractions;

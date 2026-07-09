@@ -2,7 +2,7 @@ syntax = "proto3";
 
 option csharp_namespace = "SharedKernel.Contracts.Grpc.File.v1";
 
-package sharedKernel.contracts.v1;
+package sharedKernel.contracts.grpc.v1;
 
 service FileValidationService {
 	rpc Exists(FileExistsRequest) returns (FileExistsResponse);

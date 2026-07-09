@@ -2,10 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SharedKernel.Messaging.Enums;
-using SharedKernel.Messaging.Options;
+using SharedKernel.Messaging.Abstractions;
+using SharedKernel.Messaging.MassTransit.Enums;
+using SharedKernel.Messaging.MassTransit.Options;
+using SharedKernel.Messaging.MassTransit.Publishers;
 
-namespace SharedKernel.Messaging;
+namespace SharedKernel.Messaging.MassTransit;
 
 public static class DependencyInjection
 {
@@ -27,6 +29,8 @@ public static class DependencyInjection
                 rabbitConfigurator.ConfigureEndpoints(context);
             });
         });
+
+        services.AddScoped<IIntegrationEventPublisher, MassTransitIntegrationEventPublisher>();
 
         return services;
     }
@@ -61,6 +65,8 @@ public static class DependencyInjection
                 rabbitConfigurator.ConfigureEndpoints(context);
             });
         });
+
+        services.AddScoped<IIntegrationEventPublisher, MassTransitIntegrationEventPublisher>();
 
         return services;
     }
@@ -97,8 +103,7 @@ public static class DependencyInjection
                 break;
 
             default:
-                throw new InvalidOperationException(
-                    $"Unsupported messaging outbox provider: {provider}");
+                throw new InvalidOperationException($"Unsupported messaging outbox provider: {provider}");
         }
     }
 }

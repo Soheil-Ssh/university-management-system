@@ -1,4 +1,4 @@
-﻿namespace SharedKernel.Messaging.Options;
+﻿namespace SharedKernel.Messaging.MassTransit.Options;
 
 public sealed class MessagingOptions
 {

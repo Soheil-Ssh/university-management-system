@@ -38,7 +38,7 @@
   </ItemGroup>
 
 	<ItemGroup>
-		<Protobuf Include="..\..\..\SharedKernel\SharedKernel.Contracts\Grpc\File\v1\file_validation.proto" GrpcServices="Server"></Protobuf>
+		<Protobuf Include="..\..\..\SharedKernel\SharedKernel.Contracts.Grpc\File\v1\file_validation.proto" GrpcServices="Server"></Protobuf>
 	</ItemGroup>
 
 </Project>

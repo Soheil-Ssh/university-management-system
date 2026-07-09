@@ -1,4 +1,4 @@
-﻿namespace SharedKernel.Messaging.Enums;
+﻿namespace SharedKernel.Messaging.MassTransit.Enums;
 
 public enum MessagingOutboxProvider
 {

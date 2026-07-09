@@ -1,4 +1,4 @@
-﻿namespace SharedKernel.Contracts.IntegrationEvents;
+﻿namespace SharedKernel.Contracts.Integration.Abstractions;
 
 public abstract record IntegrationEvent
 {

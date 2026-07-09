@@ -1,7 +1,7 @@
 ﻿using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
-namespace SharedKernel.Messaging.Extensions;
+namespace SharedKernel.Messaging.MassTransit.Extensions;
 
 public static class ModelBuilderOutboxExtensions
 {
