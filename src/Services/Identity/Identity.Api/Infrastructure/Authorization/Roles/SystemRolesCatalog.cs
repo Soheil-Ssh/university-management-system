@@ -7,6 +7,7 @@ public static class SystemRolesCatalog
     public static readonly RoleDefinition EducationManager = new("EducationManager", "مدیر آموزش", "مدیریت امور آموزشی دانشگاه");
     public static readonly RoleDefinition DepartmentManager = new("DepartmentManager", "مدیر گروه", "مدیریت گروه آموزشی");
     public static readonly RoleDefinition DepartmentExpert = new("DepartmentExpert", "کارشناس گروه", "انجام امور اجرایی و آموزشی گروه");
+    public static readonly RoleDefinition CentralOrganizationEmployee = new("CentralOrganizationEmployee", "کارمند", "کارمند سازمان مرکزی داشنگاه");
     public static readonly RoleDefinition Professor = new("Professor", "استاد", "عضو هیئت علمی و مدرس");
     public static readonly RoleDefinition Student = new("Student", "دانشجو", "دانشجوی دانشگاه");
     public static readonly RoleDefinition Unassigned = new("Unassigned", "بدون نقش", "کاربری که هنوز هیچ نقش عملیاتی به او اختصاص داده نشده است");
@@ -18,6 +19,7 @@ public static class SystemRolesCatalog
         EducationManager,
         DepartmentManager,
         DepartmentExpert,
+        CentralOrganizationEmployee,
         Professor,
         Student,
         Unassigned

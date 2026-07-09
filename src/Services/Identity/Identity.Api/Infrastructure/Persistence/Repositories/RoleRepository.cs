@@ -5,6 +5,9 @@ public class RoleRepository(IdentityDbContext context) : IRoleRepository
     public async Task<Role?> GetByIdAsync(RoleId id, CancellationToken cancellationToken = default)
         => await context.Roles.FirstOrDefaultAsync(r => r.Id == id, cancellationToken);
 
+    public async Task<Role?> GetByNameAsync(string name, CancellationToken cancellationToken = default)
+        => await context.Roles.FirstOrDefaultAsync(r => r.Name == name, cancellationToken);
+
     public async Task AddAsync(Role role, CancellationToken cancellationToken = default)
     {
         await context.Roles.AddAsync(role, cancellationToken);

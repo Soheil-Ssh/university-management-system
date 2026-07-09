@@ -1,4 +1,6 @@
-﻿using SharedKernel.Contracts.Integration.Events.CentralOrganization.Employees.v1;
+﻿using Identity.Api.Infrastructure.Authorization.Roles;
+using Identity.Api.Infrastructure.Persistence.Repositories;
+using SharedKernel.Contracts.Integration.Events.CentralOrganization.Employees.v1;
 using SharedKernel.Contracts.Integration.Events.Identity.User.v1;
 using SharedKernel.Domain.Extensions;
 using SharedKernel.Messaging.Abstractions;
@@ -38,6 +40,7 @@ public class ProvisionEmployeeUser
     public sealed class Handler(IUserRepository userRepository,
         IPasswordHasher passwordHasher,
         IIntegrationEventPublisher integrationEventPublisher,
+        IRoleRepository roleRepository,
         IUnitOfWork unitOfWork)
         : ICommandHandler<Command, Result>
     {
@@ -116,21 +119,36 @@ public class ProvisionEmployeeUser
                 mobileResult.Data,
                 emailResult.Data,
                 passwordHash);
-
             if (userResult.IsFailure)
             {
                 await PublishFailedAsync(request, userResult.Error.Description, cancellationToken);
                 return Result.Success();
             }
 
-            await userRepository.AddAsync(userResult.Data, cancellationToken);
+            var user = userResult.Data;
+
+            var role = await roleRepository.GetByNameAsync(SystemRolesCatalog.CentralOrganizationEmployee.Name, cancellationToken);
+            if (role is null)
+            {
+                await PublishFailedAsync(request, "Central organization employee system rule was not found.", cancellationToken);
+                return Result.Success();
+            }
+
+            var assignResult = user.AssignRole(role.Id);
+            if (assignResult.IsFailure)
+            {
+                await PublishFailedAsync(request, assignResult.Error.Description, cancellationToken);
+                return Result.Success();
+            }
+
+            await userRepository.AddAsync(user, cancellationToken);
             await unitOfWork.SaveAsync(cancellationToken);
 
             await integrationEventPublisher.PublishAsync(
                 new EmployeeIdentityProvisioningSucceededIntegrationEvent
                 {
                     EmployeeId = request.EmployeeId,
-                    IdentityUserId = userResult.Data.Id.Value,
+                    IdentityUserId = user.Id.Value,
                     CorrelationId = request.CorrelationId
                 },
                 cancellationToken);
