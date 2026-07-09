@@ -48,12 +48,12 @@ public static class Create
         public async Task<Result<Guid>> Handle(Command request, CancellationToken cancellationToken)
         {
             // Check if username already exists
-            var usernameExists = await userRepository.IsExistUserName(request.UserName, cancellationToken);
+            var usernameExists = await userRepository.IsExistUserNameAsync(request.UserName, cancellationToken);
             if (usernameExists)
                 return UserErrors.UsernameAlreadyExists;
 
             // Check if email already exists
-            var emailExists = await userRepository.IsExistEmail(request.Email, cancellationToken);
+            var emailExists = await userRepository.IsExistEmailAsync(request.Email, cancellationToken);
             if (emailExists)
                 return UserErrors.EmailAlreadyExists;
 

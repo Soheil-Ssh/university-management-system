@@ -2,7 +2,7 @@
 
 public class EmployeeRepository(CentralOrganizationDbContext context) : IEmployeeRepository
 {
-    public async Task<Employee?> GetById(EmployeeId id, CancellationToken cancellationToken = default)
+    public async Task<Employee?> GetByIdAsync(EmployeeId id, CancellationToken cancellationToken = default)
         => await context.Employees
             .FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
 
@@ -13,7 +13,7 @@ public class EmployeeRepository(CentralOrganizationDbContext context) : IEmploye
 
     public async Task<bool> IsExistPersonnelCodeAsync(PersonnelCode personnelCode, CancellationToken cancellationToken = default)
         => await context.Employees
-            .AnyAsync(e => e.PersonnelCode == personnelCode, cancellationToken);
+            .AnyAsync(e => e.PersonnelCode.Value == personnelCode.Value, cancellationToken);
 
     public async Task<bool> IsExistNationalCodeAsync(NationalCode nationalCode, CancellationToken cancellationToken = default)
         => await context.Employees
@@ -33,8 +33,9 @@ public class EmployeeRepository(CentralOrganizationDbContext context) : IEmploye
 
         var lastCode = await context.Employees
             .AsNoTracking()
-            .OrderByDescending(e => e.PersonnelCode)
-            .Select(u => u.PersonnelCode)
+            .Where(e => e.PersonnelCode.Value.StartsWith(prefix))
+            .OrderByDescending(e => e.PersonnelCode.Value)
+            .Select(e => e.PersonnelCode)
             .FirstOrDefaultAsync(cancellationToken);
 
         if (lastCode is null)

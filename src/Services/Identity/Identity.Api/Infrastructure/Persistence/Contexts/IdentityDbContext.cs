@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using SharedKernel.Messaging.MassTransit.Extensions;
 
 namespace Identity.Api.Infrastructure.Persistence.Contexts;
 
@@ -11,6 +12,7 @@ public class IdentityDbContext(DbContextOptions<IdentityDbContext> options) : Db
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        modelBuilder.AddMassTransitOutboxEntities();
         base.OnModelCreating(modelBuilder);
     }
 }

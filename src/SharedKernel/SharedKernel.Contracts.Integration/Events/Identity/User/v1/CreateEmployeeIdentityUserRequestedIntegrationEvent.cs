@@ -1,6 +1,6 @@
-﻿namespace SharedKernel.Contracts.Integration.Events.CentralOrganization.Employees.v1;
+﻿namespace SharedKernel.Contracts.Integration.Events.Identity.User.v1;
 
-public record EmployeeIdentityProvisioningRequestedIntegrationEvent : IntegrationEvent
+public sealed record CreateEmployeeIdentityUserRequestedIntegrationEvent : IntegrationEvent
 {
     public Guid EmployeeId { get; init; }
     public string NationalCode { get; init; } = string.Empty;

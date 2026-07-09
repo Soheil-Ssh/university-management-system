@@ -2,6 +2,9 @@
 
 public class EmployeeErrors
 {
+    public static readonly Error NotFound = new("Employee.NotFound", "The employee was not found.", ErrorType.Unauthorized);
+    public static readonly Error IdentityAlreadyProvisioned = 
+        new("Employee.IdentityAlreadyProvisioned", "The employee identity has already been provisioned.", ErrorType.Conflict);
     public static readonly Error BirthDateInvalid = new("Employee.BirthDate.Invalid", "Employee birth date is invalid.", ErrorType.Validation);
     public static readonly Error GenderInvalid = new("Employee.Gender.Invalid", "Employee gender is invalid.", ErrorType.Validation);
     public static readonly Error EducationFieldEmpty = new("Employee.EducationField.Empty", "Employee education cannot be empty.", ErrorType.Validation);

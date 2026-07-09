@@ -1,12 +1,18 @@
-﻿using CentralOrganization.Api.Infrastructure.Persistence.Repositories;
+﻿using CentralOrganization.Api.Features.Employees.v1.IdentityProvisioning;
+using CentralOrganization.Api.Infrastructure.Messaging.Sagas;
+using CentralOrganization.Api.Infrastructure.Messaging.Sagas.Activities;
+using CentralOrganization.Api.Infrastructure.Messaging.Sagas.States;
+using CentralOrganization.Api.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using SharedKernel.Abstractions;
 using SharedKernel.Api;
+using SharedKernel.Contracts.Integration.Events.CentralOrganization.Employees.v1;
 using SharedKernel.Identity;
 using SharedKernel.Identity.Extensions;
-using SharedKernel.Messaging;
-using SharedKernel.Messaging.Enums;
+using SharedKernel.Messaging.MassTransit;
+using SharedKernel.Messaging.MassTransit.Enums;
+using SharedKernel.Messaging.MassTransit.Extensions;
 using SharedKernel.Observability.HealthCheck;
 using SharedKernel.Persistence;
 
@@ -61,7 +67,22 @@ public static class ServiceCollectionExtensions
                 tags: [HealthCheckTags.Ready, HealthCheckTags.Database, HealthCheckTags.PostgresSql]);
 
         // Add Masstransit messaging to the service collection
-        services.AddApplicationMessagingWithEfOutbox<CentralOrganizationDbContext>(configuration, MessagingOutboxProvider.Postgres);
+        services.AddApplicationMessagingWithEfOutbox<CentralOrganizationDbContext>(configuration,
+            MessagingOutboxProvider.Postgres,
+            busConfiguration =>
+            {
+                busConfiguration
+                    .AddSagaStateMachine<EmployeeIdentityProvisioningStateMachine, EmployeeIdentityProvisioningState>()
+                    .EntityFrameworkRepository(repository =>
+                    {
+                        repository.ExistingDbContext<CentralOrganizationDbContext>();
+                        repository.UsePostgres();
+                    });
+            });
+
+        // Add saga activities to the service collection
+        services.AddScoped<MarkEmployeeIdentityProvisioningSucceededActivity>();
+        services.AddScoped<MarkEmployeeIdentityProvisioningFailedActivity>();
 
         return services;
     }

@@ -1,5 +1,6 @@
 ﻿using CentralOrganization.Api.Domain.Employee.Enums;
 using CentralOrganization.Api.Domain.Employee.Errors;
+using CentralOrganization.Api.Domain.Employee.Events;
 using SharedKernel.Domain.Enums;
 using SharedKernel.Domain.Identifiers;
 
@@ -25,6 +26,7 @@ public sealed class Employee : AggregateRoot<EmployeeId>
     public string JobTitle { get; private set; }
     public EmploymentStatus EmploymentStatus { get; private set; }
     public IdentityProvisioningStatus IdentityProvisioningStatus { get; private set; }
+    public string? IdentityProvisioningFailureReason { get; set; }
     public UserId? IdentityUserId { get; private set; }
     public FileId? ProfileImageFileId { get; private set; }
     public string FullName => $"{FirstName} {LastName}";
@@ -70,7 +72,18 @@ public sealed class Employee : AggregateRoot<EmployeeId>
 
         EmploymentStatus = EmploymentStatus.Inactive;
         IdentityProvisioningStatus = IdentityProvisioningStatus.Pending;
+        IdentityProvisioningFailureReason = null;
         IdentityUserId = null;
+
+        // Add domain event for identity provisioning request
+        AddDomainEvent(new EmployeeIdentityProvisioningRequestedDomainEvent(
+            EmployeeId: id.Value,
+            PersonnelCode: PersonnelCode.Value,
+            NationalCode: NationalCode.Value,
+            FirstName: FirstName.Value,
+            LastName: LastName.Value,
+            Email: Email.Value,
+            MobileNumber: MobileNumber.Value));
     }
 
     public static Result<Employee> Create(UnitId unitId,
@@ -165,5 +178,41 @@ public sealed class Employee : AggregateRoot<EmployeeId>
             educationField,
             jobTitle,
             new FileId(profileImageFileId));
+    }
+
+    public Result MarkIdentityProvisioningSucceeded(UserId identityUserId)
+    {
+        if (IdentityProvisioningStatus == IdentityProvisioningStatus.Succeeded)
+        {
+            if (IdentityUserId == identityUserId)
+                return Result.Success();
+
+            return EmployeeErrors.IdentityAlreadyProvisioned;
+        }
+
+        IdentityUserId = identityUserId;
+        EmploymentStatus = EmploymentStatus.Active;
+        IdentityProvisioningStatus = IdentityProvisioningStatus.Succeeded;
+        IdentityProvisioningFailureReason = null;
+
+        return Result.Success();
+    }
+
+    public Result MarkIdentityProvisioningFailed(string reason)
+    {
+        if (IdentityProvisioningStatus == IdentityProvisioningStatus.Succeeded)
+            return EmployeeErrors.IdentityAlreadyProvisioned;
+
+        if (string.IsNullOrWhiteSpace(reason))
+            reason = "Identity provisioning failed.";
+
+        if (reason.Length > 1000)
+            reason = reason[..1000];
+
+        EmploymentStatus = EmploymentStatus.Inactive;
+        IdentityProvisioningStatus = IdentityProvisioningStatus.Failed;
+        IdentityProvisioningFailureReason = reason;
+
+        return Result.Success();
     }
 }

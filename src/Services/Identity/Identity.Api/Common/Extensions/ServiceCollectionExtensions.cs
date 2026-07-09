@@ -1,5 +1,6 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 using Duende.IdentityServer.Services;
+using Identity.Api.Features.Users.v1.ProvisionEmployeeUser;
 using Identity.Api.Infrastructure.IdentityServer;
 using Identity.Api.Infrastructure.Persistence.Options;
 using Identity.Api.Infrastructure.Persistence.Repositories;
@@ -9,8 +10,14 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using SharedKernel.Abstractions;
 using SharedKernel.Api;
+using SharedKernel.Contracts.Integration.Events.CentralOrganization.Employees.v1;
+using SharedKernel.Contracts.Integration.Events.Identity.User.v1;
 using SharedKernel.Identity;
 using SharedKernel.Identity.Extensions;
+using SharedKernel.Messaging.Abstractions;
+using SharedKernel.Messaging.MassTransit;
+using SharedKernel.Messaging.MassTransit.Enums;
+using SharedKernel.Messaging.MassTransit.Extensions;
 using SharedKernel.Observability.HealthCheck;
 using SharedKernel.Persistence;
 using SharedKernel.Persistence.Database;
@@ -122,12 +129,25 @@ public static class ServiceCollectionExtensions
             .AddCheck(
                 name: HealthCheckNames.Api,
                 check: () => HealthCheckResult.Healthy("Identity API is running."),
-                tags: [ HealthCheckTags.Live, HealthCheckTags.Ready, HealthCheckTags.Api])
+                tags: [HealthCheckTags.Live, HealthCheckTags.Ready, HealthCheckTags.Api])
             .AddSqlServer(
                 connectionString: sqlServerConnectionString!,
                 name: HealthCheckNames.DatabaseSqlServer,
                 failureStatus: HealthStatus.Unhealthy,
                 tags: [HealthCheckTags.Ready, HealthCheckTags.Database, HealthCheckTags.SqlServer]);
+
+        // Add integration event handlers to the service collection
+        services.AddScoped<IIntegrationEventHandler<CreateEmployeeIdentityUserRequestedIntegrationEvent>,
+            ProvisionEmployeeUser.IntegrationEventHandler>();
+
+        // Add Masstransit messaging to the service collection
+        services.AddApplicationMessagingWithEfOutbox<IdentityDbContext>(configuration,
+            MessagingOutboxProvider.SqlServer,
+            busConfigurator =>
+            {
+                busConfigurator.AddIntegrationEventConsumer<CreateEmployeeIdentityUserRequestedIntegrationEvent>(
+                    "identity-create-employee-user");
+            });
 
         return services;
     }

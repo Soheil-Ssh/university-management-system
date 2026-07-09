@@ -32,7 +32,9 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\SharedKernel\SharedKernel.Abstractions\SharedKernel.Abstractions.csproj" />
 		<ProjectReference Include="..\..\..\SharedKernel\SharedKernel.Api\SharedKernel.Api.csproj" />
+		<ProjectReference Include="..\..\..\SharedKernel\SharedKernel.Contracts.Integration\SharedKernel.Contracts.Integration.csproj" />
 		<ProjectReference Include="..\..\..\SharedKernel\SharedKernel.Identity\SharedKernel.Identity.csproj" />
+		<ProjectReference Include="..\..\..\SharedKernel\SharedKernel.Messaging.MassTransit\SharedKernel.Messaging.MassTransit.csproj" />
 		<ProjectReference Include="..\..\..\SharedKernel\SharedKernel.Observability\SharedKernel.Observability.csproj" />
 		<ProjectReference Include="..\..\..\SharedKernel\SharedKernel.Persistence\SharedKernel.Persistence.csproj" />
 	</ItemGroup>

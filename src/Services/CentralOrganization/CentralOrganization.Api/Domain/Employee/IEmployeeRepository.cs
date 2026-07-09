@@ -3,7 +3,7 @@ namespace CentralOrganization.Api.Domain.Employee;
 
 public interface IEmployeeRepository
 {
-    Task<Employee?> GetById(EmployeeId id, CancellationToken cancellationToken = default);
+    Task<Employee?> GetByIdAsync(EmployeeId id, CancellationToken cancellationToken = default);
     Task AddAsync(Employee employee, CancellationToken cancellationToken = default);
     Task<bool> IsExistPersonnelCodeAsync(PersonnelCode personnelCode, CancellationToken cancellationToken = default);
     Task<bool> IsExistNationalCodeAsync(NationalCode nationalCode, CancellationToken cancellationToken = default);

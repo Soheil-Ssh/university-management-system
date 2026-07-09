@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using SharedKernel.Messaging.Extensions;
+using SharedKernel.Messaging.MassTransit.Extensions;
 using Unit = CentralOrganization.Api.Domain.Unit.Unit;
 
 namespace CentralOrganization.Api.Infrastructure.Persistence.Contexts;

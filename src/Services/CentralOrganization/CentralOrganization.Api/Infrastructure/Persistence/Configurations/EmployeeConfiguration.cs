@@ -30,12 +30,14 @@ public sealed class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
             .OnDelete(DeleteBehavior.Restrict);
 
         // PersonnelCode
-        builder.Property(x => x.PersonnelCode)
-            .HasColumnName("PersonnelCode")
-            .HasMaxLength(17)
-            .IsRequired()
-            .HasConversion(code => code.Value, value => PersonnelCode.FromString(value).Data);
-        builder.HasIndex(x => x.PersonnelCode).IsUnique();
+        builder.OwnsOne(x => x.PersonnelCode, personnelCode =>
+        {
+            personnelCode.Property(c => c.Value)
+                .HasColumnName("PersonnelCode")
+                .HasMaxLength(17)
+                .IsRequired();
+            personnelCode.HasIndex(x => x.Value).IsUnique();
+        });
 
         // FirstName
         builder.ConfigureName(x => x.FirstName, "FirstName", true);
@@ -90,6 +92,9 @@ public sealed class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
 
         // IdentityProvisioningStatus
         builder.Property(x => x.IdentityProvisioningStatus).HasConversion<int>().IsRequired();
+
+        // IdentityProvisioningFailureReason
+        builder.Property(x => x.IdentityProvisioningFailureReason).HasMaxLength(1000);
 
         // IdentityUserId
         builder.Property(x => x.IdentityUserId)
