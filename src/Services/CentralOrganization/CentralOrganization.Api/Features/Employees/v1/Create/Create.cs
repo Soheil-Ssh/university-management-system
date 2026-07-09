@@ -1,6 +1,9 @@
 ﻿using CentralOrganization.Api.Domain.Employee.Errors;
+using Microsoft.AspNetCore.Identity;
 using SharedKernel.Domain.Enums;
 using System.Text.RegularExpressions;
+using CentralOrganization.Api.Application.Abstractions;
+using SharedKernel.Domain.Identifiers;
 
 namespace CentralOrganization.Api.Features.Employees.v1.Create;
 
@@ -56,6 +59,7 @@ public static class Create
 
     public class Handler(IUnitRepository unitRepository,
         IEmployeeRepository employeeRepository,
+        IFileValidatorClient fileValidatorClient,
         IUnitOfWork unitOfWork)
         : ICommandHandler<Command, Result<Guid>>
     {
@@ -106,6 +110,13 @@ public static class Create
 
             if (emailExists)
                 return EmployeeErrors.EmailAlreadyExists;
+
+            var fileExistsResult = await fileValidatorClient.ExistsAsync(new FileId(request.ProfileImageFileId), cancellationToken);
+            if (fileExistsResult.IsFailure)
+                return fileExistsResult.Error;
+
+            if (!fileExistsResult.Data)
+                return EmployeeErrors.PersonalImageFileNotFound.WithPath(nameof(request.ProfileImageFileId));
 
             var employeeResult = Employee.Create(
                 unitId,

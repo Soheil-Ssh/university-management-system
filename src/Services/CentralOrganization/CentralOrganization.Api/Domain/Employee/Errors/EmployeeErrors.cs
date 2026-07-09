@@ -17,8 +17,10 @@ public class EmployeeErrors
         new("Employee.PersonnelCode.AlreadyExists", "An employee with the specified personnel code already exists.", ErrorType.Conflict);
     public static readonly Error NationalCodeAlreadyExists = 
         new("Employee.NationalCode.AlreadyExists", "An employee with the specified national code already exists.", ErrorType.Conflict);
-    public static readonly Error MobileNumberAlreadyExists = new(
-        "Employee.MobileNumber.AlreadyExists", "An employee with the specified mobile number already exists.", ErrorType.Conflict);
-    public static readonly Error EmailAlreadyExists = new(
-        "Employee.Email.AlreadyExists", "An employee with the specified email already exists.", ErrorType.Conflict);
+    public static readonly Error MobileNumberAlreadyExists = 
+        new("Employee.MobileNumber.AlreadyExists", "An employee with the specified mobile number already exists.", ErrorType.Conflict);
+    public static readonly Error EmailAlreadyExists = 
+        new("Employee.Email.AlreadyExists", "An employee with the specified email already exists.", ErrorType.Conflict);
+    public static readonly Error PersonalImageFileNotFound = 
+        new("Employee.PersonalImage.FileNotFound", "Personal image file was not found.", ErrorType.Validation);
 }

@@ -1,4 +1,6 @@
-﻿using CentralOrganization.Api.Features.Employees.v1.IdentityProvisioning;
+﻿using CentralOrganization.Api.Application.Abstractions;
+using CentralOrganization.Api.Features.Employees.v1.IdentityProvisioning;
+using CentralOrganization.Api.Infrastructure.Grpc;
 using CentralOrganization.Api.Infrastructure.Messaging.Sagas;
 using CentralOrganization.Api.Infrastructure.Messaging.Sagas.Activities;
 using CentralOrganization.Api.Infrastructure.Messaging.Sagas.States;
@@ -7,6 +9,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using SharedKernel.Abstractions;
 using SharedKernel.Api;
+using SharedKernel.Contracts.Grpc.File.v1;
 using SharedKernel.Contracts.Integration.Events.CentralOrganization.Employees.v1;
 using SharedKernel.Identity;
 using SharedKernel.Identity.Extensions;
@@ -40,10 +43,23 @@ public static class ServiceCollectionExtensions
         services.AddUmsJwtAuthentication(configuration);
         services.AddUmsAuthorization();
 
+        // Get the file service gRPC URL from the configuration
+        var fileServiceUrl = configuration["GrpcServices:FileServiceUrl"]
+                             ?? throw new InvalidOperationException("File service gRPC URL is not configured.");
+
+        // Add the gRPC client for the FileValidationService to the service collection
+        services.AddGrpcClient<FileValidationService.FileValidationServiceClient>((serviceProvider, options) =>
+        {
+            options.Address = new Uri(fileServiceUrl);
+        });
+
         // Add repositories and unit of work to the service collection
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IUnitRepository, UnitRepository>();
         services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+
+        // Add services to the service collection
+        services.AddScoped<IFileValidatorClient, FileValidatorGrpcClient>();
 
         // Add the shared kernel abstractions to the service collection
         services.AddSharedKernelAbstractions<Program>();

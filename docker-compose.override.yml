@@ -188,6 +188,7 @@ services:
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
       - ConnectionStrings__PostgresDefaultConnection=Host=postgres;Port=5432;Database=central_organization_db;Username=central_organization_user;Password=Password@123;TrustServerCertificate=True
+      - GrpcServices__FileServiceUrl=http://file.api:8082
       - Observability__Loki__Enabled=true
       - Observability__Loki__Uri=http://loki:3100
       - Observability__Loki__MinimumLevel=Information

@@ -35,4 +35,10 @@
     <ProjectReference Include="..\..\..\SharedKernel\SharedKernel.Persistence\SharedKernel.Persistence.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Protobuf Include="..\..\..\SharedKernel\SharedKernel.Contracts.Grpc\File\v1\file_validation.proto" GrpcServices="Client">
+      <Link>Protos\file_validation.proto</Link>
+    </Protobuf>
+  </ItemGroup>
+
 </Project>
