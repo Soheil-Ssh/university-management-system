@@ -13,6 +13,9 @@
   <Folder Name="/src/Services/Identity/">
     <Project Path="src/Services/Identity/Identity.Api/Identity.Api.csproj" />
   </Folder>
+  <Folder Name="/src/Services/Notification/">
+    <Project Path="src/Services/Notification/Notification.Api/Notification.Api.csproj" Id="d389f25f-73fe-4b36-b2e1-964700abbc3c" />
+  </Folder>
   <Folder Name="/src/Services/Student/">
     <Project Path="src/Services/Student/Student.Api/Student.Api.csproj" Id="8d7cf3b9-ae9e-4209-a710-8b462410ad6b" />
   </Folder>
