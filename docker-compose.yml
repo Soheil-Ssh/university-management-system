@@ -47,12 +47,21 @@ services:
       context: .
       dockerfile: src/Services/CentralOrganization/CentralOrganization.Api/Dockerfile
 
+  # Notification Api
+  notification.api:
+    image: ${DOCKER_REGISTRY-}notification.api
+    build:
+      context: .
+      dockerfile: src/Services/Notification/Notification.Api/Dockerfile
+
   # Monitoring Health Checks
   monitoring.healthchecks:
     image: ${DOCKER_REGISTRY-}monitoringhealthchecks
     build:
       context: .
       dockerfile: src/Monitoring/Monitoring.HealthChecks/Dockerfile
+
+
 
 networks:
   ums_network:
@@ -63,3 +72,4 @@ volumes:
   postgres_data:
   grafana_data:
   loki_data:
+

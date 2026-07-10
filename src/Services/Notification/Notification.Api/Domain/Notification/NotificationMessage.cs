@@ -1,8 +1,4 @@
-﻿using Notification.Api.Domain.Notification.Enums;
-using Notification.Api.Domain.Notification.Errors;
-using SharedKernel.Domain.Result;
-
-namespace Notification.Api.Domain.Notification;
+﻿namespace Notification.Api.Domain.Notification;
 
 public sealed class NotificationMessage : AggregateRoot<NotificationMessageId>
 {
@@ -30,8 +26,8 @@ public sealed class NotificationMessage : AggregateRoot<NotificationMessageId>
     public NotificationStatus Status { get; private set; }
     public NotificationPriority Priority { get; private set; }
     public DateTime? ScheduledAt { get; private set; }
-    public DateTime? SentAtUtc { get; private set; }
-    public DateTime? FailedAtUtc { get; private set; }
+    public DateTime? SentAt { get; private set; }
+    public DateTime? FailedAt { get; private set; }
     public string? FailureReason { get; private set; }
     public int DeliveryAttemptCount { get; private set; }
 
@@ -219,7 +215,7 @@ public sealed class NotificationMessage : AggregateRoot<NotificationMessageId>
 
         DeliveryAttemptCount = attemptNumber;
         Status = NotificationStatus.Pending;
-        FailedAtUtc = null;
+        FailedAt = null;
         FailureReason = null;
         _deliveryAttempts.Add(attemptResult.Data);
 
@@ -235,8 +231,8 @@ public sealed class NotificationMessage : AggregateRoot<NotificationMessageId>
         if (attemptResult.IsFailure) return attemptResult.Error;
 
         Status = NotificationStatus.Sent;
-        SentAtUtc = DateTime.UtcNow;
-        FailedAtUtc = null;
+        SentAt = DateTime.UtcNow;
+        FailedAt = null;
         FailureReason = null;
 
         return Result.Success();
@@ -257,7 +253,7 @@ public sealed class NotificationMessage : AggregateRoot<NotificationMessageId>
         if (attemptResult.IsFailure) return attemptResult.Error;
 
         Status = NotificationStatus.Failed;
-        FailedAtUtc = DateTime.UtcNow;
+        FailedAt = DateTime.UtcNow;
         FailureReason = failureReason.Trim();
 
         return Result.Success();
@@ -276,7 +272,7 @@ public sealed class NotificationMessage : AggregateRoot<NotificationMessageId>
 
         Status = NotificationStatus.Cancelled;
         FailureReason = reason.Trim();
-        FailedAtUtc = null;
+        FailedAt = null;
 
         return Result.Success();
     }

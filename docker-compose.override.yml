@@ -208,6 +208,32 @@ services:
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
 
+  # Notification Api
+  notification.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - ConnectionStrings__PostgresDefaultConnection=Host=postgres;Port=5432;Database=notification_db;Username=notification_user;Password=Password@123;TrustServerCertificate=True
+      - Observability__Loki__Enabled=true
+      - Observability__Loki__Uri=http://loki:3100
+      - Observability__Loki__MinimumLevel=Information
+      - Messaging__Host=rabbitmq
+      - Messaging__Port=5672
+    ports:
+      - "5005:8080"
+      - "5055:8081"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - ums_network
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
   # Monitoring Health Checks
   monitoring.healthchecks:
     environment:
