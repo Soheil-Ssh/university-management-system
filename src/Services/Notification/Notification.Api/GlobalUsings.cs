@@ -6,3 +6,5 @@ global using Notification.Api.Domain.Notification.Errors;
 global using Notification.Api.Domain.Notification;
 global using Microsoft.EntityFrameworkCore;
 global using Notification.Api.Infrastructure.Persistence.Contexts;
+global using Notification.Api.Application.Contracts.Notification;
+global using Notification.Api.Application.Abstractions;

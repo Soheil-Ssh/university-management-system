@@ -1,6 +1,7 @@
 ﻿using Carter;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Notification.Api.Infrastructure.Providers;
 using SharedKernel.Abstractions;
 using SharedKernel.Api;
 using SharedKernel.Identity;
@@ -34,6 +35,11 @@ public static class ServiceCollectionExtensions
 
         // Add repositories and unit of work to the service collection
         //services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+        //
+        services.AddScoped<IEmailSender, LoggingEmailSender>();
+        services.AddScoped<ISmsSender, LoggingSmsSender>();
+        services.AddScoped<IPushSender, LoggingPushSender>();
 
         // Add the shared kernel abstractions to the service collection
         services.AddSharedKernelAbstractions<Program>();
