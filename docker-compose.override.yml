@@ -251,8 +251,10 @@ services:
       - HealthChecksUI__HealthChecks__2__Uri=http://student.api:8080/health
       - HealthChecksUI__HealthChecks__3__Name=Central Organization API
       - HealthChecksUI__HealthChecks__3__Uri=http://central.organization.api:8080/health
-      - HealthChecksUI__HealthChecks__4__Name=Infrastructure
-      - HealthChecksUI__HealthChecks__4__Uri=http://monitoring.healthchecks:8080/health/infrastructure
+      - HealthChecksUI__HealthChecks__4__Name=Notification API
+      - HealthChecksUI__HealthChecks__4__Uri=http://notification.api:8080/health
+      - HealthChecksUI__HealthChecks__5__Name=Infrastructure
+      - HealthChecksUI__HealthChecks__5__Uri=http://monitoring.healthchecks:8080/health/infrastructure
     ports:
       - "5010:8080"
       - "5060:8081"

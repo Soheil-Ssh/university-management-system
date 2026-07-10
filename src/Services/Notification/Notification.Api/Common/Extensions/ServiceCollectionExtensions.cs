@@ -48,7 +48,7 @@ public static class ServiceCollectionExtensions
         services.AddHealthChecks()
             .AddCheck(
                 name: HealthCheckNames.Api,
-                check: () => HealthCheckResult.Healthy("Student API is running."),
+                check: () => HealthCheckResult.Healthy("Notification API is running."),
                 tags: [HealthCheckTags.Live, HealthCheckTags.Ready, HealthCheckTags.Api])
             .AddNpgSql(
                 connectionString: postgresConnectionString!,
