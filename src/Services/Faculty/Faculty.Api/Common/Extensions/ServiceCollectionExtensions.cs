@@ -35,6 +35,7 @@ public static class ServiceCollectionExtensions
         // Add repositories and unit of work to the service collection
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IFacultyRepository, FacultyRepository>();
+        services.AddScoped<IProfessorRepository, ProfessorRepository>();
 
         // Add the shared kernel abstractions to the service collection
         services.AddSharedKernelAbstractions<Program>();
