@@ -303,6 +303,10 @@ services:
         condition: service_started
       central.organization.api:
         condition: service_started
+      notification.api:
+        condition: service_started
+      faculty.api:
+        condition: service_started
     networks:
       - ums_network
     volumes:
