@@ -1,5 +1,4 @@
 ﻿using Faculty.Api.Domain.Professor.Events;
-using SharedKernel.Domain.Extensions;
 
 namespace Faculty.Api.Domain.Professor;
 
@@ -76,9 +75,9 @@ public sealed class Professor : AggregateRoot<ProfessorId>
         string firstName,
         string lastName,
         string fatherName,
-        string nationalCode,
-        string email,
-        string mobileNumber,
+        NationalCode nationalCode,
+        Email email,
+        MobileNumber mobileNumber,
         string specialization,
         AcademicRank academicRank,
         ProfessorEmploymentType employmentType,
@@ -96,18 +95,6 @@ public sealed class Professor : AggregateRoot<ProfessorId>
         var fatherNameResult = Name.Create(fatherName).WithPath(nameof(FatherName));
         if (fatherNameResult.IsFailure)
             return fatherNameResult.Error;
-
-        var nationalCodeResult = NationalCode.Create(nationalCode).WithPath(nameof(NationalCode));
-        if (nationalCodeResult.IsFailure)
-            return nationalCodeResult.Error;
-
-        var emailResult = Email.Create(email).WithPath(nameof(Email));
-        if (emailResult.IsFailure)
-            return emailResult.Error;
-
-        var mobileNumberResult = MobileNumber.Create(mobileNumber).WithPath(nameof(MobileNumber));
-        if (mobileNumberResult.IsFailure)
-            return mobileNumberResult.Error;
 
         if (string.IsNullOrWhiteSpace(specialization))
             return ProfessorErrors.SpecializationEmpty;
@@ -140,9 +127,9 @@ public sealed class Professor : AggregateRoot<ProfessorId>
             firstNameResult.Data,
             lastNameResult.Data,
             fatherNameResult.Data,
-            nationalCodeResult.Data,
-            emailResult.Data,
-            mobileNumberResult.Data,
+            nationalCode,
+            email,
+            mobileNumber,
             specialization,
             academicRank,
             employmentType,
@@ -153,8 +140,8 @@ public sealed class Professor : AggregateRoot<ProfessorId>
     public Result Update(string firstName,
         string lastName,
         string fatherName,
-        string email,
-        string mobileNumber,
+        Email email,
+        MobileNumber mobileNumber,
         string specialization,
         AcademicRank academicRank,
         ProfessorEmploymentType employmentType,
@@ -171,14 +158,6 @@ public sealed class Professor : AggregateRoot<ProfessorId>
         var fatherNameResult = Name.Create(fatherName).WithPath(nameof(FatherName));
         if (fatherNameResult.IsFailure)
             return fatherNameResult.Error;
-
-        var emailResult = Email.Create(email).WithPath(nameof(Email));
-        if (emailResult.IsFailure)
-            return emailResult.Error;
-
-        var mobileNumberResult = MobileNumber.Create(mobileNumber).WithPath(nameof(MobileNumber));
-        if (mobileNumberResult.IsFailure)
-            return mobileNumberResult.Error;
 
         if (string.IsNullOrWhiteSpace(specialization))
             return ProfessorErrors.SpecializationEmpty;
@@ -199,8 +178,8 @@ public sealed class Professor : AggregateRoot<ProfessorId>
         FirstName = firstNameResult.Data;
         LastName = lastNameResult.Data;
         FatherName = fatherNameResult.Data;
-        Email = emailResult.Data;
-        MobileNumber = mobileNumberResult.Data;
+        Email = email;
+        MobileNumber = mobileNumber;
         Specialization = specialization;
         AcademicRank = academicRank;
         EmploymentType = employmentType;

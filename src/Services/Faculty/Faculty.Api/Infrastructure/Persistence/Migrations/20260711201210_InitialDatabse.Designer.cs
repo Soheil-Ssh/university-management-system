@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Faculty.Api.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(FacultyDbContext))]
-    [Migration("20260711173754_AddProfessorTable")]
-    partial class AddProfessorTable
+    [Migration("20260711201210_InitialDatabse")]
+    partial class InitialDatabse
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -70,10 +70,8 @@ namespace Faculty.Api.Infrastructure.Persistence.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("AcademicRank")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("character varying(30)");
+                    b.Property<int>("AcademicRank")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -92,10 +90,15 @@ namespace Faculty.Api.Infrastructure.Persistence.Migrations
                     b.Property<DateOnly>("EmploymentStartDate")
                         .HasColumnType("date");
 
-                    b.Property<string>("EmploymentType")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("character varying(30)");
+                    b.Property<int>("EmploymentType")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("IdentityProvisioningFailureReason")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<int>("IdentityProvisioningStatus")
+                        .HasColumnType("integer");
 
                     b.Property<Guid?>("IdentityUserId")
                         .HasColumnType("uuid");
