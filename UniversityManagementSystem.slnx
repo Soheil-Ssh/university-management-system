@@ -7,6 +7,9 @@
   <Folder Name="/src/Services/CentralOrganization/">
     <Project Path="src/Services/CentralOrganization/CentralOrganization.Api/CentralOrganization.Api.csproj" />
   </Folder>
+  <Folder Name="/src/Services/Faculty/">
+    <Project Path="src/Services/Faculty/Faculty.Api/Faculty.Api.csproj" Id="8112279d-be39-445b-96cb-baaca8e3ef43" />
+  </Folder>
   <Folder Name="/src/Services/File/">
     <Project Path="src/Services/File/File.Api/File.Api.csproj" Id="2577b22f-6bf1-42d8-8564-8b3f0edbc159" />
   </Folder>
