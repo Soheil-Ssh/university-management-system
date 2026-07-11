@@ -234,6 +234,30 @@ services:
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
 
+  # Faculty Api
+  faculty.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - ConnectionStrings__PostgresDefaultConnection=Host=postgres;Port=5432;Database=faculty_db;Username=faculty_user;Password=Password@123;TrustServerCertificate=True
+      - Observability__Loki__Enabled=true
+      - Observability__Loki__Uri=http://loki:3100
+      - Observability__Loki__MinimumLevel=Information
+    ports:
+      - "5006:8080"
+      - "5056:8081"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - ums_network
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
   # Monitoring Health Checks
   monitoring.healthchecks:
     environment:
@@ -253,8 +277,10 @@ services:
       - HealthChecksUI__HealthChecks__3__Uri=http://central.organization.api:8080/health
       - HealthChecksUI__HealthChecks__4__Name=Notification API
       - HealthChecksUI__HealthChecks__4__Uri=http://notification.api:8080/health
-      - HealthChecksUI__HealthChecks__5__Name=Infrastructure
-      - HealthChecksUI__HealthChecks__5__Uri=http://monitoring.healthchecks:8080/health/infrastructure
+      - HealthChecksUI__HealthChecks__5__Name=Faculty API
+      - HealthChecksUI__HealthChecks__5__Uri=http://faculty.api:8080/health
+      - HealthChecksUI__HealthChecks__6__Name=Infrastructure
+      - HealthChecksUI__HealthChecks__6__Uri=http://monitoring.healthchecks:8080/health/infrastructure
     ports:
       - "5010:8080"
       - "5060:8081"

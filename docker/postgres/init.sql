@@ -13,3 +13,7 @@ CREATE DATABASE central_organization_db OWNER central_organization_user;
 -- Notification service database
 CREATE USER notification_user WITH PASSWORD 'Password@123';
 CREATE DATABASE notification_db OWNER notification_user;
+
+-- Faculty service database
+CREATE USER faculty_user WITH PASSWORD 'Password@123';
+CREATE DATABASE faculty_db OWNER faculty_user;

@@ -54,14 +54,19 @@ services:
       context: .
       dockerfile: src/Services/Notification/Notification.Api/Dockerfile
 
+  # Faculty Api
+  faculty.api:
+    image: ${DOCKER_REGISTRY-}faculty.api
+    build:
+      context: .
+      dockerfile: src/Services/Faculty/Faculty.Api/Dockerfile
+
   # Monitoring Health Checks
   monitoring.healthchecks:
     image: ${DOCKER_REGISTRY-}monitoringhealthchecks
     build:
       context: .
       dockerfile: src/Monitoring/Monitoring.HealthChecks/Dockerfile
-
-
 
 networks:
   ums_network:
@@ -72,4 +77,5 @@ volumes:
   postgres_data:
   grafana_data:
   loki_data:
+
 

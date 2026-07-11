@@ -10,7 +10,8 @@
         "student.api": "StartDebugging",
         "centralorganization.api": "StartDebugging",
         "monitoring.healthchecks": "StartDebugging",
-        "notification.api": "StartDebugging"
+        "notification.api": "StartDebugging",
+        "faculty.api": "StartDebugging"
       }
     }
   }

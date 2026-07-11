@@ -1,3 +1,10 @@
 ﻿global using SharedKernel.Domain.Abstractions;
 global using Faculty.Api.Domain.Faculty.Errors;
 global using SharedKernel.Domain.Result;
+global using Microsoft.EntityFrameworkCore;
+global using SharedKernel.Abstractions.Persistence;
+global using Faculty.Api.Infrastructure.Persistence.Contexts;
+global using Faculty.Api.Infrastructure.Persistence.Repositories;
+global using Faculty.Api.Domain.Faculty;
+global using Faculty.Api.Domain.Faculty.ValueObjects;
+global using Carter;

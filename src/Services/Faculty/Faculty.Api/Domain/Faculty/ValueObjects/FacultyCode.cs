@@ -48,6 +48,11 @@ public sealed record FacultyCode
         return new FacultyCode(value);
     }
 
+    internal static FacultyCode FromPersistence(string value)
+    {
+        return new FacultyCode(value);
+    }
+
     public override string ToString() => Value;
 
     public static implicit operator string(FacultyCode code) => code.Value;

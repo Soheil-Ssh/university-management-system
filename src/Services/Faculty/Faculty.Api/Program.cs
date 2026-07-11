@@ -1,6 +1,32 @@
-var builder = WebApplication.CreateBuilder(args);
-var app = builder.Build();
+using Faculty.Api.Common.Extensions;
+using Serilog;
+using SharedKernel.Observability;
+using SharedKernel.Observability.Logging;
 
-app.MapGet("/", () => "Hello World!");
+const string serviceName = "central-organization-api";
+ApplicationLogging.ConfigureBootstrapLogger(serviceName);
 
-app.Run();
+try
+{
+    Log.Information("Starting {ServiceName}", serviceName);
+
+    var builder = WebApplication.CreateBuilder(args);
+    builder.AddApplicationObservability(serviceName);
+    builder.Services.AddCentralOrganizationServices(builder.Configuration);
+
+    var app = builder.Build();
+
+    app.UseApplicationObservability();
+    await app.UseFacultyPipeline();
+    app.MapApplicationObservability();
+
+    app.Run();
+}
+catch (Exception exception)
+{
+    Log.Fatal(exception, "{ServiceName} terminated unexpectedly", serviceName);
+}
+finally
+{
+    await Log.CloseAndFlushAsync();
+}
