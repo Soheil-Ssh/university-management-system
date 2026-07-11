@@ -3,7 +3,7 @@
 public class LoggingEmailSender(ILogger<LoggingEmailSender> logger) : IEmailSender
 {
     public NotificationProvider Provider => NotificationProvider.Logging;
-    public Task<NotificationSendResult> SendAsync(EmailNotification notification, CancellationToken cancellationToken)
+    public Task<Result<NotificationSendResult>> SendAsync(EmailNotification notification, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
@@ -31,7 +31,6 @@ public class LoggingEmailSender(ILogger<LoggingEmailSender> logger) : IEmailSend
             notification.Subject,
             notification.Body);
 
-        var result = new NotificationSendResult(Provider, providerMessageId);
-        return Task.FromResult(result);
+        return Task.FromResult(Result<NotificationSendResult>.Success(new NotificationSendResult(Provider, providerMessageId)));
     }
 }

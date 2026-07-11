@@ -67,6 +67,17 @@ public class EmployeeIdentityProvisioningStateMachine : MassTransitStateMachine<
                     context.Saga.CompletedAt = DateTime.UtcNow;
                 })
                 .Activity(x => x.OfType<MarkEmployeeIdentityProvisioningSucceededActivity>())
+                .Publish(context => new EmployeeAccountCreatedIntegrationEvent()
+                {
+                    EmployeeId = context.Saga.EmployeeId,
+                    IdentityUserId = context.Saga.IdentityUserId!.Value,
+                    FirstName = context.Saga.FirstName,
+                    LastName = context.Saga.LastName,
+                    MobileNumber = context.Saga.MobileNumber,
+                    UserName = context.Saga.NationalCode,
+                    TemporaryPassword = context.Saga.NationalCode,
+                    MustChangePassword = true,
+                })
                 .Finalize(),
 
             When(ProvisioningFailed)

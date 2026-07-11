@@ -8,3 +8,4 @@ global using Microsoft.EntityFrameworkCore;
 global using Notification.Api.Infrastructure.Persistence.Contexts;
 global using Notification.Api.Application.Contracts.Notification;
 global using Notification.Api.Application.Abstractions;
+global using SharedKernel.Abstractions.Persistence;

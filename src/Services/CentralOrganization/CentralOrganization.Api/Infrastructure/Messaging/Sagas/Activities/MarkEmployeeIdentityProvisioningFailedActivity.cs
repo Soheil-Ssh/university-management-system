@@ -11,11 +11,15 @@ public sealed class MarkEmployeeIdentityProvisioningFailedActivity(ISender sende
         BehaviorContext<EmployeeIdentityProvisioningState, EmployeeIdentityProvisioningFailedIntegrationEvent> context,
         IBehavior<EmployeeIdentityProvisioningState, EmployeeIdentityProvisioningFailedIntegrationEvent> next)
     {
-        await sender.Send(
-            new MarkEmployeeIdentityProvisioningFailed.Command(
-                context.Message.EmployeeId,
-                context.Message.Reason),
-            context.CancellationToken);
+        var result = await sender.Send(new MarkEmployeeIdentityProvisioningFailed
+                 .Command(context.Message.EmployeeId, context.Message.Reason), context.CancellationToken);
+
+        if (result.IsFailure)
+            throw new InvalidOperationException(
+                $"Failed to mark employee identity provisioning as failed. " +
+                $"EmployeeId: {context.Message.EmployeeId}, " +
+                $"Reason: {context.Message.Reason}, " +
+                $"Error: {result.Error}");
 
         await next.Execute(context);
     }

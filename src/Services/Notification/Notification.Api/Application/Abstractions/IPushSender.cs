@@ -3,5 +3,5 @@
 public interface IPushSender
 {
     NotificationProvider Provider { get; }
-    Task<NotificationSendResult> SendAsync(PushNotification notification, CancellationToken cancellationToken);
+    Task<Result<NotificationSendResult>> SendAsync(PushNotification notification, CancellationToken cancellationToken);
 }

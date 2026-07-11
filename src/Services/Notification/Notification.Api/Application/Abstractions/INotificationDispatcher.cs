@@ -2,5 +2,5 @@
 
 public interface INotificationDispatcher
 {
-    Task<NotificationDispatchResult> DispatchAsync(NotificationMessage notification, CancellationToken cancellationToken);
+    Task<Result<NotificationDispatchResult>> DispatchAsync(NotificationMessage notification, CancellationToken cancellationToken);
 }

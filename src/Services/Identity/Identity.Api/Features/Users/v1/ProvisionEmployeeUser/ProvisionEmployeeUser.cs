@@ -1,5 +1,4 @@
 ﻿using Identity.Api.Infrastructure.Authorization.Roles;
-using Identity.Api.Infrastructure.Persistence.Repositories;
 using SharedKernel.Contracts.Integration.Events.CentralOrganization.Employees.v1;
 using SharedKernel.Contracts.Integration.Events.Identity.User.v1;
 using SharedKernel.Domain.Extensions;

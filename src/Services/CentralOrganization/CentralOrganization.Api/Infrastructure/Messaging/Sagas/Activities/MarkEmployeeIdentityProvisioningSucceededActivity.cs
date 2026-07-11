@@ -10,10 +10,17 @@ public class MarkEmployeeIdentityProvisioningSucceededActivity(ISender sender)
     public async Task Execute(BehaviorContext<EmployeeIdentityProvisioningState, EmployeeIdentityProvisioningSucceededIntegrationEvent> context,
         IBehavior<EmployeeIdentityProvisioningState, EmployeeIdentityProvisioningSucceededIntegrationEvent> next)
     {
-        await sender.Send(new MarkEmployeeIdentityProvisioningSucceeded.Command(
-                context.Message.EmployeeId,
-                context.Message.IdentityUserId),
+        var result = await sender.Send(
+            new MarkEmployeeIdentityProvisioningSucceeded.Command(context.Message.EmployeeId, context.Message.IdentityUserId),
             context.CancellationToken);
+
+        if (result.IsFailure)
+            throw new InvalidOperationException(
+                $"Failed to mark employee identity provisioning as succeeded. " +
+                $"EmployeeId: {context.Message.EmployeeId}, " +
+                $"Error: {result.Error}");
+
+        await next.Execute(context);
     }
 
     public Task Faulted<TException>(BehaviorExceptionContext<EmployeeIdentityProvisioningState,

@@ -3,8 +3,7 @@
 public class LoggingSmsSender(ILogger<LoggingSmsSender> logger) : ISmsSender
 {
     public NotificationProvider Provider => NotificationProvider.Logging;
-
-    public Task<NotificationSendResult> SendAsync(SmsNotification notification, CancellationToken cancellationToken)
+    public Task<Result<NotificationSendResult>> SendAsync(SmsNotification notification, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
@@ -31,9 +30,6 @@ public class LoggingSmsSender(ILogger<LoggingSmsSender> logger) : ISmsSender
             providerMessageId,
             notification.Body);
 
-        var result =
-            new NotificationSendResult(Provider, providerMessageId);
-
-        return Task.FromResult(result);
+        return Task.FromResult(Result<NotificationSendResult>.Success(new NotificationSendResult(Provider, providerMessageId)));
     }
 }

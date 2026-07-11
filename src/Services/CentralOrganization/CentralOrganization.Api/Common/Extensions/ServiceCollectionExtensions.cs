@@ -1,5 +1,4 @@
 ﻿using CentralOrganization.Api.Application.Abstractions;
-using CentralOrganization.Api.Features.Employees.v1.IdentityProvisioning;
 using CentralOrganization.Api.Infrastructure.Grpc;
 using CentralOrganization.Api.Infrastructure.Messaging.Sagas;
 using CentralOrganization.Api.Infrastructure.Messaging.Sagas.Activities;
@@ -10,12 +9,10 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using SharedKernel.Abstractions;
 using SharedKernel.Api;
 using SharedKernel.Contracts.Grpc.File.v1;
-using SharedKernel.Contracts.Integration.Events.CentralOrganization.Employees.v1;
 using SharedKernel.Identity;
 using SharedKernel.Identity.Extensions;
 using SharedKernel.Messaging.MassTransit;
 using SharedKernel.Messaging.MassTransit.Enums;
-using SharedKernel.Messaging.MassTransit.Extensions;
 using SharedKernel.Observability.HealthCheck;
 using SharedKernel.Persistence;
 

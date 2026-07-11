@@ -45,4 +45,7 @@ public class NotificationMessageErrors
     public static readonly Error CancelReasonTooLong = new("Notification.Cancel.ReasonTooLong", "Cancel reason is too long.", ErrorType.Validation);
     public static readonly Error CannotCancelSentNotification = 
         new("Notification.Cancel.CannotCancelSentNotification", "Sent notification cannot be cancelled.", ErrorType.Validation);
+
+    // Channel errors
+    public static readonly Error ChannelInvalid = new("Notification.Channel.Invalid", "Channel invalid.", ErrorType.Validation);
 }

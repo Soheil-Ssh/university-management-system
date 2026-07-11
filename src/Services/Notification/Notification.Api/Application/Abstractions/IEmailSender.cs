@@ -3,5 +3,5 @@
 public interface IEmailSender
 {
     NotificationProvider Provider { get; }
-    Task<NotificationSendResult> SendAsync(EmailNotification notification, CancellationToken cancellationToken);
+    Task<Result<NotificationSendResult>> SendAsync(EmailNotification notification, CancellationToken cancellationToken);
 }

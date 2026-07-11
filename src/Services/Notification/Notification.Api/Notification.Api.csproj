@@ -26,10 +26,6 @@
 	</ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Domain\Notification\ValueObjects\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\..\SharedKernel\SharedKernel.Abstractions\SharedKernel.Abstractions.csproj" />
     <ProjectReference Include="..\..\..\SharedKernel\SharedKernel.Api\SharedKernel.Api.csproj" />
     <ProjectReference Include="..\..\..\SharedKernel\SharedKernel.Contracts.Integration\SharedKernel.Contracts.Integration.csproj" />

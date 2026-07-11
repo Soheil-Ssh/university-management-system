@@ -1,11 +1,18 @@
 ﻿using Carter;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Notification.Api.Features.Notifications.SendEmployeeAccountCreatedNotification;
+using Notification.Api.Infrastructure.Persistence.Repositories;
 using Notification.Api.Infrastructure.Providers;
 using SharedKernel.Abstractions;
 using SharedKernel.Api;
+using SharedKernel.Contracts.Integration.Events.CentralOrganization.Employees.v1;
 using SharedKernel.Identity;
 using SharedKernel.Identity.Extensions;
+using SharedKernel.Messaging.Abstractions;
+using SharedKernel.Messaging.MassTransit;
+using SharedKernel.Messaging.MassTransit.Enums;
+using SharedKernel.Messaging.MassTransit.Extensions;
 using SharedKernel.Observability.HealthCheck;
 using SharedKernel.Persistence;
 
@@ -34,12 +41,14 @@ public static class ServiceCollectionExtensions
         services.AddUmsAuthorization();
 
         // Add repositories and unit of work to the service collection
-        //services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<INotificationRepository, NotificationRepository>();
 
-        //
+        // Add notification providers to the service collection
         services.AddScoped<IEmailSender, LoggingEmailSender>();
         services.AddScoped<ISmsSender, LoggingSmsSender>();
         services.AddScoped<IPushSender, LoggingPushSender>();
+        services.AddScoped<INotificationDispatcher, NotificationDispatcher>();
 
         // Add the shared kernel abstractions to the service collection
         services.AddSharedKernelAbstractions<Program>();
@@ -49,6 +58,18 @@ public static class ServiceCollectionExtensions
 
         // Add Carter to the service collection
         services.AddCarter();
+
+        // Add integration event handlers to the service collection
+        services.AddScoped<IIntegrationEventHandler<EmployeeAccountCreatedIntegrationEvent>,
+            SendEmployeeAccountCreatedNotification.IntegrationEventHandler>();
+
+        // Add Masstransit messaging to the service collection
+        services.AddApplicationMessagingWithEfOutbox<NotificationDbContext>(configuration,
+            MessagingOutboxProvider.Postgres,
+            busConfigurator =>
+            {
+                busConfigurator.AddIntegrationEventConsumer<EmployeeAccountCreatedIntegrationEvent>("employee-account-create");
+            });
 
         // Add health checks to the service collection
         services.AddHealthChecks()

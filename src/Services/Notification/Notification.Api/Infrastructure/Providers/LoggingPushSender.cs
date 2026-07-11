@@ -4,9 +4,7 @@ public class LoggingPushSender(ILogger<LoggingPushSender> logger) : IPushSender
 {
     public NotificationProvider Provider => NotificationProvider.Logging;
 
-    public Task<NotificationSendResult> SendAsync(
-        PushNotification notification,
-        CancellationToken cancellationToken)
+    public Task<Result<NotificationSendResult>> SendAsync(PushNotification notification, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
@@ -34,7 +32,6 @@ public class LoggingPushSender(ILogger<LoggingPushSender> logger) : IPushSender
             notification.Subject,
             notification.Body);
 
-        var result = new NotificationSendResult(Provider, providerMessageId);
-        return Task.FromResult(result);
+        return Task.FromResult(Result<NotificationSendResult>.Success(new NotificationSendResult(Provider, providerMessageId)));
     }
 }
