@@ -8,5 +8,5 @@ public interface IFacultyRepository
     Task AddAsync(Faculty faculty, CancellationToken cancellationToken = default);
     Task<bool> ExistsByCodeAsync(FacultyCode code, CancellationToken cancellationToken = default);
     Task<bool> ExistsByNameAsync(string name, FacultyId? excludeId = null, CancellationToken cancellationToken = default);
-
+    Task<int> GetNextFacultyCodeAsync(CancellationToken cancellationToken);
 }

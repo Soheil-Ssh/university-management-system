@@ -20,4 +20,25 @@ public class FacultyRepository(FacultyDbContext context) : IFacultyRepository
             .AsNoTracking()
             .AnyAsync(f => f.Name.ToUpper() == normalizedName && (excludeId == null || f.Id != excludeId), cancellationToken);
     }
+
+    public async Task<int> GetNextFacultyCodeAsync(CancellationToken cancellationToken)
+    {
+        var prefix = "UMS_FAC_FACULTY_";
+
+        var lastCode = await context.Faculties
+            .AsNoTracking()
+            .OrderByDescending(f => f.Code)
+            .Select(f => f.Code)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (lastCode is null)
+            return 1;
+
+        var sequencePart = lastCode.Value[prefix.Length..];
+
+        if (!int.TryParse(sequencePart, out var lastSequenceNumber))
+            return 1;
+
+        return lastSequenceNumber + 1;
+    }
 }
