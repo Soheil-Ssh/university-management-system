@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Faculty.Api.Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Faculty.Api.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(FacultyDbContext))]
-    partial class FacultyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260712050630_AddOutBoxTables")]
+    partial class AddOutBoxTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -177,66 +180,6 @@ namespace Faculty.Api.Infrastructure.Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("Professors", (string)null);
-                });
-
-            modelBuilder.Entity("Faculty.Api.Infrastructure.Messaging.Sagas.States.ProfessorIdentityProvisioningState", b =>
-                {
-                    b.Property<Guid>("CorrelationId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("CompletedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("CurrentState")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<string>("FailureReason")
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<Guid?>("IdentityUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<string>("MobileNumber")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
-
-                    b.Property<string>("NationalCode")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("character varying(10)");
-
-                    b.Property<Guid>("ProfessorId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("CorrelationId");
-
-                    b.HasIndex("ProfessorId")
-                        .IsUnique();
-
-                    b.ToTable("ProfessorIdentityProvisioningSagas", (string)null);
                 });
 
             modelBuilder.Entity("MassTransit.EntityFrameworkCoreIntegration.InboxState", b =>

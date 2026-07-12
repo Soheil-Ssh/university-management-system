@@ -2,11 +2,13 @@
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Notification.Api.Features.Notifications.SendEmployeeAccountCreatedNotification;
+using Notification.Api.Features.Notifications.SendProfessorAccountCreatedNotification;
 using Notification.Api.Infrastructure.Persistence.Repositories;
 using Notification.Api.Infrastructure.Providers;
 using SharedKernel.Abstractions;
 using SharedKernel.Api;
 using SharedKernel.Contracts.Integration.Events.CentralOrganization.Employees.v1;
+using SharedKernel.Contracts.Integration.Events.Faculty.Professor.v1;
 using SharedKernel.Identity;
 using SharedKernel.Identity.Extensions;
 using SharedKernel.Messaging.Abstractions;
@@ -62,6 +64,8 @@ public static class ServiceCollectionExtensions
         // Add integration event handlers to the service collection
         services.AddScoped<IIntegrationEventHandler<EmployeeAccountCreatedIntegrationEvent>,
             SendEmployeeAccountCreatedNotification.IntegrationEventHandler>();
+        services.AddScoped<IIntegrationEventHandler<ProfessorAccountCreatedIntegrationEvent>,
+            SendProfessorAccountCreatedNotification.IntegrationEventHandler>();
 
         // Add Masstransit messaging to the service collection
         services.AddApplicationMessagingWithEfOutbox<NotificationDbContext>(configuration,
@@ -69,6 +73,7 @@ public static class ServiceCollectionExtensions
             busConfigurator =>
             {
                 busConfigurator.AddIntegrationEventConsumer<EmployeeAccountCreatedIntegrationEvent>("employee-account-create");
+                busConfigurator.AddIntegrationEventConsumer<ProfessorAccountCreatedIntegrationEvent>("professor-account-create");
             });
 
         // Add health checks to the service collection

@@ -1,6 +1,6 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using Duende.IdentityServer.Services;
+﻿using Duende.IdentityServer.Services;
 using Identity.Api.Features.Users.v1.ProvisionEmployeeUser;
+using Identity.Api.Features.Users.v1.ProvisionProfessorUser;
 using Identity.Api.Infrastructure.IdentityServer;
 using Identity.Api.Infrastructure.Persistence.Options;
 using Identity.Api.Infrastructure.Persistence.Repositories;
@@ -21,6 +21,7 @@ using SharedKernel.Messaging.MassTransit.Extensions;
 using SharedKernel.Observability.HealthCheck;
 using SharedKernel.Persistence;
 using SharedKernel.Persistence.Database;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Identity.Api.Common.Extensions;
 
@@ -137,16 +138,20 @@ public static class ServiceCollectionExtensions
                 tags: [HealthCheckTags.Ready, HealthCheckTags.Database, HealthCheckTags.SqlServer]);
 
         // Add integration event handlers to the service collection
-        services.AddScoped<IIntegrationEventHandler<CreateEmployeeIdentityUserRequestedIntegrationEvent>,
+        services.AddScoped<
+            IIntegrationEventHandler<CreateEmployeeIdentityUserRequestedIntegrationEvent>,
             ProvisionEmployeeUser.IntegrationEventHandler>();
+        services.AddScoped<
+            IIntegrationEventHandler<CreateProfessorIdentityUserRequestedIntegrationEvent>,
+            ProvisionProfessorUser.IntegrationEventHandler>();
 
         // Add Masstransit messaging to the service collection
         services.AddApplicationMessagingWithEfOutbox<IdentityDbContext>(configuration,
             MessagingOutboxProvider.SqlServer,
             busConfigurator =>
             {
-                busConfigurator.AddIntegrationEventConsumer<CreateEmployeeIdentityUserRequestedIntegrationEvent>(
-                    "identity-create-employee-user");
+                busConfigurator.AddIntegrationEventConsumer<CreateEmployeeIdentityUserRequestedIntegrationEvent>("identity-create-employee-user");
+                busConfigurator.AddIntegrationEventConsumer<CreateProfessorIdentityUserRequestedIntegrationEvent>("identity-create-professor-user");
             });
 
         return services;

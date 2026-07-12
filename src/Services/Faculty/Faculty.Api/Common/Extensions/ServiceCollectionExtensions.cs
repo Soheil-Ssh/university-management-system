@@ -1,9 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore.Diagnostics;
+﻿using Faculty.Api.Infrastructure.Messaging.Sagas;
+using Faculty.Api.Infrastructure.Messaging.Sagas.Activities;
+using Faculty.Api.Infrastructure.Messaging.Sagas.States;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using SharedKernel.Abstractions;
 using SharedKernel.Api;
 using SharedKernel.Identity;
 using SharedKernel.Identity.Extensions;
+using SharedKernel.Messaging.MassTransit;
+using SharedKernel.Messaging.MassTransit.Enums;
 using SharedKernel.Observability.HealthCheck;
 using SharedKernel.Persistence;
 
@@ -45,6 +50,25 @@ public static class ServiceCollectionExtensions
 
         // Add Carter to the service collection
         services.AddCarter();
+
+        // Add MassTransit with EF Outbox messaging to the service collection
+        services.AddApplicationMessagingWithEfOutbox<FacultyDbContext>(configuration, 
+            MessagingOutboxProvider.Postgres,
+            busConfiguration =>
+            {
+                busConfiguration
+                    .AddSagaStateMachine<ProfessorIdentityProvisioningStateMachine,
+                        ProfessorIdentityProvisioningState>()
+                    .EntityFrameworkRepository(repository =>
+                    {
+                        repository.ExistingDbContext<FacultyDbContext>();
+                        repository.UsePostgres();
+                    });
+            });
+
+        // Add saga activities to the service collection
+        services.AddScoped<MarkProfessorIdentityProvisioningSucceededActivity>();
+        services.AddScoped<MarkProfessorIdentityProvisioningFailedActivity>();
 
         // Add health checks to the service collection
         services.AddHealthChecks()

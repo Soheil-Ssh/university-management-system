@@ -2,6 +2,7 @@
 
 public interface IProfessorRepository
 {
+    Task<Professor?> GetByIdAsync(ProfessorId professorId, CancellationToken cancellationToken = default);
     Task AddAsync(Professor professor, CancellationToken cancellationToken = default);
     Task<bool> ExistsByNationalCodeAsync(NationalCode nationalCode, CancellationToken cancellationToken = default);
     Task<bool> ExistsByEmailAsync(Email email, CancellationToken cancellationToken = default);

@@ -1,9 +1,8 @@
-using Faculty.Api.Common.Extensions;
 using Serilog;
 using SharedKernel.Observability;
 using SharedKernel.Observability.Logging;
 
-const string serviceName = "central-organization-api";
+const string serviceName = "faculty-api";
 ApplicationLogging.ConfigureBootstrapLogger(serviceName);
 
 try

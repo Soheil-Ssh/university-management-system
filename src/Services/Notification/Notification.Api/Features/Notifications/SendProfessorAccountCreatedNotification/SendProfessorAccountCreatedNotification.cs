@@ -1,16 +1,16 @@
-﻿using SharedKernel.Contracts.Integration.Events.CentralOrganization.Employees.v1;
+﻿using SharedKernel.Contracts.Integration.Events.Faculty.Professor.v1;
 
-namespace Notification.Api.Features.Notifications.SendEmployeeAccountCreatedNotification;
+namespace Notification.Api.Features.Notifications.SendProfessorAccountCreatedNotification;
 
-public static class SendEmployeeAccountCreatedNotification
+public static class SendProfessorAccountCreatedNotification
 {
-    public sealed class IntegrationEventHandler(ISender sender) : IIntegrationEventHandler<EmployeeAccountCreatedIntegrationEvent>
+    public sealed class IntegrationEventHandler(ISender sender) : IIntegrationEventHandler<ProfessorAccountCreatedIntegrationEvent>
     {
-        public async Task HandleAsync(EmployeeAccountCreatedIntegrationEvent integrationEvent, CancellationToken cancellationToken = default)
+        public async Task HandleAsync(ProfessorAccountCreatedIntegrationEvent integrationEvent, CancellationToken cancellationToken = default)
         {
             var command = new Command(
                 integrationEvent.EventId,
-                integrationEvent.EmployeeId,
+                integrationEvent.ProfessorId,
                 integrationEvent.IdentityUserId,
                 integrationEvent.FirstName,
                 integrationEvent.LastName,
@@ -26,7 +26,7 @@ public static class SendEmployeeAccountCreatedNotification
     }
 
     public sealed record Command(Guid EventId,
-        Guid EmployeeId,
+        Guid ProfessorId,
         Guid IdentityUserId,
         string FirstName,
         string LastName,
@@ -36,31 +36,30 @@ public static class SendEmployeeAccountCreatedNotification
         Guid CorrelationId) : ICommand<Result>;
 
     public sealed class Handler(INotificationDispatcher notificationDispatcher,
-        INotificationRepository notificationRepository,
-        IUnitOfWork unitOfWork,
-        ILogger<Handler> logger)
-        : ICommandHandler<Command, Result>
+       INotificationRepository notificationRepository,
+       IUnitOfWork unitOfWork,
+       ILogger<Handler> logger)
+       : ICommandHandler<Command, Result>
     {
-        private const string SourceService = "CentralOrganization.Api";
-        private const string SourceEventType = nameof(EmployeeAccountCreatedIntegrationEvent);
+        private const string SourceService = "Faculty.Api";
+        private const string SourceEventType = nameof(ProfessorAccountCreatedIntegrationEvent);
 
         public async Task<Result> Handle(Command request, CancellationToken cancellationToken)
         {
             var alreadyProcessed = await notificationRepository.ExistsAsync(request.EventId, NotificationChannel.Sms, cancellationToken);
-
             if (alreadyProcessed)
             {
                 logger.LogInformation(
-                    "Duplicate notification event ignored. " +
+                    "Duplicate professor notification event ignored. " +
                     "EventName={EventName} NotificationLog={NotificationLog} " +
                     "SourceEventId={SourceEventId} SourceEventType={SourceEventType} " +
-                    "Channel={Channel} EmployeeId={EmployeeId}",
-                    "DuplicateNotificationEventIgnored",
+                    "Channel={Channel} ProfessorId={ProfessorId}",
+                    "DuplicateProfessorNotificationEventIgnored",
                     true,
                     request.EventId,
                     SourceEventType,
                     NotificationChannel.Sms,
-                    request.EmployeeId);
+                    request.ProfessorId);
 
                 return Result.Success();
             }
@@ -78,14 +77,14 @@ public static class SendEmployeeAccountCreatedNotification
             if (notificationResult.IsFailure)
             {
                 logger.LogError(
-                    "Employee account notification creation failed. " +
+                    "Professor account notification creation failed. " +
                     "EventName={EventName} NotificationLog={NotificationLog} " +
-                    "SourceEventId={SourceEventId} EmployeeId={EmployeeId} " +
+                    "SourceEventId={SourceEventId} ProfessorId={ProfessorId} " +
                     "ErrorCode={ErrorCode} ErrorDescription={ErrorDescription}",
-                    "EmployeeAccountNotificationCreationFailed",
+                    "ProfessorAccountNotificationCreationFailed",
                     true,
                     request.EventId,
-                    request.EmployeeId,
+                    request.ProfessorId,
                     notificationResult.Error.Code,
                     notificationResult.Error.Description);
 
@@ -97,20 +96,19 @@ public static class SendEmployeeAccountCreatedNotification
             await notificationRepository.AddAsync(notification, cancellationToken);
 
             var dispatchResult = await notificationDispatcher.DispatchAsync(notification, cancellationToken);
-
             if (dispatchResult.IsFailure)
             {
                 logger.LogError(
-                    "Employee account notification dispatch could not be processed. " +
+                    "Professor account notification dispatch could not be processed. " +
                     "EventName={EventName} NotificationLog={NotificationLog} " +
                     "NotificationMessageId={NotificationMessageId} SourceEventId={SourceEventId} " +
-                    "EmployeeId={EmployeeId} ErrorCode={ErrorCode} " +
+                    "ProfessorId={ProfessorId} ErrorCode={ErrorCode} " +
                     "ErrorDescription={ErrorDescription}",
-                    "EmployeeAccountNotificationDispatchError",
+                    "ProfessorAccountNotificationDispatchError",
                     true,
                     notification.Id.Value,
                     request.EventId,
-                    request.EmployeeId,
+                    request.ProfessorId,
                     dispatchResult.Error.Code,
                     dispatchResult.Error.Description);
 
@@ -122,19 +120,19 @@ public static class SendEmployeeAccountCreatedNotification
             if (dispatchResult.Data.Status == NotificationDispatchStatus.Failed)
             {
                 logger.LogWarning(
-                    "Employee account notification saved as failed. " +
+                    "Professor account notification saved as failed. " +
                     "EventName={EventName} NotificationLog={NotificationLog} " +
                     "NotificationMessageId={NotificationMessageId} " +
                     "DeliveryAttemptId={DeliveryAttemptId} SourceEventId={SourceEventId} " +
-                    "EmployeeId={EmployeeId} IdentityUserId={IdentityUserId} " +
+                    "ProfessorId={ProfessorId} IdentityUserId={IdentityUserId} " +
                     "Channel={Channel} Provider={Provider} DispatchStatus={DispatchStatus} " +
                     "ErrorCode={ErrorCode} ErrorMessage={ErrorMessage}",
-                    "EmployeeAccountNotificationFailed",
+                    "ProfessorAccountNotificationFailed",
                     true,
                     dispatchResult.Data.NotificationMessageId.Value,
                     dispatchResult.Data.DeliveryAttemptId.Value,
                     request.EventId,
-                    request.EmployeeId,
+                    request.ProfessorId,
                     request.IdentityUserId,
                     dispatchResult.Data.Channel,
                     dispatchResult.Data.Provider,
@@ -146,19 +144,19 @@ public static class SendEmployeeAccountCreatedNotification
             }
 
             logger.LogInformation(
-                "Employee account notification processed successfully. " +
+                "Professor account notification processed successfully. " +
                 "EventName={EventName} NotificationLog={NotificationLog} " +
                 "NotificationMessageId={NotificationMessageId} " +
                 "DeliveryAttemptId={DeliveryAttemptId} SourceEventId={SourceEventId} " +
-                "EmployeeId={EmployeeId} IdentityUserId={IdentityUserId} " +
+                "ProfessorId={ProfessorId} IdentityUserId={IdentityUserId} " +
                 "Channel={Channel} Provider={Provider} DispatchStatus={DispatchStatus} " +
                 "ProviderMessageId={ProviderMessageId}",
-                "EmployeeAccountNotificationProcessed",
+                "ProfessorAccountNotificationProcessed",
                 true,
                 dispatchResult.Data.NotificationMessageId.Value,
                 dispatchResult.Data.DeliveryAttemptId.Value,
                 request.EventId,
-                request.EmployeeId,
+                request.ProfessorId,
                 request.IdentityUserId,
                 dispatchResult.Data.Channel,
                 dispatchResult.Data.Provider,
@@ -169,11 +167,8 @@ public static class SendEmployeeAccountCreatedNotification
         }
 
         private static string CreateSmsBody(Command request)
-        {
-            return
-                $"{request.FirstName} {request.LastName} عزیز، حساب کاربری شما در سامانه UMS ایجاد شد. " +
-                $"نام کاربری: {request.UserName}، رمز عبور موقت: {request.TemporaryPassword}. " +
-                "پس از اولین ورود، تغییر رمز عبور الزامی است.";
-        }
+            => $"استاد گرامی {request.FirstName} {request.LastName}، حساب کاربری شما در سامانه UMS ایجاد شد. " +
+               $"نام کاربری: {request.UserName}، رمز عبور موقت: {request.TemporaryPassword}. " +
+               "پس از اولین ورود، تغییر رمز عبور الزامی است.";
     }
 }

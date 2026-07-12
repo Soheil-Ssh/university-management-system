@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using SharedKernel.Messaging.MassTransit.Extensions;
 
 namespace Faculty.Api.Infrastructure.Persistence.Contexts;
 
@@ -10,6 +11,7 @@ public sealed class FacultyDbContext(DbContextOptions<FacultyDbContext> options)
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        modelBuilder.AddMassTransitOutboxEntities();
         base.OnModelCreating(modelBuilder);
     }
 }

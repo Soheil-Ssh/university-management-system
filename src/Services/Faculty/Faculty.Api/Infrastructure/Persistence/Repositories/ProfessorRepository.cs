@@ -2,6 +2,9 @@
 
 public class ProfessorRepository(FacultyDbContext context) : IProfessorRepository
 {
+    public async Task<Professor?> GetByIdAsync(ProfessorId professorId, CancellationToken cancellationToken = default)
+        => await context.Professors.FirstOrDefaultAsync(f => f.Id == professorId, cancellationToken);
+
     public async Task AddAsync(Professor professor, CancellationToken cancellationToken = default)
     {
         await context.Professors.AddAsync(professor, cancellationToken);

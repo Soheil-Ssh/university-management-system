@@ -25,3 +25,5 @@ global using Identity.Api.Common.Abstractions;
 global using SharedKernel.Domain.Identifiers;
 global using Identity.Api.Infrastructure.Authorization.Permissions;
 global using SharedKernel.Identity.Permissions;
+global using SharedKernel.Messaging.Abstractions;
+global using SharedKernel.Domain.Extensions;

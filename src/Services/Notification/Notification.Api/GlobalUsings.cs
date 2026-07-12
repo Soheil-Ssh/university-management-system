@@ -9,3 +9,6 @@ global using Notification.Api.Infrastructure.Persistence.Contexts;
 global using Notification.Api.Application.Contracts.Notification;
 global using Notification.Api.Application.Abstractions;
 global using SharedKernel.Abstractions.Persistence;
+global using SharedKernel.Abstractions.CQRS;
+global using MediatR;
+global using SharedKernel.Messaging.Abstractions;

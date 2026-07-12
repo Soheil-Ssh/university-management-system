@@ -22,3 +22,5 @@ global using Faculty.Api.Domain.Professor.Enums;
 global using SharedKernel.Domain.Identifiers;
 global using SharedKernel.Domain.ValueObjects;
 global using SharedKernel.Domain.Extensions;
+global using SharedKernel.Messaging.Abstractions;
+global using MassTransit;
