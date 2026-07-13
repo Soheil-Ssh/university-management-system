@@ -1,6 +1,4 @@
-﻿using Faculty.Api.Domain.Faculty.ValueObjects;
-
-namespace Faculty.Api.Domain.Faculty;
+﻿namespace Faculty.Api.Domain.Faculty;
 
 public sealed class Faculty : AggregateRoot<FacultyId>
 {
@@ -10,6 +8,7 @@ public sealed class Faculty : AggregateRoot<FacultyId>
     public FacultyCode Code { get; set; }
     public string Name { get; set; }
     public string? Description { get; set; }
+    public ProfessorId? DeanProfessorId { get; private set; }
     public bool IsActive { get; private set; }
 
 #pragma warning disable CS8618
@@ -81,6 +80,30 @@ public sealed class Faculty : AggregateRoot<FacultyId>
             return Result.Success();
 
         IsActive = false;
+        return Result.Success();
+    }
+
+    public Result AssignDean(ProfessorId professorId)
+    {
+        if (professorId.Value == Guid.Empty)
+            return FacultyErrors.DeanProfessorIdEmpty;
+
+        if (!IsActive)
+            return FacultyErrors.CannotAssignDeanToInactiveFaculty;
+
+        if (DeanProfessorId == professorId)
+            return Result.Success();
+
+        DeanProfessorId = professorId;
+        return Result.Success();
+    }
+
+    public Result RemoveDean()
+    {
+        if (DeanProfessorId is null)
+            return Result.Success();
+
+        DeanProfessorId = null;
         return Result.Success();
     }
 

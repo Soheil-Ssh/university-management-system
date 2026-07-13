@@ -7,6 +7,8 @@ public static class FacultyErrors
     // General Errors
     public static readonly Error NotFound = new("Faculty.NotFound", "Faculty was not found.", ErrorType.NotFound);
     public static readonly Error Inactive = new("Faculty.Inactive", "The faculty is inactive.", ErrorType.Conflict);
+    public static readonly Error CannotAssignDeanToInactiveFaculty = 
+        new("Faculty.CannotAssignDeanToInactiveFaculty", "A dean cannot be assigned to an inactive faculty.", ErrorType.Conflict);
 
     // Name Errors
     public static readonly Error NameEmpty = new("Faculty.Name.Empty", "Faculty name cannot be empty.", ErrorType.Validation);
@@ -18,4 +20,7 @@ public static class FacultyErrors
 
     // Code Errors
     public static readonly Error CodeAlreadyExists = new("Faculty.Code.AlreadyExists", "A faculty with the specified code already exists.", ErrorType.Conflict);
+
+    // Dean Professor Errors
+    public static readonly Error DeanProfessorIdEmpty = new("Faculty.DeanProfessorId.Empty", "Dean professor identifier cannot be empty.", ErrorType.Validation);
 }

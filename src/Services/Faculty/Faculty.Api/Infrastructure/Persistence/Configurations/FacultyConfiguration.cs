@@ -29,6 +29,16 @@ public sealed class FacultyConfiguration : IEntityTypeConfiguration<Domain.Facul
         // Description
         builder.Property(x => x.Description).HasMaxLength(500);
 
+        // DeanProfessorId
+        builder.Property(x => x.DeanProfessorId)
+            .HasConversion(professorId => professorId == null ? (Guid?)null : professorId.Value,
+                value => value.HasValue ? new ProfessorId(value.Value) : null);
+        builder.HasOne<Professor>()
+            .WithMany()
+            .HasForeignKey(x => x.DeanProfessorId)
+            .OnDelete(DeleteBehavior.Restrict);
+        builder.HasIndex(x => x.DeanProfessorId).IsUnique();
+
         // IsActive
         builder.Property(x => x.IsActive).IsRequired();
 
