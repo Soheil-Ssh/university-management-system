@@ -1,6 +1,4 @@
-﻿using Faculty.Api.Domain.Faculty.ValueObjects;
-
-namespace Faculty.Api.Domain.Faculty;
+﻿namespace Faculty.Api.Domain.Faculty;
 
 public interface IFacultyRepository
 {
@@ -9,4 +7,5 @@ public interface IFacultyRepository
     Task<bool> ExistsByCodeAsync(FacultyCode code, CancellationToken cancellationToken = default);
     Task<bool> ExistsByNameAsync(string name, FacultyId? excludeId = null, CancellationToken cancellationToken = default);
     Task<int> GetNextFacultyCodeAsync(CancellationToken cancellationToken);
+    Task<bool> IsDeanOfAnotherFacultyAsync(ProfessorId professorId, FacultyId excludedFacultyId, CancellationToken cancellationToken = default);
 }

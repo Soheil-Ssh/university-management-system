@@ -230,6 +230,17 @@ public sealed class Professor : AggregateRoot<ProfessorId>
         return Result.Success();
     }
 
+    public Result EnsureEligibleForDeanAssignment()
+    {
+        if (IdentityProvisioningStatus != IdentityProvisioningStatus.Succeeded || IdentityUserId is null)
+            return ProfessorErrors.IdentityNotProvisionedForDeanAssignment;
+
+        if (!IsActive)
+            return ProfessorErrors.InactiveForDeanAssignment;
+
+        return Result.Success();
+    }
+
     public Result ChangeProfileImage(FileId profileImageFileId)
     {
         if (profileImageFileId.Value == Guid.Empty)

@@ -41,4 +41,9 @@ public class FacultyRepository(FacultyDbContext context) : IFacultyRepository
 
         return lastSequenceNumber + 1;
     }
+
+    public async Task<bool> IsDeanOfAnotherFacultyAsync(ProfessorId professorId, FacultyId excludedFacultyId, CancellationToken cancellationToken = default)
+        => await context.Faculties
+            .AsNoTracking()
+            .AnyAsync(f => f.DeanProfessorId == professorId && f.Id != excludedFacultyId, cancellationToken);
 }
