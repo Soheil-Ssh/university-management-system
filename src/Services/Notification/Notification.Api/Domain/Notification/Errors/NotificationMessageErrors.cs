@@ -3,8 +3,13 @@
 public class NotificationMessageErrors
 {
     // General errors
+    public static readonly Error NotFound = new("Notification.NotFound", "Notification was not found.", ErrorType.Validation);
+
+    // Body errors
     public static readonly Error BodyEmpty = new("Notification.Body.Empty", "Notification body cannot be empty.", ErrorType.Validation);
     public static readonly Error BodyTooLong = new("Notification.Body.TooLong", "Notification body is too long.", ErrorType.Validation);
+
+    // Priority errors
     public static readonly Error InvalidPriority = new("Notification.Priority.Invalid", "Notification priority is invalid.", ErrorType.Validation);
 
     // Correlation errors
