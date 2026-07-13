@@ -1,8 +1,8 @@
 ﻿using Carter;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Notification.Api.Features.Notifications.SendEmployeeAccountCreatedNotification;
-using Notification.Api.Features.Notifications.SendProfessorAccountCreatedNotification;
+using Notification.Api.Features.Notifications.v1.SendEmployeeAccountCreatedNotification;
+using Notification.Api.Features.Notifications.v1.SendProfessorAccountCreatedNotification;
 using Notification.Api.Infrastructure.Persistence.Repositories;
 using Notification.Api.Infrastructure.Providers;
 using SharedKernel.Abstractions;
