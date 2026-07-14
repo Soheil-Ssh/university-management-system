@@ -1,4 +1,4 @@
-﻿namespace CentralOrganization.Api.Domain.Employee;
+﻿namespace SharedKernel.Domain.Identifiers;
 
 public sealed record EmployeeId(Guid Value)
 {

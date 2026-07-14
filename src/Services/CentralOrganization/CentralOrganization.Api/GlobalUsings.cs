@@ -21,3 +21,4 @@ global using SharedKernel.Domain.Extensions;
 global using CentralOrganization.Api.Domain.Employee.ValueObjects;
 global using SharedKernel.Messaging.Abstractions;
 global using MassTransit;
+global using SharedKernel.Domain.Identifiers;
