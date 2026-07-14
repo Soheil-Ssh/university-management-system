@@ -27,3 +27,4 @@ global using MassTransit;
 global using SharedKernel.Api.Contracts;
 global using Faculty.Api.Domain.Department.ValueObjects;
 global using Faculty.Api.Domain.Department;
+global using Faculty.Api.Domain.Department.Errors;
