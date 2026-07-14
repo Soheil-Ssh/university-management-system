@@ -1,6 +1,4 @@
-﻿using SharedKernel.Domain.Error;
-
-namespace Faculty.Api.Domain.Faculty.Errors;
+﻿namespace Faculty.Api.Domain.Faculty.Errors;
 
 public static class FacultyErrors
 {
@@ -9,6 +7,8 @@ public static class FacultyErrors
     public static readonly Error Inactive = new("Faculty.Inactive", "The faculty is inactive.", ErrorType.Conflict);
     public static readonly Error CannotAssignDeanToInactiveFaculty = 
         new("Faculty.CannotAssignDeanToInactiveFaculty", "A dean cannot be assigned to an inactive faculty.", ErrorType.Conflict);
+    public static readonly Error CannotAddDepartmentToInactiveFaculty = 
+        new("Faculty.CannotAddDepartmentToInactiveFaculty", "A department cannot be added to an inactive faculty.", ErrorType.Conflict);
 
     // Name Errors
     public static readonly Error NameEmpty = new("Faculty.Name.Empty", "Faculty name cannot be empty.", ErrorType.Validation);

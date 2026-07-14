@@ -59,8 +59,8 @@ public sealed class Department : AggregateRoot<DepartmentId>
         string name,
         string? shortName,
         string? description,
-        Email? email,
-        PhoneNumber? phoneNumber,
+        string? email,
+        string? phoneNumber,
         string? internalPhoneNumber,
         string? officeLocation)
     {
@@ -77,6 +77,28 @@ public sealed class Department : AggregateRoot<DepartmentId>
             return DepartmentErrors.ShortNameTooLong;
 
         description = NormalizeOptional(description);
+
+        Email? emailValueObject = null;
+        if (!string.IsNullOrWhiteSpace(email))
+        {
+            var emailResult = Email.Create(email).WithPath(nameof(Email));
+
+            if (emailResult.IsFailure)
+                return emailResult.Error;
+
+            emailValueObject = emailResult.Data;
+        }
+
+        PhoneNumber? phoneNumberValueObject = null;
+        if (!string.IsNullOrWhiteSpace(phoneNumber))
+        {
+            var phoneNumberResult = PhoneNumber.Create(phoneNumber).WithPath(nameof(PhoneNumber));
+
+            if (phoneNumberResult.IsFailure)
+                return phoneNumberResult.Error;
+
+            phoneNumberValueObject = phoneNumberResult.Data;
+        }
 
         if (description?.Length > DescriptionMaxLength)
             return DepartmentErrors.DescriptionTooLong;
@@ -98,8 +120,8 @@ public sealed class Department : AggregateRoot<DepartmentId>
             name,
             shortName,
             description,
-            email,
-            phoneNumber,
+            emailValueObject,
+            phoneNumberValueObject,
             internalPhoneNumber,
             officeLocation);
     }

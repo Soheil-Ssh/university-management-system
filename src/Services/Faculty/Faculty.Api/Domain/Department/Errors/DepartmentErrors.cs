@@ -12,6 +12,7 @@ public static class DepartmentErrors
     // Name errors
     public static readonly Error NameEmpty = new("Department.Name.Empty", "Department name cannot be empty.", ErrorType.Validation);
     public static readonly Error NameTooLong = new("Department.Name.TooLong", "Department name is too long.", ErrorType.Validation);
+    public static readonly Error NameAlreadyExists = new("Department.Name.AlreadyExists", "A department name is already exists.", ErrorType.Conflict);
 
     // Short name errors
     public static readonly Error ShortNameTooLong = new("Department.ShortName.TooLong", "Department short name is too long.", ErrorType.Validation);
