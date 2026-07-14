@@ -153,8 +153,29 @@ public sealed class Department : AggregateRoot<DepartmentId>
         return Result.Success();
     }
 
-    public Result UpdateContactInformation(Email? email, PhoneNumber? phoneNumber, string? internalPhoneNumber, string? officeLocation)
+    public Result UpdateContactInformation(string? email, string? phoneNumber, string? internalPhoneNumber, string? officeLocation)
     {
+        Email? emailValueObject = null;
+
+        if (!string.IsNullOrWhiteSpace(email))
+        {
+            var emailResult = Email.Create(email).WithPath(nameof(Email));
+            if (emailResult.IsFailure)
+                return emailResult.Error;
+
+            emailValueObject = emailResult.Data;
+        }
+
+        PhoneNumber? phoneNumberValueObject = null;
+        if (!string.IsNullOrWhiteSpace(phoneNumber))
+        {
+            var phoneNumberResult = PhoneNumber.Create(phoneNumber).WithPath(nameof(PhoneNumber));
+            if (phoneNumberResult.IsFailure)
+                return phoneNumberResult.Error;
+
+            phoneNumberValueObject = phoneNumberResult.Data;
+        }
+
         internalPhoneNumber = NormalizeOptional(internalPhoneNumber);
         if (internalPhoneNumber?.Length > InternalPhoneNumberMaxLength)
             return DepartmentErrors.InternalPhoneNumberTooLong;
@@ -163,11 +184,14 @@ public sealed class Department : AggregateRoot<DepartmentId>
         if (officeLocation?.Length > OfficeLocationMaxLength)
             return DepartmentErrors.OfficeLocationTooLong;
 
-        if (Email == email && PhoneNumber == phoneNumber && InternalPhoneNumber == internalPhoneNumber && OfficeLocation == officeLocation)
+        if (Email == emailValueObject && 
+            PhoneNumber == phoneNumberValueObject &&
+            InternalPhoneNumber == internalPhoneNumber && 
+            OfficeLocation == officeLocation)
             return Result.Success();
 
-        Email = email;
-        PhoneNumber = phoneNumber;
+        Email = emailValueObject;
+        PhoneNumber = phoneNumberValueObject;
         InternalPhoneNumber = internalPhoneNumber;
         OfficeLocation = officeLocation;
 
