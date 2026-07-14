@@ -2,7 +2,7 @@
 
 public sealed class DepartmentRepository(FacultyDbContext context) : IDepartmentRepository
 {
-    public async Task<Department?> GetById(DepartmentId id, CancellationToken cancellationToken = default)
+    public async Task<Department?> GetByIdAsync(DepartmentId id, CancellationToken cancellationToken = default)
         => await context.Departments.FirstOrDefaultAsync(d => d.Id == id, cancellationToken);
 
     public async Task AddAsync(Department department, CancellationToken cancellationToken = default)
@@ -12,6 +12,10 @@ public sealed class DepartmentRepository(FacultyDbContext context) : IDepartment
 
     public async Task<bool> ExistsByNameAsync(FacultyId facultyId, string name, CancellationToken cancellationToken = default)
         => await context.Departments.AnyAsync(d => d.FacultyId == facultyId && d.Name == name, cancellationToken);
+
+    public async Task<bool> ExistsByNameAsync(FacultyId facultyId, string name, DepartmentId departmentId, CancellationToken cancellationToken = default)
+        => await context.Departments.AnyAsync(d => d.Id != departmentId && d.FacultyId == facultyId && d.Name == name, cancellationToken);
+
 
     public async Task<int> GetNextDepartmentCodeAsync(CancellationToken cancellationToken)
     {
