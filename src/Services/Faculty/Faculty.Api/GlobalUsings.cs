@@ -24,3 +24,4 @@ global using SharedKernel.Domain.ValueObjects;
 global using SharedKernel.Domain.Extensions;
 global using SharedKernel.Messaging.Abstractions;
 global using MassTransit;
+global using SharedKernel.Api.Contracts;
