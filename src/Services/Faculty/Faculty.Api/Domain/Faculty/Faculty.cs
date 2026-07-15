@@ -5,9 +5,9 @@ public sealed class Faculty : AggregateRoot<FacultyId>
     private const int NameMaxLength = 150;
     private const int DescriptionMaxLength = 500;
 
-    public FacultyCode Code { get; set; }
-    public string Name { get; set; }
-    public string? Description { get; set; }
+    public FacultyCode Code { get; private set; }
+    public string Name { get; private set; }
+    public string? Description { get; private set; }
     public ProfessorId? DeanProfessorId { get; private set; }
     public bool IsActive { get; private set; }
 
@@ -108,7 +108,5 @@ public sealed class Faculty : AggregateRoot<FacultyId>
     }
 
     private static string? NormalizeDescription(string? description)
-    {
-        return string.IsNullOrWhiteSpace(description) ? null : description.Trim();
-    }
+        => string.IsNullOrWhiteSpace(description) ? null : description.Trim();
 }
