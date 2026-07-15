@@ -5,6 +5,9 @@ public sealed class DepartmentRepository(FacultyDbContext context) : IDepartment
     public async Task<Department?> GetByIdAsync(DepartmentId id, CancellationToken cancellationToken = default)
         => await context.Departments.FirstOrDefaultAsync(d => d.Id == id, cancellationToken);
 
+    public async Task<Department?> GetByHeadProfessorIdAsync(ProfessorId professorId, CancellationToken cancellationToken = default)
+        => await context.Departments.FirstOrDefaultAsync(d => d.HeadProfessorId == professorId, cancellationToken);
+
     public async Task AddAsync(Department department, CancellationToken cancellationToken = default)
     {
         await context.Departments.AddAsync(department, cancellationToken);

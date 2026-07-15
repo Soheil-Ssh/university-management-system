@@ -294,6 +294,7 @@ public sealed class Professor : AggregateRoot<ProfessorId>
             return Result.Success();
 
         IsActive = false;
+        AddDomainEvent(new ProfessorDeactivatedDomainEvent(Id));
 
         return Result.Success();
     }
