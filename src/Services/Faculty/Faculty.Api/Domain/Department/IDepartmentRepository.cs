@@ -7,4 +7,6 @@ public interface IDepartmentRepository
     Task<bool> ExistsByNameAsync(FacultyId facultyId, string name, CancellationToken cancellationToken = default);
     Task<bool> ExistsByNameAsync(FacultyId facultyId, string name, DepartmentId departmentId, CancellationToken cancellationToken = default);
     Task<int> GetNextDepartmentCodeAsync(CancellationToken cancellationToken);
+    Task<bool> IsHeadOfAnotherDepartmentAsync(ProfessorId professorId, DepartmentId excludedDepartmentId,
+        CancellationToken cancellationToken = default);
 }

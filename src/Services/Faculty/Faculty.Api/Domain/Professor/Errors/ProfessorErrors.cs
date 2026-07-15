@@ -10,6 +10,13 @@ public static class ProfessorErrors
         new("Professor.InactiveForDeanAssignment", "An inactive professor cannot be assigned as faculty dean.",ErrorType.Conflict);
     public static readonly Error 
         AlreadyDeanOfAnotherFaculty = new("Professor.AlreadyDeanOfAnotherFaculty", "The professor is already assigned as dean of another faculty.",ErrorType.Conflict);
+    public static readonly Error IdentityNotProvisionedForAcademicManagement = 
+        new("Professor.IdentityNotProvisionedForAcademicManagement", 
+            "A professor whose identity has not been provisioned successfully cannot be assigned to an academic management role.", ErrorType.Conflict);
+    public static readonly Error InactiveForAcademicManagement = 
+        new("Professor.InactiveForAcademicManagement", "An inactive professor cannot be assigned to an academic management role.", ErrorType.Conflict);
+    public static readonly Error AlreadyHeadOfAnotherDepartment = 
+        new("Professor.AlreadyHeadOfAnotherDepartment", "The professor is already assigned as head of another department.", ErrorType.Conflict);
 
     // Specialization errors
     public static readonly Error SpecializationEmpty = new("Professor.Specialization.Empty", "Professor specialization cannot be empty.", ErrorType.Validation);

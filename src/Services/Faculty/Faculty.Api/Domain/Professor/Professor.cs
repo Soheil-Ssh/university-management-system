@@ -241,6 +241,17 @@ public sealed class Professor : AggregateRoot<ProfessorId>
         return Result.Success();
     }
 
+    public Result EnsureEligibleForAcademicManagement()
+    {
+        if (IdentityProvisioningStatus != IdentityProvisioningStatus.Succeeded || IdentityUserId is null)
+            return ProfessorErrors.IdentityNotProvisionedForAcademicManagement;
+
+        if (!IsActive)
+            return ProfessorErrors.InactiveForAcademicManagement;
+
+        return Result.Success();
+    }
+
     public Result ChangeProfileImage(FileId profileImageFileId)
     {
         if (profileImageFileId.Value == Guid.Empty)

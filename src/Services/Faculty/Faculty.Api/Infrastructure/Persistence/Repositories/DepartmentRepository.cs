@@ -16,7 +16,6 @@ public sealed class DepartmentRepository(FacultyDbContext context) : IDepartment
     public async Task<bool> ExistsByNameAsync(FacultyId facultyId, string name, DepartmentId departmentId, CancellationToken cancellationToken = default)
         => await context.Departments.AnyAsync(d => d.Id != departmentId && d.FacultyId == facultyId && d.Name == name, cancellationToken);
 
-
     public async Task<int> GetNextDepartmentCodeAsync(CancellationToken cancellationToken)
     {
         var prefix = "UMS_FAC_DEP_";
@@ -37,4 +36,9 @@ public sealed class DepartmentRepository(FacultyDbContext context) : IDepartment
 
         return lastSequenceNumber + 1;
     }
+
+    public Task<bool> IsHeadOfAnotherDepartmentAsync(ProfessorId professorId, DepartmentId excludedDepartmentId, CancellationToken cancellationToken = default)
+        => context.Departments
+            .AsNoTracking()
+            .AnyAsync(r => r.HeadProfessorId == professorId && r.Id != excludedDepartmentId, cancellationToken);
 }
