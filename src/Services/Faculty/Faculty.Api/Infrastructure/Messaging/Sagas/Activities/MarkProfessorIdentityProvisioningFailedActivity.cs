@@ -1,6 +1,6 @@
 ﻿using Faculty.Api.Features.Professors.v1.IdentityProvisioning;
 using Faculty.Api.Infrastructure.Messaging.Sagas.States;
-using SharedKernel.Contracts.Integration.Events.Faculty.Professor.v1;
+using SharedKernel.Contracts.Integration.Events.Faculty.Professor.v1.IdentityProvisioning;
 
 namespace Faculty.Api.Infrastructure.Messaging.Sagas.Activities;
 

@@ -8,7 +8,7 @@ using Notification.Api.Infrastructure.Providers;
 using SharedKernel.Abstractions;
 using SharedKernel.Api;
 using SharedKernel.Contracts.Integration.Events.CentralOrganization.Employees.v1;
-using SharedKernel.Contracts.Integration.Events.Faculty.Professor.v1;
+using SharedKernel.Contracts.Integration.Events.Faculty.Professor.v1.IdentityProvisioning;
 using SharedKernel.Identity;
 using SharedKernel.Identity.Extensions;
 using SharedKernel.Messaging.Abstractions;

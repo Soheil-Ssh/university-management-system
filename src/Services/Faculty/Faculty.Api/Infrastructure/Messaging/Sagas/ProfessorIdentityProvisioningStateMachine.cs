@@ -1,7 +1,7 @@
 ﻿using Faculty.Api.Infrastructure.Messaging.Sagas.Activities;
 using Faculty.Api.Infrastructure.Messaging.Sagas.States;
 using SharedKernel.Contracts.Integration.Events.CentralOrganization.Employees.v1;
-using SharedKernel.Contracts.Integration.Events.Faculty.Professor.v1;
+using SharedKernel.Contracts.Integration.Events.Faculty.Professor.v1.IdentityProvisioning;
 using SharedKernel.Contracts.Integration.Events.Identity.User.v1;
 
 namespace Faculty.Api.Infrastructure.Messaging.Sagas;

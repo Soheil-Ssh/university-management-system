@@ -1,6 +1,6 @@
 ﻿using Identity.Api.Infrastructure.Authorization.Roles;
 using SharedKernel.Contracts.Integration.Events.CentralOrganization.Employees.v1;
-using SharedKernel.Contracts.Integration.Events.Faculty.Professor.v1;
+using SharedKernel.Contracts.Integration.Events.Faculty.Professor.v1.IdentityProvisioning;
 using SharedKernel.Contracts.Integration.Events.Identity.User.v1;
 
 namespace Identity.Api.Features.Users.v1.ProvisionProfessorUser;

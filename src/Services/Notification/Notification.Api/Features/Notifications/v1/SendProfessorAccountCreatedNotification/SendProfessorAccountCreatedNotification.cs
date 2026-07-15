@@ -1,4 +1,4 @@
-﻿using SharedKernel.Contracts.Integration.Events.Faculty.Professor.v1;
+﻿using SharedKernel.Contracts.Integration.Events.Faculty.Professor.v1.IdentityProvisioning;
 
 namespace Notification.Api.Features.Notifications.v1.SendProfessorAccountCreatedNotification;
 
