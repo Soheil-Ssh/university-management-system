@@ -1,11 +1,10 @@
-﻿using Faculty.Api.Domain.Professor.Events;
-
-namespace Faculty.Api.Domain.Professor;
+﻿namespace Faculty.Api.Domain.Professor;
 
 public sealed class Professor : AggregateRoot<ProfessorId>
 {
     private const int SpecializationMaxLength = 150;
     private const int IdentityProvisioningFailureReasonMaxLength = 1000;
+    private const int IdentityDeactivationFailureReasonMaxLength = 1000;
 
     public ProfessorCode Code { get; private set; }
     public Name FirstName { get; private set; }
@@ -23,6 +22,8 @@ public sealed class Professor : AggregateRoot<ProfessorId>
     public IdentityProvisioningStatus IdentityProvisioningStatus { get; private set; }
     public string? IdentityProvisioningFailureReason { get; private set; }
     public bool IsActive { get; private set; }
+    public IdentityDeactivationStatus IdentityDeactivationStatus { get; private set; }
+    public string? IdentityDeactivationFailureReason { get; private set; }
     public string FullName => $"{FirstName.Value} {LastName.Value}";
 
 #pragma warning disable CS8618
@@ -60,6 +61,9 @@ public sealed class Professor : AggregateRoot<ProfessorId>
         IdentityUserId = null;
         IdentityProvisioningStatus = IdentityProvisioningStatus.Pending;
         IdentityProvisioningFailureReason = null;
+
+        IdentityDeactivationStatus = IdentityDeactivationStatus.NotRequested;
+        IdentityDeactivationFailureReason = null;
 
         AddDomainEvent(new ProfessorIdentityProvisioningRequestedDomainEvent(
             ProfessorId: id.Value,
@@ -293,8 +297,46 @@ public sealed class Professor : AggregateRoot<ProfessorId>
         if (!IsActive)
             return Result.Success();
 
+        if (IdentityProvisioningStatus != IdentityProvisioningStatus.Succeeded || IdentityUserId is null)
+            return ProfessorErrors.IdentityNotProvisioned;
+
         IsActive = false;
-        AddDomainEvent(new ProfessorDeactivatedDomainEvent(Id));
+        IdentityDeactivationStatus = IdentityDeactivationStatus.Pending;
+        IdentityDeactivationFailureReason = null;
+
+        AddDomainEvent(new ProfessorDeactivatedDomainEvent(Id, IdentityUserId));
+        return Result.Success();
+    }
+
+    public Result MarkIdentityDeactivationSucceeded()
+    {
+        if (IdentityDeactivationStatus == IdentityDeactivationStatus.Succeeded)
+            return Result.Success();
+
+        if (IdentityDeactivationStatus != IdentityDeactivationStatus.Pending)
+            return ProfessorErrors.IdentityDeactivationNotPending;
+
+        IdentityDeactivationStatus = IdentityDeactivationStatus.Succeeded;
+        IdentityDeactivationFailureReason = null;
+
+        return Result.Success();
+    }
+
+    public Result MarkIdentityDeactivationFailed(string? reason)
+    {
+        if (IdentityDeactivationStatus == IdentityDeactivationStatus.Succeeded)
+            return ProfessorErrors.IdentityDeactivationAlreadySucceeded;
+
+        if (string.IsNullOrWhiteSpace(reason))
+            reason = "Professor identity user deactivation failed.";
+
+        reason = reason.Trim();
+
+        if (reason.Length > IdentityDeactivationFailureReasonMaxLength)
+            reason = reason[..IdentityDeactivationFailureReasonMaxLength];
+
+        IdentityDeactivationStatus = IdentityDeactivationStatus.Failed;
+        IdentityDeactivationFailureReason = reason;
 
         return Result.Success();
     }

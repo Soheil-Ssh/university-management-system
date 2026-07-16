@@ -10,11 +10,9 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using SharedKernel.Abstractions;
 using SharedKernel.Api;
-using SharedKernel.Contracts.Integration.Events.CentralOrganization.Employees.v1;
 using SharedKernel.Contracts.Integration.Events.Identity.User.v1;
 using SharedKernel.Identity;
 using SharedKernel.Identity.Extensions;
-using SharedKernel.Messaging.Abstractions;
 using SharedKernel.Messaging.MassTransit;
 using SharedKernel.Messaging.MassTransit.Enums;
 using SharedKernel.Messaging.MassTransit.Extensions;
@@ -22,6 +20,7 @@ using SharedKernel.Observability.HealthCheck;
 using SharedKernel.Persistence;
 using SharedKernel.Persistence.Database;
 using System.Security.Cryptography.X509Certificates;
+using Identity.Api.Features.Users.v1.DeactivateProfessorUser;
 
 namespace Identity.Api.Common.Extensions;
 
@@ -144,14 +143,17 @@ public static class ServiceCollectionExtensions
         services.AddScoped<
             IIntegrationEventHandler<CreateProfessorIdentityUserRequestedIntegrationEvent>,
             ProvisionProfessorUser.IntegrationEventHandler>();
+        services.AddScoped<
+            IIntegrationEventHandler<DeactivateProfessorIdentityUserRequestedIntegrationEvent>,
+            DeactivateProfessorUser.IntegrationEventHandler>();
 
         // Add Masstransit messaging to the service collection
-        services.AddApplicationMessagingWithEfOutbox<IdentityDbContext>(configuration,
-            MessagingOutboxProvider.SqlServer,
+        services.AddApplicationMessagingWithEfOutbox<IdentityDbContext>(configuration, MessagingOutboxProvider.SqlServer,
             busConfigurator =>
             {
                 busConfigurator.AddIntegrationEventConsumer<CreateEmployeeIdentityUserRequestedIntegrationEvent>("identity-create-employee-user");
                 busConfigurator.AddIntegrationEventConsumer<CreateProfessorIdentityUserRequestedIntegrationEvent>("identity-create-professor-user");
+                busConfigurator.AddIntegrationEventConsumer<DeactivateProfessorIdentityUserRequestedIntegrationEvent>("identity-deactivate-professor-user");
             });
 
         return services;

@@ -1,4 +1,4 @@
-﻿namespace Faculty.Api.Infrastructure.Messaging.Sagas.States;
+﻿namespace Faculty.Api.Infrastructure.Messaging.Sagas.ProfessorIdentityProvisioning.States;
 
 public sealed class ProfessorIdentityProvisioningState : SagaStateMachineInstance
 {

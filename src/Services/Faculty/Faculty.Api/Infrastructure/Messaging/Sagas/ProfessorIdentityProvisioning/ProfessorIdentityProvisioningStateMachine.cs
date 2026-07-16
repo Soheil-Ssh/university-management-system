@@ -1,10 +1,10 @@
-﻿using Faculty.Api.Infrastructure.Messaging.Sagas.Activities;
-using Faculty.Api.Infrastructure.Messaging.Sagas.States;
+﻿using Faculty.Api.Infrastructure.Messaging.Sagas.ProfessorIdentityProvisioning.Activities;
+using Faculty.Api.Infrastructure.Messaging.Sagas.ProfessorIdentityProvisioning.States;
 using SharedKernel.Contracts.Integration.Events.CentralOrganization.Employees.v1;
 using SharedKernel.Contracts.Integration.Events.Faculty.Professor.v1.IdentityProvisioning;
 using SharedKernel.Contracts.Integration.Events.Identity.User.v1;
 
-namespace Faculty.Api.Infrastructure.Messaging.Sagas;
+namespace Faculty.Api.Infrastructure.Messaging.Sagas.ProfessorIdentityProvisioning;
 
 public class ProfessorIdentityProvisioningStateMachine : MassTransitStateMachine<ProfessorIdentityProvisioningState>
 {

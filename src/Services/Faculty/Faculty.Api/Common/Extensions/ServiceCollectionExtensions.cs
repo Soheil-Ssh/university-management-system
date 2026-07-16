@@ -1,6 +1,9 @@
-﻿using Faculty.Api.Infrastructure.Messaging.Sagas;
-using Faculty.Api.Infrastructure.Messaging.Sagas.Activities;
-using Faculty.Api.Infrastructure.Messaging.Sagas.States;
+﻿using Faculty.Api.Infrastructure.Messaging.Sagas.ProfessorIdentityDeactivation;
+using Faculty.Api.Infrastructure.Messaging.Sagas.ProfessorIdentityDeactivation.Activities;
+using Faculty.Api.Infrastructure.Messaging.Sagas.ProfessorIdentityDeactivation.States;
+using Faculty.Api.Infrastructure.Messaging.Sagas.ProfessorIdentityProvisioning;
+using Faculty.Api.Infrastructure.Messaging.Sagas.ProfessorIdentityProvisioning.Activities;
+using Faculty.Api.Infrastructure.Messaging.Sagas.ProfessorIdentityProvisioning.States;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using SharedKernel.Abstractions;
@@ -58,8 +61,15 @@ public static class ServiceCollectionExtensions
             busConfiguration =>
             {
                 busConfiguration
-                    .AddSagaStateMachine<ProfessorIdentityProvisioningStateMachine,
-                        ProfessorIdentityProvisioningState>()
+                    .AddSagaStateMachine<ProfessorIdentityProvisioningStateMachine, ProfessorIdentityProvisioningState>()
+                    .EntityFrameworkRepository(repository =>
+                    {
+                        repository.ExistingDbContext<FacultyDbContext>();
+                        repository.UsePostgres();
+                    });
+
+                busConfiguration
+                    .AddSagaStateMachine<ProfessorIdentityDeactivationStateMachine, ProfessorIdentityDeactivationState>()
                     .EntityFrameworkRepository(repository =>
                     {
                         repository.ExistingDbContext<FacultyDbContext>();
@@ -70,6 +80,9 @@ public static class ServiceCollectionExtensions
         // Add saga activities to the service collection
         services.AddScoped<MarkProfessorIdentityProvisioningSucceededActivity>();
         services.AddScoped<MarkProfessorIdentityProvisioningFailedActivity>();
+
+        services.AddScoped<MarkProfessorIdentityDeactivationSucceededActivity>();
+        services.AddScoped<MarkProfessorIdentityDeactivationFailedActivity>();
 
         // Add health checks to the service collection
         services.AddHealthChecks()

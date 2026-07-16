@@ -1,8 +1,8 @@
 ﻿using Faculty.Api.Features.Professors.v1.IdentityProvisioning;
-using Faculty.Api.Infrastructure.Messaging.Sagas.States;
+using Faculty.Api.Infrastructure.Messaging.Sagas.ProfessorIdentityProvisioning.States;
 using SharedKernel.Contracts.Integration.Events.Faculty.Professor.v1.IdentityProvisioning;
 
-namespace Faculty.Api.Infrastructure.Messaging.Sagas.Activities;
+namespace Faculty.Api.Infrastructure.Messaging.Sagas.ProfessorIdentityProvisioning.Activities;
 
 public class MarkProfessorIdentityProvisioningFailedActivity(ISender sender, ILogger<MarkProfessorIdentityProvisioningFailedActivity> logger)
     : IStateMachineActivity<ProfessorIdentityProvisioningState, ProfessorIdentityProvisioningFailedIntegrationEvent>
@@ -18,6 +18,8 @@ public class MarkProfessorIdentityProvisioningFailedActivity(ISender sender, ILo
                 $"EmployeeId: {context.Message.ProfessorId}, " +
                 $"Reason: {context.Message.Reason}, " +
                 $"Error: {result.Error}");
+
+        await next.Execute(context);
     }
 
     public Task Faulted<TException>(

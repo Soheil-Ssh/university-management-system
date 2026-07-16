@@ -1,4 +1,4 @@
-﻿using Faculty.Api.Infrastructure.Messaging.Sagas.States;
+﻿using Faculty.Api.Infrastructure.Messaging.Sagas.ProfessorIdentityProvisioning.States;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Faculty.Api.Infrastructure.Persistence.Configurations;

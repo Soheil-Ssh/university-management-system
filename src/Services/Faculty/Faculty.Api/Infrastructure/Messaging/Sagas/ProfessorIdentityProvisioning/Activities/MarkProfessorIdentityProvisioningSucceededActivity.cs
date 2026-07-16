@@ -1,8 +1,8 @@
 ﻿using Faculty.Api.Features.Professors.v1.IdentityProvisioning;
-using Faculty.Api.Infrastructure.Messaging.Sagas.States;
+using Faculty.Api.Infrastructure.Messaging.Sagas.ProfessorIdentityProvisioning.States;
 using SharedKernel.Contracts.Integration.Events.Faculty.Professor.v1.IdentityProvisioning;
 
-namespace Faculty.Api.Infrastructure.Messaging.Sagas.Activities;
+namespace Faculty.Api.Infrastructure.Messaging.Sagas.ProfessorIdentityProvisioning.Activities;
 
 public class MarkProfessorIdentityProvisioningSucceededActivity(ISender sender, ILogger<MarkProfessorIdentityProvisioningSucceededActivity> logger) :
     IStateMachineActivity<ProfessorIdentityProvisioningState, ProfessorIdentityProvisioningSucceededIntegrationEvent>

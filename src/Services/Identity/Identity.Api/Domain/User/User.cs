@@ -113,14 +113,22 @@ public sealed class User : AggregateRoot<UserId>
         return Result.Success();
     }
 
-    public void Activate()
+    public Result Activate()
     {
+        if (IsActive)
+            return Result.Success();
+
         IsActive = true;
+        return Result.Success();
     }
 
-    public void Deactivate()
+    public Result Deactivate()
     {
+        if (!IsActive)
+            return Result.Success();
+
         IsActive = false;
+        return Result.Success();
     }
 
     private static string GenerateSecurityStamp()

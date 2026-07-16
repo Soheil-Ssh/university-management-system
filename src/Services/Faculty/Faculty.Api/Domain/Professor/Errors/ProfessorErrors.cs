@@ -17,6 +17,10 @@ public static class ProfessorErrors
         new("Professor.InactiveForAcademicManagement", "An inactive professor cannot be assigned to an academic management role.", ErrorType.Conflict);
     public static readonly Error AlreadyHeadOfAnotherDepartment = 
         new("Professor.AlreadyHeadOfAnotherDepartment", "The professor is already assigned as head of another department.", ErrorType.Conflict);
+    public static readonly Error IdentityDeactivationNotPending = 
+        new("Professor.IdentityDeactivationNotPending", "Professor identity deactivation is not pending.", ErrorType.Conflict);
+    public static readonly Error IdentityDeactivationAlreadySucceeded = 
+        new("Professor.IdentityDeactivationAlreadySucceeded", "Professor identity deactivation has already succeeded.", ErrorType.Conflict);
 
     // Specialization errors
     public static readonly Error SpecializationEmpty = new("Professor.Specialization.Empty", "Professor specialization cannot be empty.", ErrorType.Validation);
