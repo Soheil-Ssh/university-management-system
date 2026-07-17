@@ -21,6 +21,7 @@ using SharedKernel.Persistence;
 using SharedKernel.Persistence.Database;
 using System.Security.Cryptography.X509Certificates;
 using Identity.Api.Features.Users.v1.DeactivateProfessorUser;
+using MassTransit;
 
 namespace Identity.Api.Common.Extensions;
 
@@ -148,12 +149,24 @@ public static class ServiceCollectionExtensions
             DeactivateProfessorUser.IntegrationEventHandler>();
 
         // Add Masstransit messaging to the service collection
+        const string createEmployeeUserQueue = "identity-create-employee-user";
+        const string createProfessorUserQueue = "identity-create-professor-user";
+        const string deactivateProfessorIdentityQueue = "identity-deactivate-professor-user";
+
         services.AddApplicationMessagingWithEfOutbox<IdentityDbContext>(configuration, MessagingOutboxProvider.SqlServer,
             busConfigurator =>
             {
-                busConfigurator.AddIntegrationEventConsumer<CreateEmployeeIdentityUserRequestedIntegrationEvent>("identity-create-employee-user");
-                busConfigurator.AddIntegrationEventConsumer<CreateProfessorIdentityUserRequestedIntegrationEvent>("identity-create-professor-user");
-                busConfigurator.AddIntegrationEventConsumer<DeactivateProfessorIdentityUserRequestedIntegrationEvent>("identity-deactivate-professor-user");
+                busConfigurator.AddIntegrationEventConsumer<CreateEmployeeIdentityUserRequestedIntegrationEvent>(createEmployeeUserQueue);
+                busConfigurator.AddIntegrationEventConsumer<CreateProfessorIdentityUserRequestedIntegrationEvent>(createProfessorUserQueue);
+                busConfigurator.AddIntegrationEventConsumer<DeactivateProfessorIdentityUserRequestedIntegrationEvent>(deactivateProfessorIdentityQueue);
+
+                busConfigurator.AddConfigureEndpointsCallback((endpointName, endPointConfigurator) =>
+                {
+                    endPointConfigurator.UseMessageRetry(retryConfigurator =>
+                    {
+                        retryConfigurator.Intervals(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(3), TimeSpan.FromSeconds(10));
+                    });
+                });
             });
 
         return services;
