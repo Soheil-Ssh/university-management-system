@@ -11,6 +11,10 @@ services:
   loki:
     image: grafana/loki:latest
 
+  # Prometheus
+  prometheus:
+    image: prom/prometheus:latest
+
   # Grafana
   grafana:
     image: grafana/grafana:latest
@@ -77,5 +81,6 @@ volumes:
   postgres_data:
   grafana_data:
   loki_data:
+  prometheus_data:
 
 
