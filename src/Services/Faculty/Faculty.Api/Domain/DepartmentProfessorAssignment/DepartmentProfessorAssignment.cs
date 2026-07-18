@@ -12,11 +12,8 @@ public sealed class DepartmentProfessorAssignment : AggregateRoot<DepartmentProf
     private DepartmentProfessorAssignment() { }
 #pragma warning restore CS8618
 
-    private DepartmentProfessorAssignment(
-        DepartmentProfessorAssignmentId id,
-        DepartmentId departmentId,
-        ProfessorId professorId,
-        DateTime assignedAt) : base(id)
+    private DepartmentProfessorAssignment(DepartmentProfessorAssignmentId id, DepartmentId departmentId, ProfessorId professorId, DateTime assignedAt) 
+        : base(id)
     {
         DepartmentId = departmentId;
         ProfessorId = professorId;
@@ -31,22 +28,15 @@ public sealed class DepartmentProfessorAssignment : AggregateRoot<DepartmentProf
         if (professorId.Value == Guid.Empty)
             return DepartmentProfessorAssignmentErrors.ProfessorRequired;
 
-        return new DepartmentProfessorAssignment(
-            DepartmentProfessorAssignmentId.New(),
-            departmentId,
-            professorId,
-            DateTime.UtcNow);
+        return new DepartmentProfessorAssignment(DepartmentProfessorAssignmentId.New(), departmentId, professorId, DateTime.UtcNow);
     }
 
-    public Result Unassign(DateTime unassignedAtUtc)
+    public Result Unassign()
     {
         if (!IsActive)
             return DepartmentProfessorAssignmentErrors.AlreadyUnassigned;
 
-        if (unassignedAtUtc < AssignedAt)
-            return DepartmentProfessorAssignmentErrors.InvalidUnassignedAt;
-
-        UnassignedAt = unassignedAtUtc;
+        UnassignedAt = DateTime.UtcNow;
 
         return Result.Success();
     }
