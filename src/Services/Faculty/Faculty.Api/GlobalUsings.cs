@@ -29,3 +29,5 @@ global using Faculty.Api.Domain.Department.ValueObjects;
 global using Faculty.Api.Domain.Department;
 global using Faculty.Api.Domain.Department.Errors;
 global using Faculty.Api.Domain.Professor.Events;
+global using Faculty.Api.Domain.DepartmentProfessorAssignment;
+global using Faculty.Api.Domain.DepartmentProfessorAssignment.Errors;

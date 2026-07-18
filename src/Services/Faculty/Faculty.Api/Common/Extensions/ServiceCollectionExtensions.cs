@@ -45,6 +45,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IFacultyRepository, FacultyRepository>();
         services.AddScoped<IProfessorRepository, ProfessorRepository>();
         services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+        services.AddScoped<IDepartmentProfessorAssignmentRepository, DepartmentProfessorAssignmentRepository>();
 
         // Add the shared kernel abstractions to the service collection
         services.AddSharedKernelAbstractions<Program>();

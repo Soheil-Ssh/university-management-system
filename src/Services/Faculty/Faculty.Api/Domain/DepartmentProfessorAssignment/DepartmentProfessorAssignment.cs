@@ -1,14 +1,12 @@
-﻿using Faculty.Api.Domain.DepartmentProfessorAssignment.Errors;
-
-namespace Faculty.Api.Domain.DepartmentProfessorAssignment;
+﻿namespace Faculty.Api.Domain.DepartmentProfessorAssignment;
 
 public sealed class DepartmentProfessorAssignment : AggregateRoot<DepartmentProfessorAssignmentId>
 {
     public DepartmentId DepartmentId { get; private set; }
     public ProfessorId ProfessorId { get; private set; }
-    public DateTime AssignedAtUtc { get; private set; }
-    public DateTime? UnassignedAtUtc { get; private set; }
-    public bool IsActive => UnassignedAtUtc is null;
+    public DateTime AssignedAt { get; private set; }
+    public DateTime? UnassignedAt { get; private set; }
+    public bool IsActive => UnassignedAt is null;
 
 #pragma warning disable CS8618
     private DepartmentProfessorAssignment() { }
@@ -18,11 +16,11 @@ public sealed class DepartmentProfessorAssignment : AggregateRoot<DepartmentProf
         DepartmentProfessorAssignmentId id,
         DepartmentId departmentId,
         ProfessorId professorId,
-        DateTime assignedAtUtc) : base(id)
+        DateTime assignedAt) : base(id)
     {
         DepartmentId = departmentId;
         ProfessorId = professorId;
-        AssignedAtUtc = assignedAtUtc;
+        AssignedAt = assignedAt;
     }
 
     public static Result<DepartmentProfessorAssignment> Create(DepartmentId departmentId, ProfessorId professorId)
@@ -45,10 +43,10 @@ public sealed class DepartmentProfessorAssignment : AggregateRoot<DepartmentProf
         if (!IsActive)
             return DepartmentProfessorAssignmentErrors.AlreadyUnassigned;
 
-        if (unassignedAtUtc < AssignedAtUtc)
+        if (unassignedAtUtc < AssignedAt)
             return DepartmentProfessorAssignmentErrors.InvalidUnassignedAt;
 
-        UnassignedAtUtc = unassignedAtUtc;
+        UnassignedAt = unassignedAtUtc;
 
         return Result.Success();
     }
