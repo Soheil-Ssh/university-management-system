@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using SharedKernel.Messaging.Abstractions;
 using SharedKernel.Messaging.MassTransit.Enums;
 using SharedKernel.Messaging.MassTransit.Options;
@@ -20,6 +21,17 @@ public static class DependencyInjection
         services.AddMassTransit(busConfigurator =>
         {
             busConfigurator.SetKebabCaseEndpointNameFormatter();
+
+            busConfigurator.ConfigureHealthCheckOptions(healthCheck =>
+            {
+                healthCheck.Name = "rabbitmq-bus";
+                healthCheck.MinimalFailureStatus = HealthStatus.Unhealthy;
+
+                healthCheck.Tags.Add("ready");
+                healthCheck.Tags.Add("masstransit");
+                healthCheck.Tags.Add("messaging");
+                healthCheck.Tags.Add("rabbitmq");
+            });
 
             configure?.Invoke(busConfigurator);
 
@@ -50,6 +62,17 @@ public static class DependencyInjection
         services.AddMassTransit(busConfigurator =>
         {
             busConfigurator.SetKebabCaseEndpointNameFormatter();
+
+            busConfigurator.ConfigureHealthCheckOptions(healthCheck =>
+            {
+                healthCheck.Name = "rabbitmq-bus";
+                healthCheck.MinimalFailureStatus = HealthStatus.Unhealthy;
+
+                healthCheck.Tags.Add("ready");
+                healthCheck.Tags.Add("masstransit");
+                healthCheck.Tags.Add("messaging");
+                healthCheck.Tags.Add("rabbitmq");
+            });
 
             configure?.Invoke(busConfigurator);
 
