@@ -1,6 +1,6 @@
-﻿namespace Faculty.Api.Features.DepartmentProfessorAssignments.v1.AssignProfessorToDepartment;
+﻿namespace Faculty.Api.Features.DepartmentProfessorAssignments.v1.Assign;
 
-public static class AssignProfessorToDepartment
+public static class Assign
 {
     public sealed record AssignProfessorToDepartmentRequest(Guid ProfessorId);
 

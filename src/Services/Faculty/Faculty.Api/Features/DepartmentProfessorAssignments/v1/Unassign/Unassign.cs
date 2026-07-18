@@ -1,6 +1,6 @@
-﻿namespace Faculty.Api.Features.DepartmentProfessorAssignments.v1.UnassignProfessorFromDepartment;
+﻿namespace Faculty.Api.Features.DepartmentProfessorAssignments.v1.Unassign;
 
-public static class UnassignProfessorFromDepartment
+public static class Unassign
 {
     public sealed record Command(Guid DepartmentId, Guid ProfessorId) : ICommand<Result>;
 
