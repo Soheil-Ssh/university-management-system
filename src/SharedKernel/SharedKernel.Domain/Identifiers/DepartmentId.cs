@@ -1,4 +1,4 @@
-﻿namespace Faculty.Api.Domain.Department;
+﻿namespace SharedKernel.Domain.Identifiers;
 
 public sealed record DepartmentId(Guid Value)
 {
