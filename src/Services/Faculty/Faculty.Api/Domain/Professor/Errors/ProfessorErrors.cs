@@ -4,6 +4,7 @@ public static class ProfessorErrors
 {
     // General errors
     public static readonly Error NotFound = new("Professor.NotFound", "Professor was not found.", ErrorType.NotFound);
+    public static readonly Error Inactive = new("Professor.Inactive", "Professor is inactive.", ErrorType.Conflict);
     public static readonly Error IdentityNotProvisionedForDeanAssignment = 
         new("Professor.IdentityNotProvisionedForDeanAssignment", "A professor whose identity account has not been provisioned successfully cannot be assigned as dean.", ErrorType.Conflict);
     public static readonly Error InactiveForDeanAssignment = 

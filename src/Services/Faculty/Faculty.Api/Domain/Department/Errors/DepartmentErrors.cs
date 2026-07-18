@@ -3,7 +3,8 @@
 public static class DepartmentErrors
 {
     // General errors
-    public static Error NotFound = new("Department.NotFound", $"Department was not found.", ErrorType.NotFound);
+    public static readonly Error NotFound = new("Department.NotFound", "Department was not found.", ErrorType.NotFound);
+    public static readonly Error Inactive = new("Department.Inactive", "Department is inactive.", ErrorType.Conflict);
     public static readonly Error CannotAssignExpertToInactiveDepartment
         = new("Department.CannotAssignExpertToInactiveDepartment", "A primary expert cannot be assigned to an inactive department.", ErrorType.Conflict);
     public static readonly Error CannotAssignHeadToInactiveDepartment =
