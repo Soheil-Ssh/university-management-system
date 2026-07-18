@@ -11,6 +11,9 @@ public static class HealthCheckTags
     public const string Cache = "cache";
     public const string External = "external";
     public const string Observability = "observability";
+    public const string Logging = "Logging";
+    public const string Metrics = "Metrics";
+    public const string Tracing = "Tracing";
     public const string Infrastructure = "infrastructure";
 
     public const string SqlServer = "sql-server";

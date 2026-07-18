@@ -58,9 +58,30 @@ services:
       - "9090:9090"
     networks:
       - ums_network
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.enable-remote-write-receiver"
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus_data:/prometheus
+
+  # Tempo
+  tempo:
+    container_name: tempo
+    restart: unless-stopped
+    command:
+      - "-target=all"
+      - -config.file=/etc/tempo/tempo.yml
+    ports:
+      - "3200:3200"
+      - "4317:4317"
+      - "4318:4318"
+    networks:
+      - ums_network
+    volumes:
+      - ./docker/tempo/tempo.yml:/etc/tempo/tempo.yml
+      - tempo_data:/data/tempo
 
   # Grafana
   grafana:
@@ -75,6 +96,7 @@ services:
     depends_on:
       - loki
       - prometheus
+      - tempo
     volumes:
       - grafana_data:/var/lib/grafana
     healthcheck:
@@ -122,6 +144,9 @@ services:
       - Observability__Loki__MinimumLevel=Information
       - Observability__Metrics__Enabled:true
       - Observability__Metrics__EndpointPath:/metrics
+      - Observability__Tracing__Enabled=true
+      - Observability__Tracing__Endpoint=http://tempo:4318/v1/traces
+      - Observability__Tracing__SamplingRatio=1.0
       - Messaging__Host=rabbitmq
       - Messaging__Port=5672
     ports:
@@ -157,6 +182,9 @@ services:
       - Observability__Loki__MinimumLevel=Information
       - Observability__Metrics__Enabled:true
       - Observability__Metrics__EndpointPath:/metrics
+      - Observability__Tracing__Enabled=true
+      - Observability__Tracing__Endpoint=http://tempo:4318/v1/traces
+      - Observability__Tracing__SamplingRatio=1.0
     ports:
       - "5002:8080"
       - "5052:8081"
@@ -185,6 +213,9 @@ services:
       - Observability__Loki__MinimumLevel=Information
       - Observability__Metrics__Enabled:true
       - Observability__Metrics__EndpointPath:/metrics
+      - Observability__Tracing__Enabled=true
+      - Observability__Tracing__Endpoint=http://tempo:4318/v1/traces
+      - Observability__Tracing__SamplingRatio=1.0
     ports:
       - "5003:8080"
       - "5053:8081"
@@ -212,6 +243,9 @@ services:
       - Observability__Loki__MinimumLevel=Information
       - Observability__Metrics__Enabled:true
       - Observability__Metrics__EndpointPath:/metrics
+      - Observability__Tracing__Enabled=true
+      - Observability__Tracing__Endpoint=http://tempo:4318/v1/traces
+      - Observability__Tracing__SamplingRatio=1.0
       - Messaging__Host=rabbitmq
       - Messaging__Port=5672
     ports:
@@ -240,6 +274,9 @@ services:
       - Observability__Loki__MinimumLevel=Information
       - Observability__Metrics__Enabled:true
       - Observability__Metrics__EndpointPath:/metrics
+      - Observability__Tracing__Enabled=true
+      - Observability__Tracing__Endpoint=http://tempo:4318/v1/traces
+      - Observability__Tracing__SamplingRatio=1.0
       - Messaging__Host=rabbitmq
       - Messaging__Port=5672
     ports:
@@ -268,6 +305,9 @@ services:
       - Observability__Loki__MinimumLevel=Information
       - Observability__Metrics__Enabled:true
       - Observability__Metrics__EndpointPath:/metrics
+      - Observability__Tracing__Enabled=true
+      - Observability__Tracing__Endpoint=http://tempo:4318/v1/traces
+      - Observability__Tracing__SamplingRatio=1.0
       - Messaging__Host=rabbitmq
       - Messaging__Port=5672
     ports:
@@ -295,6 +335,12 @@ services:
       - Observability__Loki__MinimumLevel=Information
       - Observability__Metrics__Enabled:true
       - Observability__Metrics__EndpointPath:/metrics
+      - Observability__Tracing__Enabled=true
+      - Observability__Tracing__Endpoint=http://tempo:4318/v1/traces
+      - Observability__Tracing__SamplingRatio=1.0
+      - HealthUrls__Loki=http://loki:3100/ready
+      - HealthUrls__Tempo=http://tempo:3200/ready
+      - HealthUrls__Grafana=http://grafana:3000/api/health
       - HealthChecksUI__HealthChecks__0__Name=Identity API
       - HealthChecksUI__HealthChecks__0__Uri=http://identity.api:8080/health
       - HealthChecksUI__HealthChecks__1__Name=File API
@@ -320,6 +366,10 @@ services:
       rabbitmq:
         condition: service_healthy
       loki:
+        condition: service_started
+      prometheus:
+        condition: service_started
+      tempo:
         condition: service_started
       grafana:
         condition: service_healthy

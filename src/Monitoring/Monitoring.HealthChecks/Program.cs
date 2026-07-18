@@ -54,7 +54,12 @@ try
             uri: new Uri(builder.Configuration["HealthUrls:Loki"]!),
             name: HealthCheckNames.ObservabilityLoki,
             failureStatus: HealthStatus.Degraded,
-            tags: [HealthCheckTags.Observability])
+            tags: [HealthCheckTags.Observability, HealthCheckTags.Logging])
+        .AddUrlGroup(
+            uri: new Uri(builder.Configuration["HealthUrls:Tempo"]!),
+            name: HealthCheckNames.ObservabilityTempo,
+            failureStatus: HealthStatus.Degraded,
+            tags: [HealthCheckTags.Observability, HealthCheckTags.Tracing])
         .AddUrlGroup(
             uri: new Uri(builder.Configuration["HealthUrls:Grafana"]!),
             name: HealthCheckNames.ObservabilityGrafana,

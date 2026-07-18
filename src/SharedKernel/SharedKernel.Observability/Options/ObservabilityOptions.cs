@@ -6,4 +6,5 @@ public sealed class ObservabilityOptions
     public string ApplicationName { get; init; } = "UMS";
     public LokiOptions Loki { get; init; } = new();
     public MetricsOptions Metrics { get; init; } = new();
+    public TracingOptions Tracing { get; init; } = new();
 }

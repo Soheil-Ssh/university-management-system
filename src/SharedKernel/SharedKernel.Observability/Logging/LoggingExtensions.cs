@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.Grafana.Loki;
@@ -21,9 +21,7 @@ public static class LoggingExtensions
 
         builder.Services.AddSerilog((services, loggerConfiguration) =>
         {
-            var observabilityOptions =
-                builder.Configuration.GetSection(ObservabilityOptions.SectionName).Get<ObservabilityOptions>() ?? new ObservabilityOptions();
-
+            var observabilityOptions = services.GetRequiredService<IOptions<ObservabilityOptions>>().Value;
             var environmentName = builder.Environment.EnvironmentName;
             var applicationName = observabilityOptions.ApplicationName;
 
@@ -32,6 +30,7 @@ public static class LoggingExtensions
                 .ReadFrom.Services(services)
                 .Enrich.FromLogContext()
                 .Enrich.WithMachineName()
+                .Enrich.With<ActivityEnricher>()
                 .Enrich.WithProperty("Application", applicationName)
                 .Enrich.WithProperty("ServiceName", serviceName)
                 .Enrich.WithProperty("Environment", environmentName)
@@ -39,7 +38,8 @@ public static class LoggingExtensions
                 .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
                 .MinimumLevel.Override("Microsoft.EntityFrameworkCore.Database.Command", LogEventLevel.Warning)
                 .WriteTo.Console(outputTemplate:
-                    "[{Timestamp:HH:mm:ss} {Level:u3}] [{ServiceName}] [{CorrelationId}] {Message:lj}{NewLine}{Exception}");
+                    "[{Timestamp:HH:mm:ss} {Level:u3}] [{ServiceName}] [{CorrelationId}] [{TraceId}:{SpanId}] " +
+                    "{Message:lj}{NewLine}{Exception}");
 
             AddLokiSinkIfEnabled(loggerConfiguration,
                 observabilityOptions,
@@ -53,6 +53,11 @@ public static class LoggingExtensions
 
     public static WebApplication UseApplicationSerilogRequestLogging(this WebApplication app)
     {
+        var observabilityOptions = app.Services.GetRequiredService<IOptions<ObservabilityOptions>>().Value;
+        var metricsPath = observabilityOptions.Metrics.Enabled
+            ? new PathString(observabilityOptions.Metrics.EndpointPath)
+            : PathString.Empty;
+
         app.UseMiddleware<CorrelationIdMiddleware>();
 
         app.UseSerilogRequestLogging(options =>
@@ -66,18 +71,11 @@ public static class LoggingExtensions
                     return LogEventLevel.Error;
 
                 var statusCode = httpContext.Response.StatusCode;
-                var requestPath = httpContext.Request.Path;
 
-                if (IsHealthCheckRequest(requestPath))
-                {
-                    if (statusCode >= StatusCodes.Status500InternalServerError)
-                        return LogEventLevel.Warning;
-
-                    if (statusCode >= StatusCodes.Status400BadRequest)
-                        return LogEventLevel.Warning;
-
-                    return LogEventLevel.Verbose;
-                }
+                if (IsObservabilityRequest(httpContext.Request.Path, metricsPath))
+                    return statusCode >= StatusCodes.Status400BadRequest
+                        ? LogEventLevel.Warning
+                        : LogEventLevel.Verbose;
 
                 if (httpContext.Response.StatusCode >= StatusCodes.Status500InternalServerError)
                     return LogEventLevel.Error;
@@ -100,12 +98,15 @@ public static class LoggingExtensions
                 diagnosticContext.Set("RequestPath", httpContext.Request.Path.Value);
                 diagnosticContext.Set("StatusCode", httpContext.Response.StatusCode);
 
-                if (httpContext.Request.Headers.TryGetValue(CorrelationIdConstants.HeaderName, out var correlationId))
-                    diagnosticContext.Set(CorrelationIdConstants.LogPropertyName, correlationId.ToString());
+                if (httpContext.Items.TryGetValue(CorrelationIdConstants.HttpContextItemName, out var correlationId))
+                    diagnosticContext.Set(CorrelationIdConstants.LogPropertyName, correlationId?.ToString());
 
                 if (httpContext.User.Identity?.IsAuthenticated == true)
+                {
                     diagnosticContext.Set("UserId",
-                        httpContext.User.FindFirst("sub")?.Value ?? httpContext.User.FindFirst("userId")?.Value ?? "unknown");
+                        httpContext.User.FindFirst("sub")?.Value ??
+                        httpContext.User.FindFirst("userId")?.Value ?? "unknown");
+                }
             };
         });
 
@@ -128,26 +129,21 @@ public static class LoggingExtensions
 
         var minimumLevel = ParseLogLevel(lokiOptions.MinimumLevel);
 
-        loggerConfiguration
-            .WriteTo
-            .GrafanaLoki(lokiOptions.Uri,
+        loggerConfiguration.WriteTo.GrafanaLoki(lokiOptions.Uri,
                 labels:
                 [
                     new LokiLabel { Key = "app", Value = applicationName },
                     new LokiLabel { Key = "service", Value = serviceName },
                     new LokiLabel { Key = "env", Value = environmentName }
                 ],
-                restrictedToMinimumLevel: minimumLevel);
+                restrictedToMinimumLevel: ParseLogLevel(lokiOptions.MinimumLevel));
     }
 
     private static LogEventLevel ParseLogLevel(string? level)
-    {
-        if (Enum.TryParse<LogEventLevel>(level, ignoreCase: true, out var parsedLevel))
-            return parsedLevel;
+        => Enum.TryParse<LogEventLevel>(level, ignoreCase: true, out var parsedLevel) ? parsedLevel : LogEventLevel.Information;
 
-        return LogEventLevel.Information;
-    }
-
-    private static bool IsHealthCheckRequest(PathString path)
-        => path.StartsWithSegments("/health") || path.StartsWithSegments("/health-checks-api");
+    private static bool IsObservabilityRequest(PathString path, PathString metricsPath)
+        => path.StartsWithSegments("/health") ||
+           path.StartsWithSegments("/health-checks-api") ||
+           (metricsPath.HasValue && path.StartsWithSegments(metricsPath));
 }
