@@ -18,5 +18,5 @@ public sealed class DepartmentProfessorAssignmentRepository(FacultyDbContext con
 
     public async Task<bool> ExistsActiveAsync(DepartmentId departmentId, ProfessorId professorId, CancellationToken cancellationToken = default)
         => await context.DepartmentProfessorAssignments
-            .AnyAsync(a => a.DepartmentId == departmentId && a.ProfessorId == professorId, cancellationToken);
+            .AnyAsync(a => a.DepartmentId == departmentId && a.ProfessorId == professorId && a.UnassignedAt == null, cancellationToken);
 }

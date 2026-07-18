@@ -19,13 +19,11 @@ public class DepartmentProfessorAssignmentConfiguration : IEntityTypeConfigurati
         builder.Property(x => x.DepartmentId)
             .HasConversion(id => id.Value, value => new DepartmentId(value))
             .IsRequired();
-        builder.HasIndex(x => x.DepartmentId).IsUnique();
 
         // ProfessorId
         builder.Property(x => x.ProfessorId)
             .HasConversion(id => id.Value, value => new ProfessorId(value))
             .IsRequired();
-        builder.HasIndex(x => x.ProfessorId).IsUnique();
 
         // AssignedAt
         builder.Property(x => x.AssignedAt).IsRequired();
