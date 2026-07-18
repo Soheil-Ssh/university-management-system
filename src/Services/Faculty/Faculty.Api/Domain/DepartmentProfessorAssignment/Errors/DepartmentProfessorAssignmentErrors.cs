@@ -3,6 +3,8 @@
 public static class DepartmentProfessorAssignmentErrors
 {
     // General errors
+    public static readonly Error NotFound =
+        new("DepartmentProfessorAssignment.NotFound", "The professor assignment was not found.", ErrorType.NotFound);
     public static readonly Error AlreadyUnassigned = 
         new("DepartmentProfessorAssignment.AlreadyUnassigned", "The professor has already been unassigned from the department.", ErrorType.Conflict);
     public static readonly Error AlreadyExists = 
