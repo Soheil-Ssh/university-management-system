@@ -4,6 +4,12 @@
     <Project Path="src/Monitoring/Monitoring.HealthChecks/Monitoring.HealthChecks.csproj" Id="d08a18c8-1d74-4dbf-82f4-637fb824284b" />
   </Folder>
   <Folder Name="/src/Services/" />
+  <Folder Name="/src/Services/Academic/">
+    <Project Path="src/Services/Academic/Academic.Api/Academic.Api.csproj" Id="2e7d3bc0-bed9-49ff-9c37-0c41600c570e" />
+    <Project Path="src/Services/Academic/Academic.Application/Academic.Application.csproj" Id="929373d6-bc78-4281-90e4-595262a0bbcf" />
+    <Project Path="src/Services/Academic/Academic.Domain/Academic.Domain.csproj" Id="6c6de09e-bf96-49dc-ae91-0b4d6d20d8a7" />
+    <Project Path="src/Services/Academic/Academic.Infrastructure/Academic.Infrastructure.csproj" Id="1e2e0c46-1a20-4496-86f5-073d72501525" />
+  </Folder>
   <Folder Name="/src/Services/CentralOrganization/">
     <Project Path="src/Services/CentralOrganization/CentralOrganization.Api/CentralOrganization.Api.csproj" />
   </Folder>
