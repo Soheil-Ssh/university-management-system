@@ -340,6 +340,7 @@ services:
       - Observability__Tracing__SamplingRatio=1.0
       - HealthUrls__Loki=http://loki:3100/ready
       - HealthUrls__Tempo=http://tempo:3200/ready
+      - HealthUrls__Prometheus=http://prometheus:9090/-/ready
       - HealthUrls__Grafana=http://grafana:3000/api/health
       - HealthChecksUI__HealthChecks__0__Name=Identity API
       - HealthChecksUI__HealthChecks__0__Uri=http://identity.api:8080/health

@@ -16,6 +16,7 @@ public static class HealthCheckNames
 
     public const string ObservabilityLoki = "observability-loki";
     public const string ObservabilityTempo = "observability-tempo";
+    public const string ObservabilityPrometheus = "observability-prometheus";
     public const string ObservabilityGrafana = "observability-grafana";
 
     public const string InfrastructureSqlServer = "sql-server";

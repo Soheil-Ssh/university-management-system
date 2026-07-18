@@ -61,6 +61,11 @@ try
             failureStatus: HealthStatus.Degraded,
             tags: [HealthCheckTags.Observability, HealthCheckTags.Tracing])
         .AddUrlGroup(
+            uri: new Uri(builder.Configuration["HealthUrls:Prometheus"]!),
+            name: HealthCheckNames.ObservabilityPrometheus,
+            failureStatus: HealthStatus.Degraded,
+            tags: [HealthCheckTags.Observability, HealthCheckTags.Metrics])
+        .AddUrlGroup(
             uri: new Uri(builder.Configuration["HealthUrls:Grafana"]!),
             name: HealthCheckNames.ObservabilityGrafana,
             failureStatus: HealthStatus.Degraded,
