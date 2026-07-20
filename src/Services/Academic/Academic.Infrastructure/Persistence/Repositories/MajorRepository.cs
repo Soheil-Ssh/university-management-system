@@ -10,6 +10,9 @@ public sealed class MajorRepository(AcademicDbContext context) : IMajorRepositor
         await context.Majors.AddAsync(major, cancellationToken);
     }
 
+    public async Task<bool> ExistsByDepartmentIdAsync(DepartmentId departmentId, CancellationToken cancellationToken = default)
+        => await context.Majors.AnyAsync(m => m.DepartmentId == departmentId, cancellationToken);
+
     public async Task<int> GetNextMajorCodeAsync(CancellationToken cancellationToken)
     {
         var prefix = "UMS_AC_MAJ_";
