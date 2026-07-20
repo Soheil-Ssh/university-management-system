@@ -1,1 +1,15 @@
 ﻿global using SharedKernel.Abstractions;
+global using SharedKernel.Abstractions.CQRS;
+global using SharedKernel.Domain.Result;
+global using FluentValidation;
+global using Academic.Domain.Major;
+global using Academic.Domain.Curriculum;
+global using Academic.Domain.Course;
+global using Academic.Domain.Major.ValueObjects;
+global using Academic.Domain.Curriculum.ValueObjects;
+global using Academic.Domain.Course.ValueObjects;
+global using Academic.Domain.Major.Errors;
+global using Academic.Domain.Curriculum.Errors;
+global using Academic.Domain.Course.Errors;
+global using SharedKernel.Abstractions.Persistence;
+global using SharedKernel.Domain.Identifiers;
