@@ -11,7 +11,8 @@
         "centralorganization.api": "StartDebugging",
         "monitoring.healthchecks": "StartDebugging",
         "notification.api": "StartDebugging",
-        "faculty.api": "StartDebugging"
+        "faculty.api": "StartDebugging",
+        "academic.api": "StartDebugging"
       }
     }
   }

@@ -69,6 +69,13 @@ services:
       context: .
       dockerfile: src/Services/Faculty/Faculty.Api/Dockerfile
 
+  # Academic Api
+  academic.api:
+    image: ${DOCKER_REGISTRY-}academic.api
+    build:
+      context: .
+      dockerfile: src/Services/Academic/Academic.Api/Dockerfile
+
   # Monitoring Health Checks
   monitoring.healthchecks:
     image: ${DOCKER_REGISTRY-}monitoringhealthchecks

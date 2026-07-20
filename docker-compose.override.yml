@@ -324,6 +324,37 @@ services:
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
 
+  # Academic Api
+  academic.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - ConnectionStrings__PostgresDefaultConnection=Host=postgres;Port=5432;Database=academic_db;Username=academic_user;Password=Password@123;TrustServerCertificate=True
+      - Observability__Loki__Enabled=true
+      - Observability__Loki__Uri=http://loki:3100
+      - Observability__Loki__MinimumLevel=Information
+      - Observability__Metrics__Enabled:true
+      - Observability__Metrics__EndpointPath:/metrics
+      - Observability__Tracing__Enabled=true
+      - Observability__Tracing__Endpoint=http://tempo:4318/v1/traces
+      - Observability__Tracing__SamplingRatio=1.0
+      - Messaging__Host=rabbitmq
+      - Messaging__Port=5672
+    ports:
+      - "5007:8080"
+      - "5057:8081"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - ums_network
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
   # Monitoring Health Checks
   monitoring.healthchecks:
     environment:
@@ -354,8 +385,10 @@ services:
       - HealthChecksUI__HealthChecks__4__Uri=http://notification.api:8080/health
       - HealthChecksUI__HealthChecks__5__Name=Faculty API
       - HealthChecksUI__HealthChecks__5__Uri=http://faculty.api:8080/health
-      - HealthChecksUI__HealthChecks__6__Name=Infrastructure
-      - HealthChecksUI__HealthChecks__6__Uri=http://monitoring.healthchecks:8080/health/infrastructure
+      - HealthChecksUI__HealthChecks__6__Name=Academic API
+      - HealthChecksUI__HealthChecks__6__Uri=http://academic.api:8080/health
+      - HealthChecksUI__HealthChecks__7__Name=Infrastructure
+      - HealthChecksUI__HealthChecks__7__Uri=http://monitoring.healthchecks:8080/health/infrastructure
     ports:
       - "5010:8080"
       - "5060:8081"
