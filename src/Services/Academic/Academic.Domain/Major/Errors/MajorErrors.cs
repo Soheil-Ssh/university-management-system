@@ -2,6 +2,9 @@
 
 public static class MajorErrors
 {
+    // Global errors
+    public static readonly Error NotFound = new("Major.NotFound", "The major was not found.", ErrorType.NotFound);
+
     // DepartmentId errors
     public static readonly Error DepartmentIdEmpty = new("Major.DepartmentId.Empty", "Department id is required.", ErrorType.Validation);
     public static readonly Error DepartmentAlreadyHasMajor = new("Major.Department.AlreadyHasMajor", "The selected department already has a major.", ErrorType.Conflict);
