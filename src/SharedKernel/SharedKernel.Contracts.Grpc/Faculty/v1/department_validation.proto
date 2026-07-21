@@ -1,0 +1,24 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "SharedKernel.Contracts.Grpc.Faculty.v1";
+
+package sharedkernel.contracts.grpc.faculty.v1;
+
+service DepartmentValidationService {
+  rpc ValidateForMajor(ValidateDepartmentForMajorRequest) returns (ValidateDepartmentForMajorResponse);
+}
+
+message ValidateDepartmentForMajorRequest {
+  string department_id = 1;
+}
+
+message ValidateDepartmentForMajorResponse {
+  bool is_eligible = 1;
+  DepartmentMajorEligibilityFailureReason failure_reason = 2;
+}
+
+enum DepartmentMajorEligibilityFailureReason {
+  DEPARTMENT_MAJOR_ELIGIBILITY_FAILURE_REASON_UNSPECIFIED = 0;
+  DEPARTMENT_MAJOR_ELIGIBILITY_FAILURE_REASON_NOT_FOUND = 1;
+  DEPARTMENT_MAJOR_ELIGIBILITY_FAILURE_REASON_INACTIVE = 2;
+}

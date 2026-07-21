@@ -1,5 +1,5 @@
-﻿using Scalar.AspNetCore;
-using SharedKernel.Api.Extensions;
+﻿using Faculty.Api.Infrastructure.Grpc;
+using Scalar.AspNetCore;
 using SharedKernel.Persistence.Database;
 
 namespace Faculty.Api.Common.Extensions;
@@ -34,10 +34,14 @@ public static class ApplicationBuilderExtensions
                 .AllowAnonymous();
         }
 
-        app.UseHttpsRedirectionExceptPaths();
+        app.UseHttpsRedirectionExceptPaths(configure =>
+        {
+            configure.ExcludedPathPrefixes.Add("/sharedkernel.contracts.grpc.faculty.v1.DepartmentValidationService");
+        });
         app.UseAuthentication();
         app.UseAuthorization();
         app.UseExceptionHandler();
+        app.MapGrpcService<DepartmentValidationGrpcService>();
         app.MapCarter();
 
         return app;

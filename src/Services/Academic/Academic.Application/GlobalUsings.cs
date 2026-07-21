@@ -13,3 +13,4 @@ global using Academic.Domain.Curriculum.Errors;
 global using Academic.Domain.Course.Errors;
 global using SharedKernel.Abstractions.Persistence;
 global using SharedKernel.Domain.Identifiers;
+global using Academic.Application.Abstractions.Services;

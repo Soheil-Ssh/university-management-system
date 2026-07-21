@@ -36,6 +36,9 @@ public static class ServiceCollectionExtensions
             options.UseNpgsql(postgresConnectionString);
         });
 
+        // Add gRPC services to the service collection
+        services.AddGrpc();
+
         // Add authentication to the service collection
         services.AddUmsJwtAuthentication(configuration);
         services.AddUmsAuthorization();

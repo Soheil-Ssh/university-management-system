@@ -1,19 +1,23 @@
 ﻿namespace Academic.Application.Features.Majors.Commands.Create;
 
-public sealed class CreateMajorCommandHandler(IMajorRepository majorRepository, IUnitOfWork unitOfWork) 
+public sealed class CreateMajorCommandHandler(IMajorRepository majorRepository, IUnitOfWork unitOfWork, IDepartmentValidationService departmentValidationService)
     : ICommandHandler<CreateMajorCommand, Result<Guid>>
 {
     public async Task<Result<Guid>> Handle(CreateMajorCommand request, CancellationToken cancellationToken)
     {
-        // TODO Check department exits with grpc
-
         var departmentId = new DepartmentId(request.DepartmentId);
 
+        // Check is existing major with current department id
         var majorExists = await majorRepository.ExistsByDepartmentIdAsync(departmentId, cancellationToken);
-
         if (majorExists)
             return MajorErrors.DepartmentAlreadyHasMajor;
 
+        // validate department id from Faculty service
+        var departmentValidationResult = await departmentValidationService.ValidateForMajorAsync(departmentId.Value, cancellationToken);
+        if (departmentValidationResult.IsFailure)
+            return departmentValidationResult.Error;
+
+        // Get next major code number
         var nextCodeNumber = await majorRepository.GetNextMajorCodeAsync(cancellationToken);
         var codeResult = MajorCode.Create(nextCodeNumber);
         if (codeResult.IsFailure)
