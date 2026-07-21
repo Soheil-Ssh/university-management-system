@@ -1,4 +1,7 @@
-﻿namespace Faculty.Api.Features.DepartmentProfessorAssignments.v1.GetByDepartment;
+﻿using SharedKernel.Abstractions.Pagination;
+using SharedKernel.Persistence.Extensions;
+
+namespace Faculty.Api.Features.DepartmentProfessorAssignments.v1.GetByDepartment;
 
 public static class GetByDepartment
 {

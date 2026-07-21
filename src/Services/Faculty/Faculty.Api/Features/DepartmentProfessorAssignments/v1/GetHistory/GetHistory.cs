@@ -1,4 +1,7 @@
-﻿namespace Faculty.Api.Features.DepartmentProfessorAssignments.v1.GetHistory;
+﻿using SharedKernel.Abstractions.Pagination;
+using SharedKernel.Persistence.Extensions;
+
+namespace Faculty.Api.Features.DepartmentProfessorAssignments.v1.GetHistory;
 
 public static class GetHistory
 {

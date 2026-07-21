@@ -1,3 +1,6 @@
+using SharedKernel.Abstractions.Pagination;
+using SharedKernel.Persistence.Extensions;
+
 namespace File.Api.Features.Files.v1.GetAll;
 
 public static class GetAll

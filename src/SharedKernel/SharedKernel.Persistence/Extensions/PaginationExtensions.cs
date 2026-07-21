@@ -1,15 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SharedKernel.Api.Contracts;
+using SharedKernel.Abstractions.Pagination;
 
-namespace SharedKernel.Api.Extensions;
+namespace SharedKernel.Persistence.Extensions;
 
 public static class PaginationExtensions
 {
-    public static async Task<PagedResult<T>> ToPagedResultAsync<T>(
-        this IQueryable<T> query,
-        int page,
-        int pageSize,
-        CancellationToken cancellationToken = default)
+    public static async Task<PagedResult<T>> ToPagedResultAsync<T>(this IQueryable<T> query, int page, int pageSize, CancellationToken cancellationToken = default)
     {
         page = Math.Max(1, page);
         pageSize = Math.Max(1, pageSize);
@@ -25,10 +21,6 @@ public static class PaginationExtensions
             .Take(pageSize)
             .ToListAsync(cancellationToken);
 
-        return new PagedResult<T>(
-            items,
-            page,
-            totalCount,
-            pageSize);
+        return new PagedResult<T>(items, page, totalCount, pageSize);
     }
 }

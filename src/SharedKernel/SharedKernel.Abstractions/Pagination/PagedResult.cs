@@ -1,14 +1,10 @@
-﻿namespace SharedKernel.Api.Contracts;
+﻿namespace SharedKernel.Abstractions.Pagination;
 
 public class PagedResult<T>
 {
     public PagedResult() { }
 
-    public PagedResult(
-        IReadOnlyList<T> items,
-        int currentPage,
-        int totalCount,
-        int pageSize)
+    public PagedResult(IReadOnlyList<T> items, int currentPage, int totalCount, int pageSize)
     {
         Items = items;
         CurrentPage = currentPage;

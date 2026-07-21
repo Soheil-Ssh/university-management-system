@@ -1,4 +1,6 @@
-﻿using SharedKernel.Identity.Permissions;
+﻿using SharedKernel.Abstractions.Pagination;
+using SharedKernel.Identity.Permissions;
+using SharedKernel.Persistence.Extensions;
 
 namespace Student.Api.Features.Admissions.v1.GetAll;
 

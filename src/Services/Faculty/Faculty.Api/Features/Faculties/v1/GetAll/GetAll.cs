@@ -1,4 +1,6 @@
-﻿using SharedKernel.Api.Contracts;
+﻿using SharedKernel.Abstractions.Pagination;
+using SharedKernel.Api.Contracts;
+using SharedKernel.Persistence.Extensions;
 
 namespace Faculty.Api.Features.Faculties.v1.GetAll;
 

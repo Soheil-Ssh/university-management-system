@@ -1,4 +1,7 @@
-﻿namespace Faculty.Api.Features.Department.v1.GetAll;
+﻿using SharedKernel.Abstractions.Pagination;
+using SharedKernel.Persistence.Extensions;
+
+namespace Faculty.Api.Features.Department.v1.GetAll;
 
 public static class GetAll
 {

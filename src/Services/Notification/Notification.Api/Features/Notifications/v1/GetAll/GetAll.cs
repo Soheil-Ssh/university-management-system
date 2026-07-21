@@ -1,4 +1,7 @@
-﻿namespace Notification.Api.Features.Notifications.v1.GetAll;
+﻿using SharedKernel.Abstractions.Pagination;
+using SharedKernel.Persistence.Extensions;
+
+namespace Notification.Api.Features.Notifications.v1.GetAll;
 
 public static class GetAll
 {
