@@ -1,4 +1,5 @@
 ﻿using Academic.Application.Features.Majors.Queries.GetAll;
+using SharedKernel.Abstractions.Pagination;
 
 namespace Academic.Api.Features.Majors.v1.GetAll;
 
@@ -18,6 +19,8 @@ public class GetAll
         int Page = 1,
         int PageSize = 20);
 
+    public sealed record Response(Guid Id, Guid DepartmentId, string Code, string Name, bool IsActive, DateTime CreatedAt, DateTime UpdatedAt);
+
     public sealed class Endpoint : ICarterModule
     {
         public void AddRoutes(IEndpointRouteBuilder app)
@@ -27,7 +30,7 @@ public class GetAll
                     {
                         var query = request.Adapt<GetAllMajorsQuery>();
                         var result = await sender.Send(query, cancellationToken);
-                        return result.ToHttpResult();
+                        return result.ToHttpResult<PagedResult<GetAllMajorDto>, PagedResult<Response>>();
                     })
                 //.RequirePermission()
                 .Version(app, 1.0)
