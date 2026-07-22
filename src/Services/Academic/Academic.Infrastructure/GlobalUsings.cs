@@ -4,3 +4,7 @@ global using Academic.Domain.Major;
 global using Academic.Infrastructure.Persistence.Contexts;
 global using Microsoft.EntityFrameworkCore;
 global using SharedKernel.Domain.Identifiers;
+global using Academic.Domain.Major.ValueObjects;
+global using SharedKernel.Abstractions.Pagination;
+global using SharedKernel.Domain.Result;
+global using SharedKernel.Persistence.Extensions;

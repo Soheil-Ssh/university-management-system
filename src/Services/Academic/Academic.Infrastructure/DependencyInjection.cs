@@ -1,6 +1,8 @@
 ﻿using Academic.Application.Abstractions.Services;
+using Academic.Application.Queries;
 using Academic.Infrastructure.Grpc;
 using Academic.Infrastructure.Persistence.Repositories;
+using Academic.Infrastructure.Queries;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,6 +35,9 @@ public static class DependencyInjection
         services.AddScoped<IMajorRepository, MajorRepository>();
         services.AddScoped<ICurriculumRepository, CurriculumRepository>();
         services.AddScoped<ICourseRepository, CourseRepository>();
+
+        // Add query services to the service collection
+        services.AddScoped<IMajorQueries, MajorQueries>();
 
         // Get the file service gRPC URL from the configuration
         var fileServiceUrl = configuration["GrpcServices:FacultyServiceUrl"]
