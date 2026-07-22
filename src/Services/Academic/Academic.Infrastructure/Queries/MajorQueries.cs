@@ -1,12 +1,12 @@
-﻿using Academic.Application.Features.Majors.Common;
-using Academic.Application.Features.Majors.Queries.GetAll;
+﻿using Academic.Application.Features.Majors.Queries.GetAll;
+using Academic.Application.Features.Majors.Queries.GetById;
 using Academic.Application.Queries;
 
 namespace Academic.Infrastructure.Queries;
 
 public class MajorQueries(AcademicDbContext context) : IMajorQueries
 {
-    public async Task<Result<PagedResult<MajorDto>>> GetAllAsync(GetAllMajorsQuery request, CancellationToken cancellationToken)
+    public async Task<Result<PagedResult<GetAllMajorDto>>> GetAllAsync(GetAllMajorsQuery request, CancellationToken cancellationToken)
     {
         IQueryable<Major> query = context.Majors.AsNoTracking();
 
@@ -46,7 +46,7 @@ public class MajorQueries(AcademicDbContext context) : IMajorQueries
 
         query = ApplySorting(query, request.SortBy, request.SortDirection);
 
-        var responseQuery = query.Select(x => new MajorDto(
+        var responseQuery = query.Select(x => new GetAllMajorDto(
             x.Id.Value,
             x.DepartmentId.Value,
             x.Code.Value,
@@ -57,6 +57,20 @@ public class MajorQueries(AcademicDbContext context) : IMajorQueries
 
         return await responseQuery.ToPagedResultAsync(request.Page, request.PageSize, cancellationToken);
     }
+
+    public async Task<GetMajorByIdDto?> GetByIdAsync(MajorId id, CancellationToken cancellationToken)
+        => await context.Majors.AsNoTracking()
+            .Where(x => x.Id == id)
+            .Select(x => new GetMajorByIdDto(
+                x.Id.Value,
+                x.DepartmentId.Value,
+                x.Code.Value,
+                x.Name,
+                x.Description,
+                x.IsActive,
+                x.CreatedAt,
+                x.UpdatedAt))
+            .FirstOrDefaultAsync(cancellationToken);
 
     private static IQueryable<Major> ApplySorting(IQueryable<Major> query, MajorSortBy sortBy, SortDirection direction)
         => (sortBy, direction) switch

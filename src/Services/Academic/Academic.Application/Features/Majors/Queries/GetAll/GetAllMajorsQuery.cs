@@ -1,6 +1,4 @@
-﻿using Academic.Application.Features.Majors.Common;
-
-namespace Academic.Application.Features.Majors.Queries.GetAll;
+﻿namespace Academic.Application.Features.Majors.Queries.GetAll;
 
 public enum MajorSortBy
 {
@@ -28,4 +26,4 @@ public sealed record GetAllMajorsQuery(
     MajorSortBy SortBy = MajorSortBy.CreatedAt,
     SortDirection SortDirection = SortDirection.Desc,
     int Page = 1,
-    int PageSize = 20) : IQuery<Result<PagedResult<MajorDto>>>;
+    int PageSize = 20) : IQuery<Result<PagedResult<GetAllMajorDto>>>;
